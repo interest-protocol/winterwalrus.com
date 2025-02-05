@@ -6,7 +6,7 @@ import { Background, Layout } from '@/components';
 const Home: FC = () => (
   <Layout>
     {/* <Div color="#8B4445"> */}
-    <Div color="#r629590">
+    <Div color="#629590">
       <Background />
     </Div>
   </Layout>
