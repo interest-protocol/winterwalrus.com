@@ -13,6 +13,10 @@ export const GlobalStyles = css`
     scroll-behavior: smooth;
   }
 
+  body {
+    background: #0c0f1d;
+  }
+
   body,
   html {
     overflow-x: hidden;
