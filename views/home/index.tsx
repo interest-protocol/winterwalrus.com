@@ -1,13 +1,14 @@
-import { H1 } from '@stylin.js/elements';
+import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
-import { Layout } from '@/components';
-import { LogoSVG } from '@/components/svg';
+import { Background, Layout } from '@/components';
 
 const Home: FC = () => (
   <Layout>
-    <H1>Home</H1>
-    <LogoSVG maxHeight="3rem" maxWidth="3rem" width="100%" />
+    {/* <Div color="#8B4445"> */}
+    <Div color="#r629590">
+      <Background />
+    </Div>
   </Layout>
 );
 
