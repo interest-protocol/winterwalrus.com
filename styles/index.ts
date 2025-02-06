@@ -9,6 +9,7 @@ export const GlobalStyles = css`
     font-style: normal;
     font-display: swap;
   }
+
   @font-face {
     font-family: 'PPNeuebit';
     src: url('https://cdn.prod.website-files.com/66a8b39f3ac043de2548ab05/66acb4a1a51187e0be57c059_PPNeueBit-Bold.otf')
@@ -17,6 +18,7 @@ export const GlobalStyles = css`
     font-style: normal;
     font-display: swap;
   }
+
   * {
     margin: 0;
     padding: 0;
