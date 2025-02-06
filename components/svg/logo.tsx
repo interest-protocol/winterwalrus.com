@@ -5,52 +5,16 @@ import { SVGProps } from './svg.types';
 const Logo: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxWidth, maxHeight }}
-    viewBox="0 0 417 461"
+    viewBox="0 0 22 22"
     fill="none"
     {...props}
   >
-    <path d="M208.5 0V194L0 461L208.5 0Z" fill="#3E415D" />
-    <path d="M208.5 1V194L417 460.785L208.5 1Z" fill="#3E415D" />
-    <rect x="113" y="301" width="193" height="94" fill="#3E415E" />
     <path
-      d="M209.854 361L306 395.147L209.854 430L113 395.147L209.854 361Z"
-      fill="#3E415E"
+      d="M11 1V17M11 17V21M11 17L14 20M11 17L8 20M14 2L11 5L8 2M2.34 6L5.804 8M5.804 8L16.196 14M5.804 8L4.706 3.902M5.804 8L1.706 9.098M16.196 14L19.66 16M16.196 14L20.294 12.902M16.197 14L17.295 18.099M19.66 6L16.196 8M16.196 8L5.804 14M16.196 8L17.294 3.902M16.196 8L20.294 9.098M5.804 14L2.34 16M5.804 14L1.706 12.902M5.804 14L4.706 18.1"
+      stroke="#99EFE4"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
-    <mask
-      id="mask0_2_35"
-      style={{ maskType: 'alpha' }}
-      maskUnits="userSpaceOnUse"
-      x="113"
-      y="330"
-      width="193"
-      height="94"
-    >
-      <rect x="113" y="330" width="193" height="94" fill="#B9B9B9" />
-    </mask>
-    <g mask="url(#mask0_2_35)">
-      <path
-        d="M210 256.5L413.5 329L210 403L5 329L210 256.5Z"
-        fill="url(#paint0_radial_2_35)"
-        fillOpacity="0.2"
-      />
-    </g>
-    <path
-      d="M209.676 245L393 310.324L209.676 377L25 310.324L209.676 245Z"
-      fill="#262736"
-    />
-    <defs>
-      <radialGradient
-        id="paint0_radial_2_35"
-        cx="0"
-        cy="0"
-        r="1"
-        gradientUnits="userSpaceOnUse"
-        gradientTransform="translate(209.25 329.75) rotate(90) scale(73.25 204.25)"
-      >
-        <stop offset="0.338542" />
-        <stop offset="1" stopOpacity="0" />
-      </radialGradient>
-    </defs>
   </svg>
 );
 
