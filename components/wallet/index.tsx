@@ -29,8 +29,8 @@ const Wallet: FC = () => {
           gap="1rem"
           display="flex"
           bg="#A8A8A81A"
+          height="2.8rem"
           color="#F1F1F1"
-          height="3.5rem"
           alignItems="center"
           borderRadius="5rem"
           onClick={() => disconnect.mutate()}
@@ -49,27 +49,27 @@ const Wallet: FC = () => {
           position="relative"
           borderRadius="5rem"
           backdropFilter="blur(16px)"
-          bg="linear-gradient(180deg, #99EFE4 0%, #1F8477 100%)"
+          bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
         >
           <Div
             inset="0"
             position="absolute"
             borderRadius="5rem"
             backdropFilter="blur(16px)"
-            bg="linear-gradient(180deg, #E2E2E255 0%, #E2E2E200 100%)"
+            bg="linear-gradient(0deg, #FFFFFF00 0%, #FFFFFFAA 100%)"
           />
           <Button
             all="unset"
             px="2rem"
             m="0.2rem"
-            color="#FDFDFD"
-            height="3.5rem"
+            color="#0C0F1D"
+            height="2.8rem"
             borderRadius="5rem"
             position="relative"
             backdropFilter="blur(16px)"
-            bg="linear-gradient(180deg, #99EFE4 0%, #1F8477 100%)"
+            bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
           >
-            Connect Wallet
+            Connect
           </Button>
         </Div>
       }
