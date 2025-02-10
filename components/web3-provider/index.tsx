@@ -3,10 +3,9 @@ import {
   SuiClientProvider,
   WalletProvider,
 } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/sui/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
-
-const RPC = 'https://fullnode.mainnet.sui.io:443';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +15,7 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
       defaultNetwork="testnet"
       networks={
         createNetworkConfig({
-          testnet: { url: RPC },
+          testnet: { url: getFullnodeUrl('testnet') },
         }).networkConfig
       }
     >
