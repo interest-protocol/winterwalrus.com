@@ -30,6 +30,7 @@ const BackgroundSnow: FC = () => {
     <>
       {items.map(([x, y, factor, golden], index) => (
         <Motion
+          zIndex="1"
           key={index}
           position="fixed"
           initial={{ x, y }}
