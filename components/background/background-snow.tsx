@@ -36,7 +36,7 @@ const BackgroundSnow: FC = () => {
           initial={{ x, y }}
           transition={{ duration: 3 + factor * 4 }}
           filter="drop-shadow(0 0 0.25rem #0C0F1D)"
-          animate={{ y: [y, maxHeight - 16 * 3 * ((30 + factor * 70) / 100)] }}
+          animate={{ y: maxHeight - 16 * 3 * ((30 + factor * 70) / 100) }}
         >
           {golden ? (
             <GoldenLogoSVG
