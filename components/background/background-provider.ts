@@ -1,10 +1,10 @@
 import { useSpring } from 'motion/react';
 import { FC, useEffect } from 'react';
 
-import { useBackgroundTranslate } from '@/hooks/use-background-position';
+import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
 
 const BackgroundProvider: FC = () => {
-  const { setTranslate } = useBackgroundTranslate();
+  const { setTranslate } = useBackgroundMotionTranslate();
 
   const x = useSpring(0);
   const y = useSpring(0);

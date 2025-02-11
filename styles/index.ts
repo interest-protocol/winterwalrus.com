@@ -31,6 +31,7 @@ export const GlobalStyles = css`
   }
 
   body {
+    cursor: url('icon.svg'), auto;
     background: #0c0f1d;
   }
 

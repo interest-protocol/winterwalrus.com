@@ -1,14 +1,16 @@
 import { Main } from '@stylin.js/elements';
 import { FC, MouseEventHandler, PropsWithChildren } from 'react';
 
+import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
 import { useBackgroundTranslate } from '@/hooks/use-background-position';
 
-import Header from '../header';
-
 const Layout: FC<PropsWithChildren> = ({ children }) => {
-  const { x, y } = useBackgroundTranslate();
+  const { x, y } = useBackgroundMotionTranslate();
+  const { setTranslate } = useBackgroundTranslate();
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
+    setTranslate({ X: e.nativeEvent.x });
+    setTranslate({ Y: e.nativeEvent.y });
     x?.set(-(e.nativeEvent.x - window.innerWidth / 2) * 0.1);
     y?.set(-(e.nativeEvent.y - window.innerHeight / 2) * 0.1);
   };
@@ -24,7 +26,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       onMouseLeave={handleMouseLeave}
       onMouseMoveCapture={handleMouseMove}
     >
-      <Header />
+      {/* <Header /> */}
       {children}
     </Main>
   );
