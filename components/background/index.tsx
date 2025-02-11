@@ -36,12 +36,22 @@ const Background: FC = () => {
             position="relative"
             scale={!(index & 1) ? '1' : '-1'}
           >
-            <GridSVG
-              width="50vw"
-              maxWidth="100vw"
-              maxHeight="100%"
-              // filter="drop-shadow(0 0 0.75rem #DC8889)"
-            />
+            <Motion
+              animate={{
+                filter: [
+                  'drop-shadow(0 0 0.25rem #45837B)',
+                  'drop-shadow(0 0 0.25rem #45837B00)',
+                ],
+              }}
+              transition={{
+                duration: 1,
+                ease: 'linear',
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            >
+              <GridSVG width="50vw" maxWidth="100vw" maxHeight="100%" />
+            </Motion>
             <Div
               inset="0"
               position="absolute"
