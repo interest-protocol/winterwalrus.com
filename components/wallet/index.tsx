@@ -49,14 +49,12 @@ const Wallet: FC = () => {
           position="relative"
           borderRadius="5rem"
           backdropFilter="blur(16px)"
-          bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
         >
           <Div
             inset="0"
             position="absolute"
             borderRadius="5rem"
             backdropFilter="blur(16px)"
-            bg="linear-gradient(0deg, #FFFFFF00 0%, #FFFFFFAA 100%)"
           />
           <Button
             all="unset"
@@ -67,7 +65,7 @@ const Wallet: FC = () => {
             borderRadius="5rem"
             position="relative"
             backdropFilter="blur(16px)"
-            bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
+            bg="linear-gradient(0deg, #99EFE4 15.38%, rgba(153, 239, 228, 0.50) 83.65%)"
           >
             Connect
           </Button>
