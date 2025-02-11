@@ -1,4 +1,4 @@
-import { Header as HTMLHeader } from '@stylin.js/elements';
+import { Div, H1, Header as HTMLHeader, Strong } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import { LogoSVG } from '../svg';
@@ -12,7 +12,22 @@ const Header: FC = () => (
     alignItems="center"
     justifyContent="space-between"
   >
-    <LogoSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
+    <Div display="flex" alignItems="center" gap="1rem">
+      <LogoSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
+      <H1
+        fontSize="3rem"
+        mx="auto"
+        color="#FFFFFF"
+        maxWidth="20rem"
+        textAlign="center"
+        fontFamily="PPNeueBit"
+      >
+        <Strong color="#99EFE4" fontFamily="PPNeueBit">
+          Winter
+        </Strong>{' '}
+        Walrus
+      </H1>
+    </Div>
     <Wallet />
   </HTMLHeader>
 );
