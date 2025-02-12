@@ -4,6 +4,8 @@ import { FC, MouseEventHandler, PropsWithChildren } from 'react';
 import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
 import { useBackgroundTranslate } from '@/hooks/use-background-position';
 
+import Header from '../header';
+
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { x, y } = useBackgroundMotionTranslate();
   const { setTranslate } = useBackgroundTranslate();
@@ -26,7 +28,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       onMouseLeave={handleMouseLeave}
       onMouseMoveCapture={handleMouseMove}
     >
-      {/* <Header /> */}
+      <Header />
       {children}
     </Main>
   );
