@@ -27,11 +27,12 @@ export const GlobalStyles = css`
   }
 
   html {
+    background: #0c0f1d;
     scroll-behavior: smooth;
   }
 
   body {
-    background: #0c0f1d;
+    cursor: url('icon.svg'), auto;
   }
 
   body,
