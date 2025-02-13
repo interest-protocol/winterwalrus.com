@@ -1,15 +1,13 @@
 import { Div } from '@stylin.js/elements';
-import { motion } from 'motion/react';
 import { FC } from 'react';
 import unikey from 'unikey';
 
 import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
 
+import Motion from '../motion';
 import { GridSVG } from '../svg';
 
 const ITEMS = 2;
-
-const Motion = motion.create(Div);
 
 const BackgroundPerspective: FC = () => {
   const { x, y } = useBackgroundMotionTranslate();
@@ -21,6 +19,7 @@ const BackgroundPerspective: FC = () => {
       scale="1.5"
       height="100vh"
       display="grid"
+      color="#629590"
       position="fixed"
       overflow="hidden"
       alignItems="center"
