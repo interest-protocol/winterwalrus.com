@@ -11,8 +11,8 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { setTranslate } = useBackgroundTranslate();
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
-    setTranslate({ X: e.nativeEvent.x });
-    setTranslate({ Y: e.nativeEvent.y });
+    setTranslate({ X: e.clientX });
+    setTranslate({ Y: e.clientY });
     x?.set(-(e.nativeEvent.x - window.innerWidth / 2) * 0.1);
     y?.set(-(e.nativeEvent.y - window.innerHeight / 2) * 0.1);
   };

@@ -1,14 +1,13 @@
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
-import { Background, Layout } from '@/components';
-
-// #8B4445
+import { Background, Epoch, Layout } from '@/components';
 
 const Home: FC = () => (
   <Layout>
-    <Div color="#629590">
-      <Background />
+    <Background />
+    <Div maxWidth="32rem" mx="auto" px="2rem">
+      <Epoch />
     </Div>
   </Layout>
 );

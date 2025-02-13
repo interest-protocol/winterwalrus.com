@@ -15,12 +15,13 @@ const Header: FC = () => (
     <Div display="flex" alignItems="center" gap="1rem">
       <LogoSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
       <H1
-        fontSize="3rem"
         mx="auto"
+        fontSize="3rem"
         color="#FFFFFF"
         maxWidth="20rem"
         textAlign="center"
         fontFamily="PPNeueBit"
+        display={['none', 'none', 'block']}
       >
         <Strong color="#99EFE4" fontFamily="PPNeueBit">
           Winter
