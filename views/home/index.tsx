@@ -9,7 +9,7 @@ const Home: FC = () => (
     <Div
       mx="auto"
       px="2rem"
-      gap="2rem"
+      gap="1.5rem"
       display="flex"
       maxWidth="32rem"
       flexDirection="column"

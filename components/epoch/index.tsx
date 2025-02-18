@@ -10,9 +10,12 @@ import { DotSVG } from '../svg';
 const Epoch: FC = () => {
   const { data } = useEpochData();
 
-  const percentage = data
-    ? (data.msUntilNextEpoch * 100) / data.epochDurationMs
-    : 0;
+  const percentage = +(
+    data && data.currentEpoch
+      ? ((data.epochDurationMs - data.msUntilNextEpoch) * 100) /
+        data.epochDurationMs
+      : 0
+  ).toFixed(2);
 
   return (
     <Div
@@ -60,7 +63,11 @@ const Epoch: FC = () => {
               </Span>
               Duration
             </P>
-            <P>{msToShortDate(data?.epochDurationMs ?? 0)}</P>
+            <P>
+              {msToShortDate(
+                data && data.epochDurationMs > 0 ? data.epochDurationMs : 0
+              )}
+            </P>
           </Div>
           <Div>
             <P
@@ -75,7 +82,13 @@ const Epoch: FC = () => {
               </Span>
               Remaining
             </P>
-            <P> ~{msToShortDate(data?.msUntilNextEpoch ?? 0)}</P>
+            <P>
+              {' '}
+              ~
+              {msToShortDate(
+                data && data.msUntilNextEpoch > 0 ? data.msUntilNextEpoch : 0
+              )}
+            </P>
           </Div>
           <Div>
             <P
@@ -85,18 +98,12 @@ const Epoch: FC = () => {
               fontWeight="500"
               fontFamily="Rubik"
             >
-              <Span color={percentage > 0.5 ? '#C484F6' : '#1F8477'}>
+              <Span color={percentage > 50 ? '#C484F6' : '#1F8477'}>
                 <DotSVG maxWidth="0.5rem" maxHeight="0.5rem" width="100%" />
               </Span>
               Voting
             </P>
-            <P>
-              {data
-                ? data.msUntilNextEpoch > data.epochDurationMs / 2
-                  ? 'After'
-                  : 'Before'
-                : '--'}
-            </P>
+            <P>{data ? (percentage > 50 ? 'After' : 'Before') : '--'}</P>
           </Div>
         </Div>
         <Div

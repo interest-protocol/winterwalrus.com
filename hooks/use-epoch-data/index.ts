@@ -1,11 +1,11 @@
 import useSwr from 'swr';
 
-import useTuskrSdk from '../use-tuskr-sdk';
+import useBlizzardSdk from '../use-blizzard-sdk';
 
 const useEpochData = () => {
-  const tuskrSdk = useTuskrSdk();
+  const blizzardSdk = useBlizzardSdk();
 
-  return useSwr('epoch-data', tuskrSdk.getEpochData, {
+  return useSwr(useEpochData.name, () => blizzardSdk.getEpochData(), {
     refreshInterval: 5000,
   });
 };
