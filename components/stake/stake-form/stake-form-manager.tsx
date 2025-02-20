@@ -1,4 +1,5 @@
 import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
+import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
@@ -6,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 import { COIN_DECIMALS } from '@/constants/ coins';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import useEpochData from '@/hooks/use-epoch-data';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 const StakeFormManager: FC = () => {
   const blizzardSdk = useBlizzardSdk();
@@ -31,14 +33,22 @@ const StakeFormManager: FC = () => {
     blizzardSdk
       .toLstAtEpoch({
         epoch: epoch.currentEpoch,
-        value: BigInt(valueIn * 10 ** COIN_DECIMALS[getValues('in.coin')]),
+        value: BigInt(
+          FixedPointMath.toBigNumber(
+            valueIn,
+            COIN_DECIMALS[getValues('in.coin')]
+          ).toFixed(0)
+        ),
         blizzardStaking: SHARED_OBJECTS.testnet.SNOW_STAKING({ mutable: true })
           .objectId,
       })
       .then((outValue) =>
         setValue(
           'out.value',
-          Number(outValue) / 10 ** COIN_DECIMALS[getValues('out.coin')]
+          FixedPointMath.toNumber(
+            BigNumber(outValue ?? 0),
+            COIN_DECIMALS[getValues('out.coin')]
+          )
         )
       );
   }, [valueIn, epoch]);

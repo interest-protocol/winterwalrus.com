@@ -24,6 +24,7 @@ export const useStake = () => {
   return async ({
     coinOut,
     coinValue,
+    isAfterVote,
     nodeId = MYSTEN_LABS_K8S,
     coinIn = TYPES[Network.Testnet].WAL,
   }: StakeArgs) => {
@@ -39,14 +40,17 @@ export const useStake = () => {
       account: currentAccount.address,
     });
 
-    const { returnValues: coin } = await blizzardSdk.mint({
+    const { returnValues } = await blizzardSdk[
+      isAfterVote ? 'mintAfterVotesFinished' : 'mint'
+    ]({
       tx,
       nodeId,
       walCoin: inCoin,
       blizzardStaking: STAKING_COIN[coinOut],
     });
 
-    tx.transferObjects([coin], currentAccount.address);
+    if (isAfterVote) blizzardSdk.keepStakeNft({ tx, nft: returnValues });
+    else tx.transferObjects([returnValues], currentAccount.address);
 
     return signAndExecute({ tx, client, signTransaction, currentAccount });
   };

@@ -3,4 +3,5 @@ export interface StakeArgs {
   coinIn?: string;
   coinOut: string;
   coinValue: bigint;
+  isAfterVote: boolean;
 }
