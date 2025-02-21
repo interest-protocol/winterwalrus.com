@@ -2,14 +2,14 @@ import useSwr from 'swr';
 
 import { MYSTEN_LABS_K8S } from '@/constants';
 
-import useTuskrSdk from '../use-tuskr-sdk';
+import useBlizzardSdk from '../use-blizzard-sdk';
 
 const useEpochAPR = (nodeId = MYSTEN_LABS_K8S) => {
-  const tuskrSdk = useTuskrSdk();
+  const blizzardSdk = useBlizzardSdk();
 
   return useSwr(
     ['epoch-apr', nodeId],
-    () => tuskrSdk.lastEpochApr({ nodeId }),
+    () => blizzardSdk.lastEpochApr({ nodeId }),
     {
       refreshInterval: 5000,
     }
