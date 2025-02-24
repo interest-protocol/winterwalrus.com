@@ -6,7 +6,7 @@ import StakeForm from './stake-form';
 
 const Stake: FC = () => {
   return (
-    <Div display="flex" flexDirection="column" gap="1.5rem">
+    <Div display="flex" flexDirection="column" gap="1rem">
       <StakeForm />
       <StakeDetails />
     </Div>

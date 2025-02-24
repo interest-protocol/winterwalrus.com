@@ -43,16 +43,16 @@ const StakeFormButton: FC = () => {
   return (
     <Button
       all="unset"
-      px="2rem"
-      m="0.2rem"
+      py="1rem"
+      px="1.5rem"
+      bg="#99EFE4"
       color="#0C0F1D"
-      height="2.8rem"
+      cursor="pointer"
+      fontWeight="500"
       textAlign="center"
       position="relative"
-      borderRadius="5rem"
       onClick={handleStake}
-      backdropFilter="blur(16px)"
-      bg="linear-gradient(0deg, #99EFE4 15.38%, rgba(153, 239, 228, 0.50) 83.65%)"
+      borderRadius="0.625rem"
     >
       Stake
     </Button>
