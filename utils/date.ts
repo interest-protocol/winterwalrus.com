@@ -16,7 +16,7 @@ const MS_SCALES = [
   YEAR_MS,
 ];
 
-const MS_SCALES_MAP = {
+const MS_SHORT_SCALES_MAP = {
   [SECOND_MS]: 's',
   [MINUTE_MS]: 'm',
   [HOUR_MS]: 'h',
@@ -26,10 +26,25 @@ const MS_SCALES_MAP = {
   [YEAR_MS]: 'y',
 };
 
-export const msToShortDate = (ms: number) => {
+const MS_SCALES_MAP = {
+  [SECOND_MS]: 'second',
+  [MINUTE_MS]: 'minute',
+  [HOUR_MS]: 'hour',
+  [DAY_MS]: 'day',
+  [WEEK_MS]: 'week',
+  [MONTH_MS]: 'month',
+  [YEAR_MS]: 'year',
+};
+
+export const msToDate = (ms: number, short: boolean = false) => {
   const scale = MS_SCALES.toReversed().find((scale) => ms / scale > 1);
 
-  return `${scale ? Math.floor(ms / scale) : ms}${
-    scale ? MS_SCALES_MAP[scale] : 'ms'
+  if (!scale)
+    return `${ms} ${short ? 'ms' : `millisecond${ms === 1 ? '' : 's'}`}`;
+
+  const value = Math.floor(ms / scale);
+
+  return `${value} ${(short ? MS_SHORT_SCALES_MAP : MS_SCALES_MAP)[scale]}${
+    short ? '' : `${value === 1 ? '' : 's'}`
   }`;
 };

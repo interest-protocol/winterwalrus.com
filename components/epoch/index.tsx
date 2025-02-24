@@ -1,14 +1,18 @@
-import { Div, H2, P, Span } from '@stylin.js/elements';
-import { FC } from 'react';
+import { Div, H2, P } from '@stylin.js/elements';
+import { AnimatePresence } from 'motion/react';
+import { FC, useState } from 'react';
 
 import useEpochData from '@/hooks/use-epoch-data';
-import { msToShortDate } from '@/utils';
+import { msToDate } from '@/utils';
 
 import Motion from '../motion';
-import { DotSVG } from '../svg';
+import { ChevronDownSVG, InfoSVG } from '../svg';
 
 const Epoch: FC = () => {
   const { data } = useEpochData();
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleCollapsed = () => setCollapsed((e) => !e);
 
   const percentage = +(
     data && data.currentEpoch
@@ -18,120 +22,169 @@ const Epoch: FC = () => {
   ).toFixed(2);
 
   return (
-    <Div
-      p="1.5rem"
-      gap="1rem"
-      bg="#F8F8F80A"
-      display="flex"
-      color="#ffffff"
-      borderRadius="2rem"
-      flexDirection="column"
-      backdropFilter="blur(50px)"
-      boxShadow="2px 4px 16px rgba(248, 248, 248, 0.06) inset"
-    >
-      <Div display="flex" justifyContent="space-between">
-        <H2 fontSize="0.825rem">Epoch {data?.currentEpoch ?? '--'}</H2>
-        <P
-          p="0.5rem"
-          fontSize="0.75rem"
-          fontFamily="Rubik"
-          borderRadius="0.5rem"
-          color={percentage > 50 ? '#C484F6' : '#99EFE4'}
-          border={`0.1rem solid ${percentage > 50 ? '#C484F61A' : '#99EFE41A'}`}
-        >
-          {percentage > 50 ? 'Minting Stake NFT' : 'Minting LST Coin'}
-        </P>
-      </Div>
-      <Div
+    <AnimatePresence>
+      <Motion
+        p="1rem"
         gap="1rem"
+        bg="#FFFFFF0D"
         display="flex"
-        alignItems="stretch"
-        justifyContent="space-between"
-        flexDirection={['column', 'row']}
+        color="#ffffff"
+        borderRadius="1rem"
+        flexDirection="column"
+        border="1px solid #FFFFFF1A"
       >
-        <Div display="flex" gap="1rem" fontSize="0.75rem">
-          <Div>
+        <Div display="flex" justifyContent="space-between" alignItems="center">
+          <H2 fontSize="0.825rem">Epoch {data?.currentEpoch ?? '--'}</H2>
+          <Div display="flex" gap="1rem" alignItems="center">
             <P
-              gap="0.25rem"
-              display="flex"
-              color="#727272"
-              fontWeight="500"
-              fontFamily="Rubik"
+              px="0.5rem"
+              py="0.25rem"
+              bg="#83F34E14"
+              color="#83F34E"
+              fontSize="0.75rem"
+              borderRadius="1.7rem"
             >
-              <Span color="#2D68FF">
-                <DotSVG maxWidth="0.5rem" maxHeight="0.5rem" width="100%" />
-              </Span>
-              Duration
+              {percentage > 50 ? 'Minting Stake NFT' : 'Minting LST Coin'}
             </P>
-            <P>
-              {msToShortDate(
-                data && data.epochDurationMs > 0 ? data.epochDurationMs : 0
-              )}
-            </P>
-          </Div>
-          <Div>
-            <P
-              gap="0.25rem"
-              display="flex"
-              color="#727272"
-              fontWeight="500"
-              fontFamily="Rubik"
-            >
-              <Span color="#FF381C">
-                <DotSVG maxWidth="0.5rem" maxHeight="0.5rem" width="100%" />
-              </Span>
-              Remaining
-            </P>
-            <P>
-              {' '}
-              ~
-              {msToShortDate(
-                data && data.msUntilNextEpoch > 0 ? data.msUntilNextEpoch : 0
-              )}
-            </P>
-          </Div>
-          <Div>
-            <P
-              gap="0.25rem"
-              display="flex"
-              color="#727272"
-              fontWeight="500"
-              fontFamily="Rubik"
-            >
-              <Span color={percentage > 50 ? '#C484F6' : '#1F8477'}>
-                <DotSVG maxWidth="0.5rem" maxHeight="0.5rem" width="100%" />
-              </Span>
-              Voting
-            </P>
-            <P>{data ? (percentage > 50 ? 'After' : 'Before') : '--'}</P>
-          </Div>
-        </Div>
-        <Div
-          gap="0.25rem"
-          display="flex"
-          alignItems="flex-end"
-          flexDirection="column"
-        >
-          <P fontWeight="0.875rem">{percentage}%</P>
-          <Div
-            bg="#fff"
-            overflow="hidden"
-            borderRadius="0.15rem"
-            width={['100%', '100%', '10rem']}
-          >
             <Motion
-              height="0.3rem"
-              overflow="hidden"
-              borderRadius="0.15rem"
-              width={`${percentage}%`}
-              bg={`linear-gradient(90deg, #1F8477 0%, #1F8477 ${
-                (50 / percentage) * 100
-              }%, #C484F6 ${(50 / percentage) * 100}%, #C484F6 100%)`}
-            />
+              cursor="pointer"
+              display="inline-flex"
+              onClick={toggleCollapsed}
+              animate={{ rotate: collapsed ? '0deg' : '180deg' }}
+            >
+              <ChevronDownSVG
+                width="100%"
+                maxWidth="0.75rem"
+                maxHeight="0.75rem"
+              />
+            </Motion>
           </Div>
         </Div>
-      </Div>
-    </Div>
+        {!collapsed && (
+          <Motion
+            gap="1.5rem"
+            display="flex"
+            alignItems="stretch"
+            flexDirection="column"
+            justifyContent="space-between"
+            animate={{ scaleY: collapsed ? 0 : 1 }}
+          >
+            <Div gap="0.5rem" display="flex" flexDirection="column">
+              <Div display="flex" justifyContent="space-between">
+                <Div display="flex" alignItems="center" gap="0.25rem">
+                  <P color="#FFFFFF80">Progress</P>
+                  <InfoSVG width="100%" maxWidth="0.75rem" />
+                </Div>
+                <P fontWeight="0.875rem">{percentage}%</P>
+              </Div>
+              <Div
+                width="100%"
+                bg="#00000052"
+                overflow="hidden"
+                borderRadius="0.15rem"
+              >
+                <Motion
+                  height="0.3rem"
+                  overflow="hidden"
+                  borderRadius="0.15rem"
+                  width={`${percentage}%`}
+                  bg={`linear-gradient(90deg, #99EFE4 ${
+                    (50 / percentage) * 100 - 1
+                  }%, #C484F6 ${1 + (50 / percentage) * 100}%)`}
+                />
+              </Div>
+            </Div>
+            <Div
+              gap="0.5rem"
+              display="grid"
+              fontSize="0.755rem"
+              gridTemplateColumns="1fr 1fr 1fr"
+            >
+              <Div
+                p="1rem"
+                gap="0.25rem"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+                borderRadius="0.625rem"
+                border="1px solid #FFFFFF1A"
+              >
+                <P>
+                  {msToDate(
+                    data && data.epochDurationMs > 0 ? data.epochDurationMs : 0
+                  )}
+                </P>
+                <P
+                  gap="0.25rem"
+                  display="flex"
+                  color="#727272"
+                  fontWeight="500"
+                >
+                  Duration
+                </P>
+              </Div>
+              <Div
+                p="1rem"
+                gap="0.25rem"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+                borderRadius="0.625rem"
+                border="1px solid #FFFFFF1A"
+              >
+                <P>
+                  ~
+                  {msToDate(
+                    data && data.msUntilNextEpoch > 0
+                      ? data.msUntilNextEpoch
+                      : 0
+                  )}
+                </P>
+                <P
+                  gap="0.25rem"
+                  display="flex"
+                  color="#727272"
+                  fontWeight="500"
+                >
+                  Remaining
+                </P>
+              </Div>
+              <Div
+                p="1rem"
+                gap="0.25rem"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+                borderRadius="0.625rem"
+                border={`1px solid ${
+                  data
+                    ? percentage > 50
+                      ? '#C484F6B2'
+                      : '#99EFE4B2'
+                    : '#FFFFFF1A'
+                }`}
+              >
+                <P
+                  color={
+                    data ? (percentage > 50 ? '#C484F6' : '#99EFE4') : undefined
+                  }
+                >
+                  {data ? (percentage > 50 ? 'After' : 'Before') : '--'}
+                </P>
+                <P
+                  gap="0.25rem"
+                  display="flex"
+                  color="#727272"
+                  fontWeight="500"
+                >
+                  Voting
+                </P>
+              </Div>
+            </Div>
+          </Motion>
+        )}
+      </Motion>
+    </AnimatePresence>
   );
 };
 
