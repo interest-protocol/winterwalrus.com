@@ -38,24 +38,24 @@ const StakeForm: FC = () => {
           <Button
             all="unset"
             width="3rem"
-            color="white"
             height="3rem"
             display="flex"
+            cursor="pointer"
+            color="#FFFFFF80"
             overflow="hidden"
+            borderRadius="50%"
             position="absolute"
             alignItems="center"
-            background="#0B0F1DB2"
-            borderRadius="0.75rem"
+            background="#FFFFFF0D"
             justifyContent="center"
-            backdropFilter="blur(50px)"
-            boxShadow="2px 4px 16px 0px rgba(248, 248, 248, 0.06) inset"
+            backdropFilter="blur(20px)"
           >
             <SwapSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
           </Button>
         </Div>
         <StakeFormField name="out" label="Out" disabled />
-        <StakeFormButton />
       </Div>
+      <StakeFormButton />
     </FormProvider>
   );
 };

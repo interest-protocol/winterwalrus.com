@@ -8,9 +8,10 @@ const Home: FC = () => (
     <Background />
     <Layout>
       <Div
+        my="3rem"
         mx="auto"
         px="2rem"
-        gap="1.5rem"
+        gap="1rem"
         display="flex"
         maxWidth="32rem"
         flexDirection="column"
