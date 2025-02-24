@@ -7,7 +7,7 @@ import Wallet from '../wallet';
 
 const Header: FC = () => (
   <HTMLHeader
-    p="2rem"
+    p="1rem"
     display="flex"
     position="relative"
     alignItems="center"
