@@ -23,16 +23,12 @@ export const GlobalStyles = css`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'JetBrains Mono', serif;
+    font-family: 'DM Sans', serif;
   }
 
   html {
     background: #0c0f1d;
     scroll-behavior: smooth;
-  }
-
-  body {
-    cursor: url('icon.svg'), auto;
   }
 
   body,
@@ -44,6 +40,7 @@ export const GlobalStyles = css`
     color: inherit;
     text-decoration: none;
   }
+
   /* width */
   ::-webkit-scrollbar {
     width: 10px;

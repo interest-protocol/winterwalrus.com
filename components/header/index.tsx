@@ -1,6 +1,7 @@
 import { Div, H1, Header as HTMLHeader, Strong } from '@stylin.js/elements';
 import { FC } from 'react';
 
+import Settings from '../settings';
 import { LogoSVG } from '../svg';
 import Wallet from '../wallet';
 
@@ -29,7 +30,10 @@ const Header: FC = () => (
         Walrus
       </H1>
     </Div>
-    <Wallet />
+    <Div display="flex" gap="1rem">
+      <Settings />
+      <Wallet />
+    </Div>
   </HTMLHeader>
 );
 
