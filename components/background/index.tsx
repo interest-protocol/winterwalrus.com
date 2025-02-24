@@ -1,6 +1,12 @@
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
 
-const Background: FC = () => <AnimatePresence></AnimatePresence>;
+import BackgroundBlur from './background-blur';
+
+const Background: FC = () => (
+  <AnimatePresence>
+    <BackgroundBlur />
+  </AnimatePresence>
+);
 
 export default Background;
