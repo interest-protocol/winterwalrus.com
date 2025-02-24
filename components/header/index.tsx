@@ -14,12 +14,12 @@ const Header: FC = () => (
     justifyContent="space-between"
   >
     <Div display="flex" alignItems="center" gap="1rem">
-      <LogoSVG maxWidth="2.5rem" maxHeight="2.5rem" width="100%" />
+      <LogoSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
       <H1
         mx="auto"
-        fontSize="3rem"
         color="#FFFFFF"
         maxWidth="20rem"
+        fontSize="2.25rem"
         textAlign="center"
         fontFamily="PPNeueBit"
         display={['none', 'none', 'block']}
