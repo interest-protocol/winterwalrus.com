@@ -2,7 +2,7 @@ import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { COIN_DECIMALS } from '@/constants/ coins';
+import { COIN_DECIMALS } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 

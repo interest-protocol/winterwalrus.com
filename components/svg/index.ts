@@ -1,6 +1,7 @@
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as CogSVG } from './cog';
 export { default as DotSVG } from './dot';
+export { default as ExternalLinkSVG } from './external-link';
 export { default as GoldenLogoSVG } from './golden-logo';
 export { default as GridSVG } from './grid';
 export { default as InfoSVG } from './info';

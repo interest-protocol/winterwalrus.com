@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 
-import { COIN_DECIMALS } from '@/constants/ coins';
+import { COIN_DECIMALS } from '@/constants/coins';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import useEpochData from '@/hooks/use-epoch-data';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';

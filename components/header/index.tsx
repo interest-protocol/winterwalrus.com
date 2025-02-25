@@ -8,7 +8,9 @@ import Wallet from '../wallet';
 const Header: FC = () => (
   <HTMLHeader
     p="1rem"
+    mx="auto"
     display="flex"
+    maxWidth="1440px"
     position="relative"
     alignItems="center"
     justifyContent="space-between"
@@ -25,8 +27,8 @@ const Header: FC = () => (
         display={['none', 'none', 'block']}
       >
         <Strong color="#99EFE4" fontFamily="PPNeueBit">
-          Winter
-        </Strong>{' '}
+          Winter{' '}
+        </Strong>
         Walrus
       </H1>
     </Div>

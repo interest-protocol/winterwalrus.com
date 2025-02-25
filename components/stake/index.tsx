@@ -4,13 +4,11 @@ import { FC } from 'react';
 import StakeDetails from './stake-details';
 import StakeForm from './stake-form';
 
-const Stake: FC = () => {
-  return (
-    <Div display="flex" flexDirection="column" gap="1rem">
-      <StakeForm />
-      <StakeDetails />
-    </Div>
-  );
-};
+const Stake: FC = () => (
+  <Div gap="1rem" display="flex" flexDirection="column">
+    <StakeForm />
+    <StakeDetails />
+  </Div>
+);
 
 export default Stake;
