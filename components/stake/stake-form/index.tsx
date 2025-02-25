@@ -1,4 +1,4 @@
-import { Network, TYPES } from '@interest-protocol/blizzard-sdk';
+import { Network, OBJECT_TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,11 +13,11 @@ const StakeForm: FC = () => {
   const form = useForm({
     defaultValues: {
       in: {
-        coin: TYPES[Network.Testnet].WAL,
+        coin: OBJECT_TYPES[Network.Testnet].WAL,
         value: 0,
       },
       out: {
-        coin: TYPES[Network.Testnet].SNOW,
+        coin: OBJECT_TYPES[Network.Testnet].SNOW,
         value: 0,
       },
     },
@@ -29,7 +29,7 @@ const StakeForm: FC = () => {
       <Div display="flex" flexDirection="column" gap="0.25rem">
         <StakeFormField name="in" label="In" />
         <Div
-          zIndex="1"
+          zIndex="0"
           display="flex"
           position="relative"
           alignItems="center"

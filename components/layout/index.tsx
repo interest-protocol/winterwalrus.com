@@ -23,11 +23,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <Main
-      minHeight="100vh"
-      onMouseLeave={handleMouseLeave}
-      onMouseMoveCapture={handleMouseMove}
-    >
+    <Main onMouseLeave={handleMouseLeave} onMouseMoveCapture={handleMouseMove}>
       <Header />
       {children}
     </Main>

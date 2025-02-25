@@ -8,7 +8,7 @@ import { Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import { MYSTEN_LABS_K8S } from '@/constants';
-import { STAKING_COIN } from '@/constants/ coins';
+import { STAKING_COIN } from '@/constants/coins';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { getCoinOfValue } from '@/utils/coin';
 import { signAndExecute } from '@/utils/tx';

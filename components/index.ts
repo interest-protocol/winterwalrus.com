@@ -5,3 +5,4 @@ export { default as Layout } from './layout';
 export { default as Motion } from './motion';
 export { default as SEO } from './seo';
 export { default as Stake } from './stake';
+export { default as Staking } from './staking';

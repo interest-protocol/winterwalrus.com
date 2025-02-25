@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ChevronDownSVG } from '@/components/svg';
-import { COIN_ICON, COIN_METADATA } from '@/constants/ coins';
+import { COIN_ICON, COIN_METADATA } from '@/constants/coins';
 
 import { StakeFormFieldCoinProps } from './stake-form-field.types';
 
