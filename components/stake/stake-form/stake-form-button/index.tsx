@@ -29,11 +29,13 @@ const StakeFormButton: FC = () => {
   };
 
   const handleStake = async () => {
+    const form = getValues();
+
+    if (!form.in.value || !form.out.value) return;
+
     const id = toast.loading('Executing');
 
     try {
-      const form = getValues();
-
       const isAfterVote =
         data && data.currentEpoch
           ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
