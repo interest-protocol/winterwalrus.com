@@ -1,43 +1,71 @@
-import { Button } from '@stylin.js/elements';
+import { A, Button, P } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
+import { ExplorerMode } from '@/constants';
 import { COIN_DECIMALS } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import { useStake } from './stake-form-button.hook';
 
 const StakeFormButton: FC = () => {
   const stake = useStake();
-
   const { data } = useEpochData();
+  const getExplorerUrl = useGetExplorerUrl();
 
   const { getValues } = useFormContext();
 
+  const onSuccess = (toastId: string) => () => {
+    toast.dismiss(toastId);
+    toast.success('Dry executed!');
+  };
+
+  const onFailure = (toastId: string) => (error?: string) => {
+    toast.dismiss(toastId);
+    toast.error(error ?? 'Error on execute transaction');
+  };
+
   const handleStake = async () => {
-    const form = getValues();
+    const id = toast.loading('Executing');
 
-    const isAfterVote =
-      data && data.currentEpoch
-        ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
-        : false;
+    try {
+      const form = getValues();
 
-    const { digest, time } = await stake({
-      isAfterVote,
-      coinOut: form.out.coin,
-      coinValue: BigInt(
-        FixedPointMath.toBigNumber(
-          form.in.value,
-          COIN_DECIMALS[form.in.coin]
-        ).toFixed(0)
-      ),
-    });
+      const isAfterVote =
+        data && data.currentEpoch
+          ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
+          : false;
 
-    console.log({
-      digest,
-      time,
-    });
+      const { digest, time } = await stake({
+        isAfterVote,
+        coinOut: form.out.coin,
+        onSuccess: onSuccess(id),
+        onFailure: onFailure(id),
+        coinValue: BigInt(
+          FixedPointMath.toBigNumber(
+            form.in.value,
+            COIN_DECIMALS[form.in.coin]
+          ).toFixed(0)
+        ),
+      });
+
+      toast(
+        <A
+          target="_blank"
+          href={getExplorerUrl(digest, ExplorerMode.Transaction)}
+        >
+          <P>Transaction executed in {time / 1000}s</P>
+          <P fontSize="0.875rem" opacity="0.75">
+            See on Explorer
+          </P>
+        </A>
+      );
+    } catch (e) {
+      onFailure((e as Error).message);
+    }
   };
 
   return (

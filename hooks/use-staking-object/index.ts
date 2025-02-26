@@ -1,0 +1,87 @@
+import { useSuiClient } from '@mysten/dapp-kit';
+import { path, pathOr } from 'ramda';
+import useSWR from 'swr';
+
+import { StakingObject } from '@/interface';
+
+export const useStakingObject = (id?: string) => {
+  const suiClient = useSuiClient();
+
+  const { data, ...props } = useSWR<StakingObject | null>(
+    [useStakingObject.name, id],
+    async () => {
+      if (!id) return null;
+
+      const item = await suiClient.getObject({
+        id,
+        options: {
+          showType: true,
+          showContent: true,
+          showDisplay: true,
+        },
+      });
+
+      return {
+        type: path(['data', 'type'], item) as string,
+        objectId: path(['data', 'objectId'], item) as string,
+        display: pathOr(null, ['data', 'display', 'data', 'image_url'], item),
+        nodeId: pathOr(
+          path(
+            ['data', 'content', 'fields', 'inner', 'fields', 'node_id'],
+            item
+          ),
+          ['data', 'content', 'fields', 'node_id'],
+          item
+        ) as string,
+        principal: pathOr(
+          path(
+            ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
+            item
+          ),
+          ['data', 'content', 'fields', 'principal'],
+          item
+        ) as string,
+        state: pathOr(
+          path(
+            [
+              'data',
+              'content',
+              'fields',
+              'inner',
+              'fields',
+              'state',
+              'variant',
+            ],
+            item
+          ),
+          ['data', 'content', 'fields', 'state', 'variant'],
+          item
+        ) as string,
+        activationEpoch: Number(
+          pathOr(
+            path(
+              [
+                'data',
+                'content',
+                'fields',
+                'inner',
+                'fields',
+                'inner',
+                'activation_epoch',
+              ],
+              item
+            ),
+            ['data', 'content', 'fields', 'activation_epoch'],
+            item
+          )
+        ),
+      };
+    },
+    { refreshInterval: 5000 }
+  );
+
+  return {
+    ...props,
+    stakingObject: data,
+  };
+};

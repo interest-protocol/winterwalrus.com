@@ -1,5 +1,6 @@
 import type { useSignTransaction } from '@mysten/dapp-kit';
 import type {
+  DryRunTransactionBlockResponse,
   SuiClient,
   SuiTransactionBlockResponse,
   SuiTransactionBlockResponseOptions,
@@ -24,8 +25,10 @@ export interface SignAndExecuteArgs {
   tx: Transaction;
   client: SuiClient;
   currentAccount: WalletAccount;
+  fallback?: (arg?: string) => void;
   options?: SuiTransactionBlockResponseOptions;
   signTransaction: ReturnType<typeof useSignTransaction>;
+  callback?: (arg: DryRunTransactionBlockResponse) => void;
 }
 
 export interface WaitForTxArgs {

@@ -8,7 +8,7 @@ const Home: FC = () => (
     <Background />
     <Div
       mx="auto"
-      my="3rem"
+      mt="3rem"
       px="2rem"
       gap="1rem"
       display="flex"

@@ -24,6 +24,8 @@ export const useStake = () => {
   return async ({
     coinOut,
     coinValue,
+    onSuccess,
+    onFailure,
     isAfterVote,
     nodeId = MYSTEN_LABS_K8S,
     coinIn = TYPES[Network.Testnet].WAL,
@@ -52,6 +54,13 @@ export const useStake = () => {
     if (isAfterVote) blizzardSdk.keepStakeNft({ tx, nft: returnValues });
     else tx.transferObjects([returnValues], currentAccount.address);
 
-    return signAndExecute({ tx, client, signTransaction, currentAccount });
+    return signAndExecute({
+      tx,
+      client,
+      currentAccount,
+      signTransaction,
+      callback: onSuccess,
+      fallback: onFailure,
+    });
   };
 };
