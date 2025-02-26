@@ -1,8 +1,8 @@
-import { Div, Span } from '@stylin.js/elements';
+import { Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { ChevronDownSVG } from '@/components/svg';
+import Motion from '@/components/motion';
 import { COIN_ICON, COIN_METADATA } from '@/constants/coins';
 
 import { StakeFormFieldCoinProps } from './stake-form-field.types';
@@ -15,17 +15,18 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
   const Icon = COIN_ICON[coin];
 
   return (
-    <Div
+    <Motion
       gap="0.5rem"
       color="white"
       display="flex"
       fontSize="1rem"
+      cursor="pointer"
       overflow="hidden"
+      whileHover="hover"
       alignItems="center"
-      borderRadius="2rem"
       background="#0B0F1DB2"
       justifyContent="center"
-      boxShadow="2px 4px 16px 0px rgba(248, 248, 248, 0.06) inset"
+      boxShadow="2px 4px 16px 0px #F8F8F80F inset"
     >
       {Icon && (
         <Span overflow="hidden" borderRadius="1rem" display="flex">
@@ -33,10 +34,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
         </Span>
       )}
       {COIN_METADATA[coin]?.symbol ?? 'Select Coin'}
-      <Span overflow="hidden" borderRadius="1rem" display="flex">
-        <ChevronDownSVG maxWidth="1rem" width="1rem" />
-      </Span>
-    </Div>
+    </Motion>
   );
 };
 

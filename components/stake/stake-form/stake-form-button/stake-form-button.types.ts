@@ -9,3 +9,10 @@ export interface StakeArgs {
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }
+
+export interface UnstakeArgs {
+  coinIn: string;
+  coinValue: bigint;
+  onFailure: (error?: string) => void;
+  onSuccess: (tx: DryRunTransactionBlockResponse) => void;
+}

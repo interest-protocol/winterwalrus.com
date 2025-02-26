@@ -71,26 +71,20 @@ export class FixedPointMath {
   public static toNumber(
     value: BigNumber,
     decimals = 9,
-    significantRounding = 4,
-    significant = 6
+    significant = decimals
   ): number {
     if (value?.isZero()) return 0;
 
     const result = +Fraction.from(
       value,
       new BigNumber(10).pow(decimals)
-    ).toSignificant(significant, { groupSeparator: '' }, significantRounding);
+    ).toSignificant(significant, { groupSeparator: '' }, 0);
 
     return !decimals ? Math.floor(result) : result;
   }
 
-  public toNumber(decimals = 9, rounding = 4, significant = 6): number {
-    return FixedPointMath.toNumber(
-      this._value,
-      decimals,
-      rounding,
-      significant
-    );
+  public toNumber(decimals = 9, significant = 6): number {
+    return FixedPointMath.toNumber(this._value, decimals, significant);
   }
 
   public div(x: BigNumberish | FixedPointMath): FixedPointMath {

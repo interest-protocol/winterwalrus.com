@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { Toaster } from 'react-hot-toast';
 
 import { BackgroundProvider } from '@/components';
+import ModalProvider from '@/components/modal-provider';
 import { GlobalStyles } from '@/styles';
 
 const Web3Provider = dynamic(import('@/components/web3-provider'), {
@@ -12,6 +13,7 @@ const Web3Provider = dynamic(import('@/components/web3-provider'), {
 
 const App = ({ Component, pageProps }: AppProps) => (
   <Web3Provider>
+    <Global styles={GlobalStyles} />
     <Toaster
       position="bottom-center"
       toastOptions={{
@@ -24,7 +26,7 @@ const App = ({ Component, pageProps }: AppProps) => (
         },
       }}
     />
-    <Global styles={GlobalStyles} />
+    <ModalProvider />
     <BackgroundProvider />
     <Component {...pageProps} />
   </Web3Provider>
