@@ -1,4 +1,3 @@
-import { Network, TYPES } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -7,7 +6,6 @@ import {
 import { Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
-import { MYSTEN_LABS_K8S } from '@/constants';
 import { STAKING_COIN } from '@/constants/coins';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { getCoinOfValue } from '@/utils/coin';
@@ -27,8 +25,8 @@ export const useStake = () => {
     onSuccess,
     onFailure,
     isAfterVote,
-    nodeId = MYSTEN_LABS_K8S,
-    coinIn = TYPES[Network.Testnet].WAL,
+    nodeId,
+    coinIn,
   }: StakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
 

@@ -1,8 +1,8 @@
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 
 export interface StakeArgs {
-  nodeId?: string;
-  coinIn?: string;
+  nodeId: string;
+  coinIn: string;
   coinOut: string;
   coinValue: bigint;
   isAfterVote: boolean;

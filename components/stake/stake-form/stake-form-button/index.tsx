@@ -43,6 +43,8 @@ const StakeFormButton: FC = () => {
 
       const { digest, time } = await stake({
         isAfterVote,
+        coinIn: form.in.coin,
+        nodeId: form.validator,
         coinOut: form.out.coin,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
