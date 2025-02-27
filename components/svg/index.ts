@@ -1,4 +1,5 @@
 export { default as ChevronDownSVG } from './chevron-down';
+export { default as ChevronRightSVG } from './chevron-right';
 export { default as CogSVG } from './cog';
 export { default as DotSVG } from './dot';
 export { default as ExternalLinkSVG } from './external-link';

@@ -1,7 +1,6 @@
-import { Network, OBJECT_TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
 import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { SwapSVG } from '@/components/svg';
 
@@ -10,21 +9,16 @@ import StakeFormField from './stake-form-field';
 import StakeFormManager from './stake-form-manager';
 
 const StakeForm: FC = () => {
-  const form = useForm({
-    defaultValues: {
-      in: {
-        coin: OBJECT_TYPES[Network.Testnet].WAL,
-        value: 0,
-      },
-      out: {
-        coin: OBJECT_TYPES[Network.Testnet].SNOW,
-        value: 0,
-      },
-    },
-  });
+  const { setValue, getValues } = useFormContext();
+
+  const handleFlipTokens = () => {
+    const coinIn = getValues('in.coin');
+    setValue('in', { coin: getValues('out.coin'), value: '0' });
+    setValue('out', { coin: coinIn, value: '0' });
+  };
 
   return (
-    <FormProvider {...form}>
+    <>
       <StakeFormManager />
       <Div display="flex" flexDirection="column" gap="0.25rem">
         <StakeFormField name="in" label="In" />
@@ -48,7 +42,9 @@ const StakeForm: FC = () => {
             alignItems="center"
             background="#FFFFFF0D"
             justifyContent="center"
+            onClick={handleFlipTokens}
             backdropFilter="blur(20px)"
+            nHover={{ color: '#99EFE4' }}
           >
             <SwapSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
           </Button>
@@ -56,8 +52,7 @@ const StakeForm: FC = () => {
         <StakeFormField name="out" label="Out" disabled />
       </Div>
       <StakeFormButton />
-    </FormProvider>
+    </>
   );
 };
-
 export default StakeForm;

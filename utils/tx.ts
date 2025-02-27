@@ -1,4 +1,7 @@
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import {
+  DryRunTransactionBlockResponse,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui/client';
 
 import {
   SignAndExecuteArgs,
@@ -6,12 +9,12 @@ import {
   WaitForTxArgs,
 } from './utils.types';
 
-const throwTXIfNotSuccessful = (
-  tx: SuiTransactionBlockResponse,
-  callback?: () => void
+const throwTxIfNotSuccessful = (
+  tx: SuiTransactionBlockResponse | DryRunTransactionBlockResponse,
+  callback?: (string?: string) => void
 ) => {
   if (!!tx.effects?.status && tx.effects.status.status !== 'success') {
-    callback?.();
+    callback?.(tx.effects.status.error);
     throw new Error('Transaction failed');
   }
 };
@@ -32,34 +35,36 @@ export const signAndExecute = async ({
   tx,
   client,
   options,
+  callback,
+  fallback,
   currentAccount,
   signTransaction,
 }: SignAndExecuteArgs): Promise<TimedSuiTransactionBlockResponse> => {
-  const { signature, bytes } = await signTransaction.mutateAsync({
-    account: currentAccount,
-    transaction: tx,
-  });
+  const { signature, bytes: transactionBlock } =
+    await signTransaction.mutateAsync({
+      transaction: tx,
+      account: currentAccount,
+    });
+
+  const txDryResult = await client.dryRunTransactionBlock({ transactionBlock });
+
+  throwTxIfNotSuccessful(txDryResult, fallback);
+
+  callback?.(txDryResult);
 
   const startTime = Date.now();
 
   const txResult = await client.executeTransactionBlock({
-    transactionBlock: bytes,
     signature,
-    options: {
-      showEffects: true,
-      ...options,
-    },
-    requestType: 'WaitForLocalExecution',
+    transactionBlock,
+    options: { showEffects: true, ...options },
   });
 
-  const time = Date.now() - startTime;
+  const time = Number(txResult.timestampMs ?? Date.now()) - startTime;
 
-  throwTXIfNotSuccessful(txResult);
+  throwTxIfNotSuccessful(txResult, fallback);
 
   waitForTx({ client, digest: txResult.digest });
 
-  return {
-    ...txResult,
-    time,
-  };
+  return { ...txResult, time };
 };
