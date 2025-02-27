@@ -117,12 +117,17 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
               src={display ?? NFT_IMAGE[type]}
             />
             <Div>
-              <Div display="flex" gap="0.5rem" fontSize="0.875rem">
-                <P fontFamily="JetBrains Mono">{formatAddress(objectId)}</P>
-                <Link href="/">
+              <Link href={getExplorerUrl(objectId, ExplorerMode.Object)}>
+                <Div
+                  gap="0.5rem"
+                  display="flex"
+                  fontSize="0.875rem"
+                  nHover={{ color: '#99EFE4' }}
+                >
+                  <P fontFamily="JetBrains Mono">{formatAddress(objectId)}</P>
                   <ExternalLinkSVG maxWidth="0.85rem" width="100%" />
-                </Link>
-              </Div>
+                </Div>
+              </Link>
               <P fontSize="0.75rem" color="#FFFFFF80">
                 {nodeName}
               </P>
