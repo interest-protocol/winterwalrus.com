@@ -1,4 +1,4 @@
-import { OBJECT_TYPES, TYPES } from '@interest-protocol/blizzard-sdk';
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import useSWR from 'swr';
@@ -23,7 +23,7 @@ export const useCoins = () => {
         (acc, { coinType, totalBalance }) =>
           [
             normalizeStructTag(TYPES[network].WAL),
-            normalizeStructTag(OBJECT_TYPES[network].SNOW),
+            normalizeStructTag(TYPES[network].SNOW),
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,

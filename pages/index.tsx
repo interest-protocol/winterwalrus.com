@@ -1,4 +1,4 @@
-import { Network, OBJECT_TYPES } from '@interest-protocol/blizzard-sdk';
+import { Network, TYPES } from '@interest-protocol/blizzard-sdk';
 import { NextPage } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -10,11 +10,11 @@ const HomePage: NextPage = () => {
   const form = useForm({
     defaultValues: {
       in: {
-        coin: OBJECT_TYPES[Network.Testnet].WAL,
+        coin: TYPES[Network.Testnet].WAL,
         value: 0,
       },
       out: {
-        coin: OBJECT_TYPES[Network.Testnet].SNOW,
+        coin: TYPES[Network.Testnet].SNOW,
         value: 0,
       },
       validator: INTEREST_LABS,
