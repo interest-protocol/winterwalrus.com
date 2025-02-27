@@ -73,52 +73,47 @@ export const useUnstake = () => {
   const signTransaction = useSignTransaction();
 
   return async ({ coinIn, coinValue, onSuccess, onFailure }: UnstakeArgs) => {
-    try {
-      invariant(currentAccount?.address, 'You must be logged in');
+    invariant(currentAccount?.address, 'You must be logged in');
 
-      const { returnValues: withdrawIXs, tx } = await blizzardSdk.fcfs({
-        value: coinValue,
-        blizzardStaking: SHARED_OBJECTS[network].SNOW_STAKING({
-          mutable: true,
-        }).objectId,
-      });
+    const { returnValues: withdrawIXs, tx } = await blizzardSdk.fcfs({
+      value: coinValue,
+      blizzardStaking: SHARED_OBJECTS[network].SNOW_STAKING({
+        mutable: true,
+      }).objectId,
+    });
 
-      const lstCoin = await getCoinOfValue({
-        tx,
-        client,
-        coinValue,
-        coinType: coinIn,
-        account: currentAccount.address,
-      });
+    const lstCoin = await getCoinOfValue({
+      tx,
+      client,
+      coinValue,
+      coinType: coinIn,
+      account: currentAccount.address,
+    });
 
-      const { returnValues: stakedWalVector } = await blizzardSdk.burnLst({
-        tx,
-        lstCoin,
-        withdrawIXs,
-        minWalValue: coinValue,
-        blizzardStaking: SHARED_OBJECTS.testnet.SNOW_STAKING({
-          mutable: true,
-        }).objectId,
-      });
+    const { returnValues: stakedWalVector } = await blizzardSdk.burnLst({
+      tx,
+      lstCoin,
+      withdrawIXs,
+      minWalValue: coinValue,
+      blizzardStaking: SHARED_OBJECTS.testnet.SNOW_STAKING({
+        mutable: true,
+      }).objectId,
+    });
 
-      blizzardSdk.vectorTransfer({
-        tx,
-        vector: stakedWalVector,
-        to: currentAccount.address,
-        type: TYPES[network].STAKED_WAL,
-      });
+    blizzardSdk.vectorTransfer({
+      tx,
+      vector: stakedWalVector,
+      to: currentAccount.address,
+      type: TYPES[network].STAKED_WAL,
+    });
 
-      return signAndExecute({
-        tx,
-        client,
-        currentAccount,
-        signTransaction,
-        callback: onSuccess,
-        fallback: onFailure,
-      });
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
+    return signAndExecute({
+      tx,
+      client,
+      currentAccount,
+      signTransaction,
+      callback: onSuccess,
+      fallback: onFailure,
+    });
   };
 };

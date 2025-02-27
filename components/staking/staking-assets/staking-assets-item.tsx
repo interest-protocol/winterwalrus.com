@@ -1,5 +1,7 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
-import { Button, Div, H4, Img, P } from '@stylin.js/elements';
+import { A, Button, Div, Img, P } from '@stylin.js/elements';
+import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { not } from 'ramda';
@@ -9,15 +11,28 @@ import unikey from 'unikey';
 
 import Motion from '@/components/motion';
 import { ChevronDownSVG, ExternalLinkSVG } from '@/components/svg';
-import { NFT_IMAGE } from '@/constants';
+import { ExplorerMode, NFT_IMAGE } from '@/constants';
 import useEpochData from '@/hooks/use-epoch-data';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
+import { useNetwork } from '@/hooks/use-network';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import { StakingAssetsItemProps } from '../staking.types';
+import { useUnstake } from './staking-assets-item.hook';
+import {
+  StakingAssetsItemUnstakeModal,
+  StakingAssetsItemWithdrawModal,
+} from './staking-assets-item-modals';
 
 const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
+  const unstake = useUnstake();
+  const network = useNetwork();
   const { data } = useEpochData();
+  const { setContent } = useModal();
+  const getExplorerUrl = useGetExplorerUrl();
   const [isOpen, setIsOpen] = useState(false);
   const { stakingObject } = useStakingObject(id);
   const { nodeName } = useNodeName(stakingObject?.nodeId);
@@ -30,7 +45,52 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
 
   if (!stakingObject) return null;
 
-  const { type, display, objectId, activationEpoch, state } = stakingObject;
+  const { type, display, objectId, activationEpoch, state, principal } =
+    stakingObject;
+
+  const onSuccess = (toastId: string) => () => {
+    toast.dismiss(toastId);
+    toast.success('Unstaked successfully');
+  };
+
+  const onFailure = (toastId: string) => (error?: string) => {
+    toast.dismiss(toastId);
+    toast.error(error ?? 'Error executing transaction');
+  };
+
+  const handleUnstake = async () => {
+    if (!isActivated(activationEpoch)) return;
+
+    if (type === TYPES[network].STAKED_WAL) {
+      if (state === 'Staked') setContent(<StakingAssetsItemUnstakeModal />);
+      else setContent(<StakingAssetsItemWithdrawModal />);
+      return;
+    }
+
+    const id = toast.loading('Unstaking...');
+
+    try {
+      const { digest, time } = await unstake({
+        objectId,
+        onSuccess: onSuccess(id),
+        onFailure: onFailure(id),
+      });
+
+      toast(
+        <A
+          target="_blank"
+          href={getExplorerUrl(digest, ExplorerMode.Transaction)}
+        >
+          <P>Transaction executed in {time / 1000}s</P>
+          <P fontSize="0.875rem" opacity="0.75">
+            See on Explorer
+          </P>
+        </A>
+      );
+    } catch (e) {
+      onFailure(id)((e as Error).message);
+    }
+  };
 
   return (
     <Div
@@ -69,13 +129,13 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             </Div>
           </Div>
           <P
-            alignSelf="flex-start"
             px="0.5rem"
             py="0.25rem"
-            bg="#FFFFFF14"
-            color="#FFFFFF"
             fontSize="0.75rem"
             borderRadius="1.7rem"
+            alignSelf="flex-start"
+            color={state === 'Staked' ? '#FFFFFF' : '#83F34E'}
+            bg={state === 'Staked' ? '#FFFFFF14' : '#83F34E14'}
           >
             {state}
           </P>
@@ -83,24 +143,21 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
         <Div display="flex" alignItems="center" gap="1rem">
           <Button
             all="unset"
+            px="1rem"
             py="0.5rem"
-            px="1.5rem"
-            bg="#99EFE4"
             color="#000000"
-            cursor="pointer"
             borderRadius="0.5rem"
-            onClick={() =>
-              toast.success(
-                <Div>
-                  <H4>Ok Marco</H4>
-                  <P>Auxiliar text</P>
-                </Div>
-              )
-            }
+            onClick={handleUnstake}
             disabled={!isActivated(activationEpoch)}
             opacity={isActivated(activationEpoch) ? 1 : 0.5}
+            bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C084F2'}
+            cursor={isActivated(activationEpoch) ? 'pointer' : 'not-allowed'}
           >
-            Unstake
+            {type === TYPES[network].STAKED_WAL
+              ? state === 'Staked'
+                ? 'Unstake'
+                : 'Withdraw'
+              : 'Burn'}
           </Button>
           <Motion
             cursor="pointer"
@@ -108,7 +165,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             initial={{ rotate: isOpen ? '180deg' : '0deg' }}
             animate={{ rotate: isOpen ? '180deg' : '0deg' }}
           >
-            <ChevronDownSVG maxWidth="1rem" width="100%" />
+            <ChevronDownSVG maxWidth="0.7rem" width="100%" />
           </Motion>
         </Div>
       </Div>
@@ -129,7 +186,9 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
               borderRadius="0.625rem"
               border="1px solid #FFFFFF1A"
             >
-              <P fontFamily="JetBrains Mono">1 WAL</P>
+              <P fontFamily="JetBrains Mono">
+                {FixedPointMath.toNumber(BigNumber(principal), 9, 2)} WAL
+              </P>
               <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
                 Principal
               </P>

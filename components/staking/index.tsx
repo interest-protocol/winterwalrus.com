@@ -47,7 +47,8 @@ const Staking: FC = () => {
               (acc, principal) => acc.plus(principal),
               ZERO_BIG_NUMBER
             ) ?? ZERO_BIG_NUMBER,
-            9
+            9,
+            3
           )}{' '}
           <Strong color="#99EFE4" fontFamily="inherit">
             WAL

@@ -12,7 +12,7 @@ const Home: FC = () => (
       px="2rem"
       gap="1rem"
       display="flex"
-      maxWidth="33rem"
+      maxWidth="34rem"
       position="relative"
       borderRadius="1rem"
       flexDirection="column"
