@@ -15,8 +15,8 @@ export const useFees = () => {
 
     return {
       staking: +fees.mint / 100,
+      unstaking: +fees.burn / 100,
       transmute: +fees.transmute / 100,
-      unstaking: +fees.burn > 100 ? +fees.burn / 100 : 1,
     };
   });
 
