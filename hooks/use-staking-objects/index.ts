@@ -43,9 +43,48 @@ export const useStakingObjects = () => {
               item
             ) as string
         ),
-        stakingObjectIds: objects.data.map(
-          (item) => path(['data', 'objectId'], item) as string
-        ),
+        stakingObjectIds: objects.data
+          .sort((a, b) =>
+            Number(
+              pathOr(
+                path(
+                  [
+                    'data',
+                    'content',
+                    'fields',
+                    'inner',
+                    'fields',
+                    'inner',
+                    'activation_epoch',
+                  ],
+                  a
+                ),
+                ['data', 'content', 'fields', 'activation_epoch'],
+                a
+              )
+            ) <
+            Number(
+              pathOr(
+                path(
+                  [
+                    'data',
+                    'content',
+                    'fields',
+                    'inner',
+                    'fields',
+                    'inner',
+                    'activation_epoch',
+                  ],
+                  b
+                ),
+                ['data', 'content', 'fields', 'activation_epoch'],
+                b
+              )
+            )
+              ? -1
+              : 1
+          )
+          .map((item) => path(['data', 'objectId'], item) as string),
       };
     },
     {

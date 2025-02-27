@@ -25,9 +25,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
       overflow="hidden"
       whileHover="hover"
       alignItems="center"
-      background="#0B0F1DB2"
       justifyContent="center"
-      boxShadow="2px 4px 16px 0px #F8F8F80F inset"
     >
       {Icon ? (
         <Span overflow="hidden" borderRadius="1rem" display="flex">
