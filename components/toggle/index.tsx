@@ -47,7 +47,7 @@ export const ToggleButton: FC<PropsWithChildren<CheckedButtonProps>> = ({
           borderRadius="99rem"
           opacity={disabled ? 0.4 : 1}
           transition="all 300ms ease-in-out"
-          bg={!active ? '#0000003D' : '#F5B722'}
+          bg={!active ? '#0000003D' : '#C484F6'}
           nHover={{
             backgroundImage: active
               ? 'linear-gradient(to bottom, #00000029, #00000029)'
