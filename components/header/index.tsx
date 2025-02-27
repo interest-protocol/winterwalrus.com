@@ -33,8 +33,8 @@ const Header: FC = () => (
       </H1>
     </Div>
     <Div display="flex" gap="1rem">
-      <Settings />
       <Wallet />
+      <Settings />
     </Div>
   </HTMLHeader>
 );
