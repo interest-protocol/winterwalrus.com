@@ -32,7 +32,7 @@ const StakeFormButton: FC = () => {
   const onSuccess = (toastId: string) => () => {
     toast.dismiss(toastId);
     toast.success(
-      coinOut === TYPES[network].WAL
+      coinOut === TYPES[network].STAKED_WAL
         ? 'Unstaked successfully'
         : 'Staked successfully!'
     );
@@ -136,9 +136,11 @@ const StakeFormButton: FC = () => {
       textAlign="center"
       position="relative"
       borderRadius="0.625rem"
-      onClick={coinOut === TYPES[network].WAL ? handleUnstake : handleStake}
+      onClick={
+        coinOut === TYPES[network].STAKED_WAL ? handleUnstake : handleStake
+      }
     >
-      {coinOut === TYPES[network].WAL ? 'Unstake' : 'Stake'}
+      {coinOut === TYPES[network].STAKED_WAL ? 'Unstake' : 'Stake'}
     </Button>
   );
 };

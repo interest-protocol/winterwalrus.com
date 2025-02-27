@@ -23,6 +23,11 @@ export const COIN_METADATA = {
     symbol: 'SNOW',
     name: 'Snow',
   },
+  [TYPES[Network.Testnet].STAKED_WAL]: {
+    type: TYPES[Network.Testnet].SNOW,
+    symbol: 'SWAL',
+    name: 'Staked WAL',
+  },
 };
 
 export const COIN_ICON = {

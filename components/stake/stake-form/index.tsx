@@ -1,20 +1,35 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { SwapSVG } from '@/components/svg';
+import { useNetwork } from '@/hooks/use-network';
 
 import StakeFormButton from './stake-form-button';
 import StakeFormField from './stake-form-field';
 import StakeFormManager from './stake-form-manager';
 
 const StakeForm: FC = () => {
+  const network = useNetwork();
   const { setValue, getValues } = useFormContext();
 
   const handleFlipTokens = () => {
     const coinIn = getValues('in.coin');
-    setValue('in', { coin: getValues('out.coin'), value: '0' });
-    setValue('out', { coin: coinIn, value: '0' });
+    setValue('in', {
+      coin:
+        getValues('out.coin') === TYPES[network].STAKED_WAL
+          ? TYPES[network].WAL
+          : TYPES[network].SNOW,
+      value: '0',
+    });
+    setValue('out', {
+      value: '0',
+      coin:
+        coinIn === TYPES[network].WAL
+          ? TYPES[network].STAKED_WAL
+          : TYPES[network].SNOW,
+    });
   };
 
   return (
