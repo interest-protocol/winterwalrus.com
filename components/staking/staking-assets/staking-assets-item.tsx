@@ -150,7 +150,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             onClick={handleUnstake}
             disabled={!isActivated(activationEpoch)}
             opacity={isActivated(activationEpoch) ? 1 : 0.5}
-            bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C084F2'}
+            bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C484F6'}
             cursor={isActivated(activationEpoch) ? 'pointer' : 'not-allowed'}
           >
             {type === TYPES[network].STAKED_WAL
