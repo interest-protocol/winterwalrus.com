@@ -1,17 +1,13 @@
 import { Img, Span } from '@stylin.js/elements';
 import { FC } from 'react';
-import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import Motion from '@/components/motion';
-import { ChevronDownSVG } from '@/components/svg';
 import { ASSET_METADATA, COIN_ICON, NFT_IMAGE } from '@/constants/coins';
-import { useModal } from '@/hooks/use-modal';
 
 import { StakeFormFieldCoinProps } from './stake-form-field.types';
-import StakeFormFieldModal from './stake-form-field-modal';
 
 const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
-  const { setContent } = useModal();
   const form = useFormContext();
   const { control } = form;
 
@@ -19,13 +15,6 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
 
   const Icon = COIN_ICON[coin];
   const image = NFT_IMAGE[coin];
-
-  const handleSelectCoin = () =>
-    setContent(
-      <FormProvider {...form}>
-        <StakeFormFieldModal name={name} />
-      </FormProvider>
-    );
 
   return (
     <Motion
@@ -38,7 +27,6 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
       whileHover="hover"
       alignItems="center"
       justifyContent="center"
-      onClick={handleSelectCoin}
     >
       {Icon ? (
         <Span overflow="hidden" borderRadius="1rem" display="flex">
@@ -50,14 +38,6 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
         </Span>
       )}
       {ASSET_METADATA[coin]?.symbol ?? 'Select Coin'}
-      <Motion
-        display="flex"
-        overflow="hidden"
-        initial={{ rotate: '0deg' }}
-        variants={{ hover: { rotate: ['0deg', '-90deg'] } }}
-      >
-        <ChevronDownSVG maxWidth="1rem" width="1rem" />
-      </Motion>
     </Motion>
   );
 };

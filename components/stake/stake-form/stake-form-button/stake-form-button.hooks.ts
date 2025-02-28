@@ -22,13 +22,13 @@ export const useStake = () => {
   const signTransaction = useSignTransaction();
 
   return async ({
+    nodeId,
+    coinIn,
     coinOut,
     coinValue,
     onSuccess,
     onFailure,
     isAfterVote,
-    nodeId,
-    coinIn,
   }: StakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
 

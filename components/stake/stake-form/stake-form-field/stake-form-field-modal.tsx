@@ -37,7 +37,7 @@ const StakeFormFieldModal: FC<StakeFormFieldCoinProps> = ({ name }) => {
     >
       <Div display="flex" justifyContent="space-between">
         <P fontSize="1.25rem" fontWeight="600">
-          Select coin
+          Select asset
         </P>
         <Span
           py="0.25rem"

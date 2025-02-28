@@ -15,7 +15,7 @@ const App = ({ Component, pageProps }: AppProps) => (
   <Web3Provider>
     <Global styles={GlobalStyles} />
     <Toaster
-      position="bottom-center"
+      position="bottom-right"
       toastOptions={{
         style: {
           color: '#FBFBFB',
