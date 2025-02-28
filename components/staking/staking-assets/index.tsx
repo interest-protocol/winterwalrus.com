@@ -2,12 +2,12 @@ import { Div, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
 
-import { useStakingObjects } from '@/hooks/use-staking-objects';
+import { useAppState } from '@/hooks/use-app-state';
 
 import StakingAssetsItem from './staking-assets-item';
 
 const StakingAssets: FC = () => {
-  const { stakingObjectIds } = useStakingObjects();
+  const { stakingObjectIds } = useAppState();
 
   if (!stakingObjectIds?.length)
     return (

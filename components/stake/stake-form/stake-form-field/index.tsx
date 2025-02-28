@@ -1,19 +1,18 @@
 import { Button, Div, Input, Label, Span } from '@stylin.js/elements';
-import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { WalletSVG } from '@/components/svg';
-import { useCoins } from '@/hooks/use-coins';
+import { useAppState } from '@/hooks/use-app-state';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { parseInputEventToNumberString } from '@/utils';
+import { parseInputEventToNumberString, ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakeFormFieldProps } from './stake-form-field.types';
 import StakeFormFieldCoin from './stake-form-field-coin';
 import StakeFormFieldPrice from './stake-form-field-price';
 
 const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
-  const { coins } = useCoins();
+  const { balances } = useAppState();
   const { register, setValue, control } = useFormContext();
 
   const coin = useWatch({ control, name: `${name}.coin` });
@@ -66,13 +65,13 @@ const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
             onClick: () =>
               setValue(
                 `${name}.value`,
-                FixedPointMath.toNumber(BigNumber(coins?.[coin] ?? 0))
+                FixedPointMath.toNumber(balances[coin] ?? ZERO_BIG_NUMBER)
               ),
           })}
         >
           <WalletSVG maxWidth="1rem" width="100%" />
           <Span fontFamily="JetBrains Mono">
-            {FixedPointMath.toNumber(BigNumber(coins?.[coin] ?? 0), 9, 4)}
+            {FixedPointMath.toNumber(balances[coin] ?? ZERO_BIG_NUMBER, 9, 4)}
           </Span>
         </Button>
       </Div>

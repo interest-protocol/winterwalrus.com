@@ -1,13 +1,13 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { A, Button, P } from '@stylin.js/elements';
+import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { ExplorerMode, INTEREST_LABS } from '@/constants';
+import { INTEREST_LABS } from '@/constants';
 import { COIN_DECIMALS } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
-import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
@@ -18,7 +18,7 @@ const StakeFormButton: FC = () => {
   const unstake = useUnstake();
   const network = useNetwork();
   const { data } = useEpochData();
-  const getExplorerUrl = useGetExplorerUrl();
+
   const { control, getValues, setValue } = useFormContext();
 
   const coinOut = useWatch({ control, name: 'out.coin' });
@@ -29,15 +29,19 @@ const StakeFormButton: FC = () => {
     setValue('validator', INTEREST_LABS);
   };
 
-  const onSuccess = (toastId: string) => () => {
-    toast.dismiss(toastId);
-    toast.success(
-      coinOut === TYPES[network].STAKED_WAL
-        ? 'Unstaked successfully'
-        : 'Staked successfully!'
-    );
-    reset();
-  };
+  const onSuccess =
+    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
+      toast.dismiss(toastId);
+      toast.success(
+        coinOut === TYPES[network].STAKED_WAL
+          ? 'Unstaked successfully!'
+          : 'Staked successfully!'
+      );
+
+      console.log({ dryTx });
+
+      reset();
+    };
 
   const onFailure = (toastId: string) => (error?: string) => {
     toast.dismiss(toastId);
@@ -57,7 +61,7 @@ const StakeFormButton: FC = () => {
           ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
           : false;
 
-      const { digest, time } = await stake({
+      await stake({
         coinOut,
         isAfterVote,
         coinIn: form.in.coin,
@@ -71,18 +75,6 @@ const StakeFormButton: FC = () => {
           ).toFixed(0)
         ),
       });
-
-      toast(
-        <A
-          target="_blank"
-          href={getExplorerUrl(digest, ExplorerMode.Transaction)}
-        >
-          <P>Transaction executed in {time / 1000}s</P>
-          <P fontSize="0.875rem" opacity="0.75">
-            See on Explorer
-          </P>
-        </A>
-      );
     } catch (e) {
       onFailure(id)((e as Error).message);
     }
@@ -96,7 +88,7 @@ const StakeFormButton: FC = () => {
     const id = toast.loading('Unstaking...');
 
     try {
-      const { digest, time } = await unstake({
+      await unstake({
         coinIn: form.in.coin,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
@@ -107,18 +99,6 @@ const StakeFormButton: FC = () => {
           ).toFixed(0)
         ),
       });
-
-      toast(
-        <A
-          target="_blank"
-          href={getExplorerUrl(digest, ExplorerMode.Transaction)}
-        >
-          <P>Transaction executed in {time / 1000}s</P>
-          <P fontSize="0.875rem" opacity="0.75">
-            See on Explorer
-          </P>
-        </A>
-      );
     } catch (e) {
       onFailure(id)((e as Error).message);
     }

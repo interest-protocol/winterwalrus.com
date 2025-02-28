@@ -1,23 +1,21 @@
 import { Div, Img, P, Span } from '@stylin.js/elements';
-import BigNumber from 'bignumber.js';
 import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { ASSET_METADATA } from '@/constants';
-import { useCoins } from '@/hooks/use-coins';
-import { useStakingObjects } from '@/hooks/use-staking-objects';
+import { useAppState } from '@/hooks/use-app-state';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakeFormFieldCoinProps } from './stake-form-field.types';
 
 const StakeFormFieldModal: FC<StakeFormFieldCoinProps> = ({ name }) => {
-  const { coins } = useCoins();
+  const { balances, principalsByType } = useAppState();
   const {
     // control,
     setValue,
   } = useFormContext();
-  const { principalByType } = useStakingObjects();
 
   // const currentCoin = useWatch({ control, name: `${name}.coin` });
 
@@ -85,7 +83,9 @@ const StakeFormFieldModal: FC<StakeFormFieldCoinProps> = ({ name }) => {
                 <P fontFamily="JetBrains Mono">
                   {
                     +FixedPointMath.toNumber(
-                      principalByType?.[type] ?? BigNumber(coins?.[type] ?? 0),
+                      principalsByType[type] ??
+                        balances[type] ??
+                        ZERO_BIG_NUMBER,
                       decimals
                     ).toFixed(4)
                   }

@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { Toaster } from 'react-hot-toast';
 
 import { BackgroundProvider } from '@/components';
+import AppStateProvider from '@/components/app-state-provider';
 import ModalProvider from '@/components/modal-provider';
 import { GlobalStyles } from '@/styles';
 
@@ -27,6 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       }}
     />
     <ModalProvider />
+    <AppStateProvider />
     <BackgroundProvider />
     <Component {...pageProps} />
   </Web3Provider>

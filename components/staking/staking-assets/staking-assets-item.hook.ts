@@ -12,7 +12,7 @@ import { signAndExecute } from '@/utils';
 
 import { UnstakeArgs } from '../staking.types';
 
-export const useUnstake = () => {
+export const useBurn = () => {
   const network = useNetwork();
   const client = useSuiClient();
   const blizzardSdk = useBlizzardSdk();

@@ -1,6 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
-import { A, Button, Div, Img, P } from '@stylin.js/elements';
+import { Button, Div, Img, P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
@@ -21,14 +21,14 @@ import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import { StakingAssetsItemProps } from '../staking.types';
-import { useUnstake } from './staking-assets-item.hook';
+import { useBurn } from './staking-assets-item.hook';
 import {
   StakingAssetsItemUnstakeModal,
   StakingAssetsItemWithdrawModal,
 } from './staking-assets-item-modals';
 
 const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
-  const unstake = useUnstake();
+  const burn = useBurn();
   const network = useNetwork();
   const { data } = useEpochData();
   const { setContent } = useModal();
@@ -50,7 +50,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
 
   const onSuccess = (toastId: string) => () => {
     toast.dismiss(toastId);
-    toast.success('Unstaked successfully');
+    toast.success('Burned successfully');
   };
 
   const onFailure = (toastId: string) => (error?: string) => {
@@ -70,23 +70,11 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
     const id = toast.loading('Unstaking...');
 
     try {
-      const { digest, time } = await unstake({
+      await burn({
         objectId,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
       });
-
-      toast(
-        <A
-          target="_blank"
-          href={getExplorerUrl(digest, ExplorerMode.Transaction)}
-        >
-          <P>Transaction executed in {time / 1000}s</P>
-          <P fontSize="0.875rem" opacity="0.75">
-            See on Explorer
-          </P>
-        </A>
-      );
     } catch (e) {
       onFailure(id)((e as Error).message);
     }
@@ -117,7 +105,10 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
               src={display ?? NFT_IMAGE[type]}
             />
             <Div>
-              <Link href={getExplorerUrl(objectId, ExplorerMode.Object)}>
+              <Link
+                target="_blank"
+                href={getExplorerUrl(objectId, ExplorerMode.Object)}
+              >
                 <Div
                   gap="0.5rem"
                   display="flex"

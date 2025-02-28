@@ -33,7 +33,7 @@ const Settings: FC = () => {
         border="1px solid #99EFE44D"
       >
         <Span
-          p="1rem"
+          p="0.75rem"
           display="inline-block"
           transition="all 300ms linear"
           nHover={{ rotate: '90deg', color: '#99EFE4' }}

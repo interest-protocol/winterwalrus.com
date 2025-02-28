@@ -32,7 +32,7 @@ const Header: FC = () => (
         Walrus
       </H1>
     </Div>
-    <Div display="flex" gap="1rem">
+    <Div display="flex" gap="1rem" alignItems="center">
       <Wallet />
       <Settings />
     </Div>
