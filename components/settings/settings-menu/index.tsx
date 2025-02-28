@@ -15,7 +15,7 @@ const SettingsMenu: FC = () => {
     <Motion
       gap="2rem"
       zIndex="1"
-      mt="3.75rem"
+      mt="4.25rem"
       bg="#FFFFFF0D"
       display="flex"
       color="#ffffff"

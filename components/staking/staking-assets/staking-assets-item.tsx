@@ -124,7 +124,9 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                   fontSize="0.875rem"
                   nHover={{ color: '#99EFE4' }}
                 >
-                  <P fontFamily="JetBrains Mono">{formatAddress(objectId)}</P>
+                  <P fontFamily="JetBrains Mono">
+                    {objectId ? formatAddress(objectId) : ''}
+                  </P>
                   <ExternalLinkSVG maxWidth="0.85rem" width="100%" />
                 </Div>
               </Link>

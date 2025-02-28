@@ -29,7 +29,7 @@ const StakeFormManager: FC = () => {
     }
 
     blizzardSdk[
-      coinOut === TYPES[network].WAL ? 'toWalAtEpoch' : 'toLstAtEpoch'
+      coinOut === TYPES[network].STAKED_WAL ? 'toWalAtEpoch' : 'toLstAtEpoch'
     ]({
       epoch: epoch.currentEpoch,
       value: BigInt(
