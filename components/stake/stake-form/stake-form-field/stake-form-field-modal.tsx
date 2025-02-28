@@ -17,7 +17,7 @@ const StakeFormFieldModal: FC<StakeFormFieldCoinProps> = ({ name }) => {
     setValue,
   } = useFormContext();
 
-  // const currentCoin = useWatch({ control, name: `${name}.coin` });
+  // const currentCoin = useWatch({ control, name: `${name}.type` });
 
   console.log({ name });
 

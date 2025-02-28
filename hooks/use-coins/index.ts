@@ -29,7 +29,7 @@ export const useCoins = () => {
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,
-                [coinType]: BigNumber(totalBalance),
+                [normalizeStructTag(coinType)]: BigNumber(totalBalance),
               }
             : acc,
         {}

@@ -15,17 +15,17 @@ const StakeForm: FC = () => {
   const { setValue, getValues } = useFormContext();
 
   const handleFlipTokens = () => {
-    const coinIn = getValues('in.coin');
+    const coinIn = getValues('in.type');
     setValue('in', {
-      coin:
-        getValues('out.coin') === TYPES[network].STAKED_WAL
+      type:
+        getValues('out.type') === TYPES[network].STAKED_WAL
           ? TYPES[network].WAL
           : TYPES[network].SNOW,
       value: '0',
     });
     setValue('out', {
       value: '0',
-      coin:
+      type:
         coinIn === TYPES[network].WAL
           ? TYPES[network].STAKED_WAL
           : TYPES[network].SNOW,

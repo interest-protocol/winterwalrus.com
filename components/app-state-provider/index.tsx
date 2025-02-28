@@ -16,15 +16,14 @@ const AppStateProvider: FC = () => {
   }, [coins]);
 
   useEffect(() => {
+    console.log('>> update ', { principalByType });
+
     if (!principalByType || !stakingObjectIds) return;
 
     update(({ balances }) => ({
-      principalByType,
       stakingObjectIds,
-      balances: {
-        ...balances,
-        ...principalByType,
-      },
+      principalsByType: principalByType,
+      balances: { ...balances, ...principalByType },
     }));
   }, [principalByType, stakingObjectIds]);
 

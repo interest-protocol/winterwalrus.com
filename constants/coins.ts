@@ -16,6 +16,11 @@ export const COIN_ICON = {
   [TYPES[Network.Testnet].SNOW]: SnowSVG,
 };
 
+export const NFT_TYPES: ReadonlyArray<string> = [
+  TYPES[Network.Testnet].STAKED_WAL,
+  TYPES[Network.Testnet].BLIZZARD_STAKE_NFT,
+];
+
 export const NFT_IMAGE = {
   [TYPES[Network.Testnet].STAKED_WAL]: '/staked-wal.png',
   [TYPES[Network.Testnet].BLIZZARD_STAKE_NFT]: '/blizzard-nft.png',

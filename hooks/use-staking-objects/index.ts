@@ -1,5 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
@@ -7,7 +8,6 @@ import useSWR from 'swr';
 import { useNetwork } from '../use-network';
 
 interface Response {
-  principals: ReadonlyArray<string>;
   stakingObjectIds: ReadonlyArray<string>;
   principalByType: Record<string, BigNumber>;
 }
@@ -20,8 +20,7 @@ export const useStakingObjects = () => {
   const { data, ...props } = useSWR<Response>(
     [useStakingObjects.name],
     async () => {
-      if (!currentAccount)
-        return { principals: [], stakingObjectIds: [], principalByType: {} };
+      if (!currentAccount) return { stakingObjectIds: [], principalByType: {} };
 
       const objects = await suiClient.getOwnedObjects({
         owner: currentAccount.address,
@@ -76,17 +75,11 @@ export const useStakingObjects = () => {
       );
 
       return {
-        principals: stakingObjects.map(
-          (item) =>
-            pathOr(
-              path(['data', 'content', 'fields', 'value'], item),
-              ['data', 'content', 'fields', 'principal'],
-              item
-            ) as string
-        ),
         principalByType: stakingObjects.reduce(
           (acc, item) => {
-            const type = path(['data', 'content', 'type'], item) as string;
+            const type = normalizeStructTag(
+              path(['data', 'content', 'type'], item) as string
+            );
             const value = BigNumber(
               pathOr(
                 path(['data', 'content', 'fields', 'value'], item),

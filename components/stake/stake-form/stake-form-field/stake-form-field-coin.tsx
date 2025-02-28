@@ -11,10 +11,10 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
   const form = useFormContext();
   const { control } = form;
 
-  const coin = useWatch({ control, name: `${name}.coin` }) as string;
+  const type = useWatch({ control, name: `${name}.type` }) as string;
 
-  const Icon = COIN_ICON[coin];
-  const image = NFT_IMAGE[coin];
+  const Icon = COIN_ICON[type];
+  const image = NFT_IMAGE[type];
 
   return (
     <Motion
@@ -37,7 +37,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldCoinProps> = ({ name }) => {
           <Img src={image} width="2rem" height="2rem" />
         </Span>
       )}
-      {ASSET_METADATA[coin]?.symbol ?? 'Select Coin'}
+      {ASSET_METADATA[type]?.symbol ?? 'Select Coin'}
     </Motion>
   );
 };

@@ -10,11 +10,11 @@ const HomePage: NextPage = () => {
   const form = useForm({
     defaultValues: {
       in: {
-        coin: TYPES[Network.Testnet].WAL,
+        type: TYPES[Network.Testnet].WAL,
         value: 0,
       },
       out: {
-        coin: TYPES[Network.Testnet].SNOW,
+        type: TYPES[Network.Testnet].SNOW,
         value: 0,
       },
       validator: INTEREST_LABS,

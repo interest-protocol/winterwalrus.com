@@ -1,15 +1,23 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
-import { Button } from '@stylin.js/elements';
+import { normalizeStructTag } from '@mysten/sui/utils';
+import { Button, P } from '@stylin.js/elements';
+import BigNumber from 'bignumber.js';
+import Link from 'next/link';
+import { path } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { INTEREST_LABS } from '@/constants';
-import { COIN_DECIMALS } from '@/constants/coins';
+import { ExplorerMode, INTEREST_LABS } from '@/constants';
+import { COIN_DECIMALS, NFT_TYPES } from '@/constants/coins';
+import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake, useUnstake } from './stake-form-button.hooks';
 
@@ -18,10 +26,13 @@ const StakeFormButton: FC = () => {
   const unstake = useUnstake();
   const network = useNetwork();
   const { data } = useEpochData();
+  const { update } = useAppState();
+  const account = useCurrentAccount();
+  const getExplorerUrl = useGetExplorerUrl();
 
   const { control, getValues, setValue } = useFormContext();
 
-  const coinOut = useWatch({ control, name: 'out.coin' });
+  const coinOut = useWatch({ control, name: 'out.type' });
 
   const reset = () => {
     setValue('in.value', '0');
@@ -33,12 +44,81 @@ const StakeFormButton: FC = () => {
     (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
       toast.dismiss(toastId);
       toast.success(
-        coinOut === TYPES[network].STAKED_WAL
-          ? 'Unstaked successfully!'
-          : 'Staked successfully!'
+        <Link
+          target="_blank"
+          href={getExplorerUrl(
+            dryTx.effects.transactionDigest,
+            ExplorerMode.Transaction
+          )}
+        >
+          <P>
+            {coinOut === TYPES[network].STAKED_WAL
+              ? 'Unstaked successfully!'
+              : 'Staked successfully!'}
+          </P>
+          <P fontSize="0.875" opacity="0.75">
+            See on explorer
+          </P>
+        </Link>
       );
 
-      console.log({ dryTx });
+      update(
+        ({
+          balances,
+          stakingObjectIds,
+          principalsByType: oldPrincipalsByType,
+        }) => {
+          const possiblyDeletedObjects = stakingObjectIds.filter(
+            (stakingObjectId) =>
+              !dryTx.objectChanges.find(
+                (object) =>
+                  object.type === 'deleted' &&
+                  NFT_TYPES.includes(object.objectType) &&
+                  object.objectId === stakingObjectId
+              )
+          );
+
+          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
+            (acc, object) =>
+              object.type === 'created' &&
+              NFT_TYPES.includes(normalizeStructTag(object.objectType))
+                ? [...acc, object]
+                : acc,
+            [] as ReadonlyArray<{ objectId: string; objectType: string }>
+          );
+
+          const principalsByType = possiblyCreatedObjects.reduce(
+            (acc, object) => ({
+              ...acc,
+              [normalizeStructTag(object.objectType)]:
+                FixedPointMath.toBigNumber(getValues('out.value')).plus(
+                  acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+                ),
+            }),
+            oldPrincipalsByType
+          );
+
+          return {
+            principalsByType,
+            stakingObjectIds: [
+              ...possiblyDeletedObjects,
+              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
+            ],
+            balances: dryTx.balanceChanges.reduce(
+              (acc, { coinType, amount, owner }) =>
+                path(['AddressOwner'], owner) === account?.address
+                  ? {
+                      ...acc,
+                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                        acc[coinType] ?? ZERO_BIG_NUMBER
+                      ),
+                    }
+                  : acc,
+              { ...balances, ...principalsByType }
+            ),
+          };
+        }
+      );
 
       reset();
     };
@@ -64,14 +144,14 @@ const StakeFormButton: FC = () => {
       await stake({
         coinOut,
         isAfterVote,
-        coinIn: form.in.coin,
+        coinIn: form.in.type,
         nodeId: form.validator,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
         coinValue: BigInt(
           FixedPointMath.toBigNumber(
             form.in.value,
-            COIN_DECIMALS[form.in.coin]
+            COIN_DECIMALS[form.in.type]
           ).toFixed(0)
         ),
       });
@@ -89,13 +169,13 @@ const StakeFormButton: FC = () => {
 
     try {
       await unstake({
-        coinIn: form.in.coin,
+        coinIn: form.in.type,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
         coinValue: BigInt(
           FixedPointMath.toBigNumber(
             form.in.value,
-            COIN_DECIMALS[form.in.coin]
+            COIN_DECIMALS[form.in.type]
           ).toFixed(0)
         ),
       });

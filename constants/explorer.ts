@@ -50,13 +50,13 @@ export const EXPLORER_PATH_GETTER = {
     [ExplorerMode.Object]: (value: string) => `object/${value}`,
     [ExplorerMode.Account]: (value: string) => `account/${value}`,
     [ExplorerMode.Transaction]: (value: string) => `txblock/${value}`,
-    [ExplorerMode.Coin]: (value: string) => `coin/${value}`,
+    [ExplorerMode.Coin]: (value: string) => `type/${value}`,
   },
   [Explorer.SuiScan]: {
     [ExplorerMode.Object]: (value: string) => `object/${value}`,
     [ExplorerMode.Account]: (value: string) => `account/${value}`,
     [ExplorerMode.Transaction]: (value: string) => `tx/${value}`,
-    [ExplorerMode.Coin]: (value: string) => `coin/${value}`,
+    [ExplorerMode.Coin]: (value: string) => `type/${value}`,
   },
   [Explorer.Polymedia]: {
     [ExplorerMode.Object]: (value: string) => `object/${value}`,

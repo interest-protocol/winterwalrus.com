@@ -1,14 +1,15 @@
 import { Div, H3, P, Strong } from '@stylin.js/elements';
+import { values } from 'ramda';
 import { FC } from 'react';
 
-import { useStakingObjects } from '@/hooks/use-staking-objects';
+import { useAppState } from '@/hooks/use-app-state';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import StakingAssets from './staking-assets';
 
 const Staking: FC = () => {
-  const { principals } = useStakingObjects();
+  const { principalsByType } = useAppState();
 
   return (
     <Div
@@ -43,10 +44,10 @@ const Staking: FC = () => {
           border="1px solid #99EFE44D"
         >
           {FixedPointMath.toNumber(
-            principals?.reduce(
+            values(principalsByType).reduce(
               (acc, principal) => acc.plus(principal),
               ZERO_BIG_NUMBER
-            ) ?? ZERO_BIG_NUMBER,
+            ),
             9,
             3
           )}{' '}

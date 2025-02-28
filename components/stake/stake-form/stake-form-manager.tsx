@@ -13,7 +13,7 @@ const StakeFormManager: FC = () => {
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
 
-  const coinOut = useWatch({ control, name: 'out.coin' });
+  const coinOut = useWatch({ control, name: 'out.type' });
   const valueIn = useWatch({ control, name: 'in.value' });
 
   useEffect(() => {

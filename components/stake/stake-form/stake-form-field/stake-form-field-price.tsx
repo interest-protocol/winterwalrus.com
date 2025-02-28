@@ -16,13 +16,13 @@ const StakeFormFieldPrice: FC<StakeFormFieldCoinProps> = ({ name }) => {
   const { control } = useFormContext();
   const { data: quotes } = useQuotes();
   const { data: suiPrice } = useWalPrice();
-  const coin = useWatch({ control, name: `${name}.coin` }) as string;
+  const type = useWatch({ control, name: `${name}.type` }) as string;
   const value = useWatch({ control, name: `${name}.value` }) as string;
 
   const price =
     suiPrice && quotes
       ? suiPrice *
-        (normalizeStructTag(coin) === TYPES[network].SNOW
+        (normalizeStructTag(type) === TYPES[network].SNOW
           ? quotes?.quoteLst ?? 1
           : 1)
       : 0;

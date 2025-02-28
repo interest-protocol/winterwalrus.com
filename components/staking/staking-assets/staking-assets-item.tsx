@@ -1,17 +1,20 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { formatAddress } from '@mysten/sui/utils';
+import { useCurrentAccount } from '@mysten/dapp-kit';
+import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { formatAddress, normalizeStructTag } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
-import { not } from 'ramda';
+import { not, path } from 'ramda';
 import { memo, useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import unikey from 'unikey';
 
 import Motion from '@/components/motion';
 import { ChevronDownSVG, ExternalLinkSVG } from '@/components/svg';
-import { ExplorerMode, NFT_IMAGE } from '@/constants';
+import { ExplorerMode, NFT_IMAGE, NFT_TYPES } from '@/constants';
+import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
@@ -19,6 +22,7 @@ import { useNetwork } from '@/hooks/use-network';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakingAssetsItemProps } from '../staking.types';
 import { useBurn } from './staking-assets-item.hook';
@@ -31,7 +35,9 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const burn = useBurn();
   const network = useNetwork();
   const { data } = useEpochData();
+  const { update } = useAppState();
   const { setContent } = useModal();
+  const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [isOpen, setIsOpen] = useState(false);
   const { stakingObject } = useStakingObject(id);
@@ -48,17 +54,90 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const { type, display, objectId, activationEpoch, state, principal } =
     stakingObject;
 
-  const onSuccess = (toastId: string) => () => {
-    toast.dismiss(toastId);
-    toast.success('Burned successfully');
-  };
+  const onSuccess =
+    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
+      toast.dismiss(toastId);
+      toast.success(
+        <Link
+          target="_blank"
+          href={getExplorerUrl(
+            dryTx.effects.transactionDigest,
+            ExplorerMode.Transaction
+          )}
+        >
+          <P>Burned successfully</P>
+          <P fontSize="0.875" opacity="0.75">
+            See on explorer
+          </P>
+        </Link>
+      );
+
+      update(
+        ({
+          balances,
+          stakingObjectIds,
+          principalsByType: oldPrincipalsByType,
+        }) => {
+          const possiblyDeletedObjects = stakingObjectIds.filter(
+            (stakingObjectId) =>
+              !dryTx.objectChanges.find(
+                (object) =>
+                  object.type === 'deleted' &&
+                  NFT_TYPES.includes(object.objectType) &&
+                  object.objectId === stakingObjectId
+              )
+          );
+
+          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
+            (acc, object) =>
+              object.type === 'created' &&
+              NFT_TYPES.includes(normalizeStructTag(object.objectType))
+                ? [...acc, object]
+                : acc,
+            [] as ReadonlyArray<{ objectId: string; objectType: string }>
+          );
+
+          const principalsByType = possiblyCreatedObjects.reduce(
+            (acc, object) => ({
+              ...acc,
+              [normalizeStructTag(object.objectType)]: BigNumber(
+                principal
+              ).plus(
+                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+              ),
+            }),
+            oldPrincipalsByType
+          );
+
+          return {
+            principalsByType,
+            stakingObjectIds: [
+              ...possiblyDeletedObjects,
+              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
+            ],
+            balances: dryTx.balanceChanges.reduce(
+              (acc, { coinType, amount, owner }) =>
+                path(['AddressOwner'], owner) === account?.address
+                  ? {
+                      ...acc,
+                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                        acc[coinType] ?? ZERO_BIG_NUMBER
+                      ),
+                    }
+                  : acc,
+              { ...balances, ...principalsByType }
+            ),
+          };
+        }
+      );
+    };
 
   const onFailure = (toastId: string) => (error?: string) => {
     toast.dismiss(toastId);
     toast.error(error ?? 'Error executing transaction');
   };
 
-  const handleUnstake = async () => {
+  const handleBurn = async () => {
     if (!isActivated(activationEpoch)) return;
 
     if (type === TYPES[network].STAKED_WAL) {
@@ -144,8 +223,8 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             px="1rem"
             py="0.5rem"
             color="#000000"
+            onClick={handleBurn}
             borderRadius="0.5rem"
-            onClick={handleUnstake}
             disabled={!isActivated(activationEpoch)}
             opacity={isActivated(activationEpoch) ? 1 : 0.5}
             bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C484F6'}
