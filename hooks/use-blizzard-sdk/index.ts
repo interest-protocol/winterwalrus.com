@@ -2,6 +2,6 @@ import { BlizzardSDK } from '@interest-protocol/blizzard-sdk';
 
 const blizzardSdk = new BlizzardSDK();
 
-const useBlizzardSdk = () => blizzardSdk;
+const useBlizzardSdk = (): BlizzardSDK => blizzardSdk;
 
 export default useBlizzardSdk;

@@ -75,8 +75,6 @@ export const useStakingObjects = () => {
           : 1
       );
 
-      console.log({ stakingObjects });
-
       return {
         principals: stakingObjects.map(
           (item) =>

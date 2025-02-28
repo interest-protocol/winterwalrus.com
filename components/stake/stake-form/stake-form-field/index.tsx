@@ -10,6 +10,7 @@ import { parseInputEventToNumberString } from '@/utils';
 
 import { StakeFormFieldProps } from './stake-form-field.types';
 import StakeFormFieldCoin from './stake-form-field-coin';
+import StakeFormFieldPrice from './stake-form-field-price';
 
 const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
   const { coins } = useCoins();
@@ -54,7 +55,7 @@ const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
         <StakeFormFieldCoin name={name} />
       </Div>
       <Div display="flex" justifyContent="space-between">
-        <Span fontFamily="JetBrains Mono">$0.00</Span>
+        <StakeFormFieldPrice name={name} />
         <Button
           all="unset"
           gap="0.5rem"
