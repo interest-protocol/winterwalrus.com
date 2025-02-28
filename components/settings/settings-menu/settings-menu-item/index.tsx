@@ -11,7 +11,7 @@ const SettingsMenuItem = memo<SettingsMenuItemProps>(
       mx="1rem"
       py="0.5rem"
       display="flex"
-      onClick={() => onSelect()}
+      onClick={onSelect}
       justifyContent="space-between"
       {...(withBorder && { borderTop: '1px solid #242424' })}
     >
@@ -19,7 +19,7 @@ const SettingsMenuItem = memo<SettingsMenuItemProps>(
         {title}
         {tag && <Small opacity="0.6"> ({tag})</Small>}
       </Span>
-      <ToggleButton name={name} defaultValue={selected} />
+      <ToggleButton name={name} defaultValue={selected} onChange={onSelect} />
     </Div>
   )
 );

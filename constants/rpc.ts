@@ -1,7 +1,5 @@
 import { Network } from './network';
 
-export const RPC_STORAGE_KEY = 'winter-walrus-rpc';
-
 export enum RPC {
   Shinami = 'shinami',
   Mysten = 'mysten',

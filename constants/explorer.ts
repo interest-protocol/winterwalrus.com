@@ -1,7 +1,5 @@
 import { Network } from './network';
 
-export const EXPLORER_STORAGE_KEY = 'winter-walrus-explorer';
-
 export enum Explorer {
   SuiVision = 'sui-vision',
   SuiScan = 'sui-scan',
