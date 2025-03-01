@@ -5,7 +5,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { ChevronRightSVG } from '@/components/svg';
 import { Network } from '@/constants';
-import { RPC, RPC_DISPLAY, RPC_STORAGE_KEY, RPCs } from '@/constants/rpc';
+import { RPC, RPC_DISPLAY, RPC_STORAGE_KEY, RPCs } from '@/constants';
 import { useNetwork } from '@/hooks/use-network';
 
 import { SettingsMenusProps } from './settings-menu.types';
