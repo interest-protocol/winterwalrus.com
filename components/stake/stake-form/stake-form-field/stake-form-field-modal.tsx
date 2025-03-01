@@ -8,18 +8,11 @@ import { useAppState } from '@/hooks/use-app-state';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { StakeFormFieldCoinProps } from './stake-form-field.types';
+import { StakeFormFieldGenericProps } from './stake-form-field.types';
 
-const StakeFormFieldModal: FC<StakeFormFieldCoinProps> = ({ name }) => {
+const StakeFormFieldModal: FC<StakeFormFieldGenericProps> = () => {
   const { balances, principalsByType } = useAppState();
-  const {
-    // control,
-    setValue,
-  } = useFormContext();
-
-  // const currentCoin = useWatch({ control, name: `${name}.type` });
-
-  console.log({ name });
+  const { setValue } = useFormContext();
 
   return (
     <Div
