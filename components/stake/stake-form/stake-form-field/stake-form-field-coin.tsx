@@ -15,13 +15,17 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
   const { control } = useFormContext();
   const { data: epoch } = useEpochData();
 
-  const type = useWatch({ control, name: `${name}.type` }) as string;
+  const typeBefore = useWatch({ control, name: `${name}.type` }) as string;
 
   const isSnowOutAfterVote =
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
-    type === TYPES[network].SNOW;
+    typeBefore === TYPES[network].SNOW;
+
+  const type = isSnowOutAfterVote
+    ? TYPES[network].BLIZZARD_STAKE_NFT
+    : typeBefore;
 
   const Icon = COIN_ICON[type];
   const image = NFT_IMAGE[type];
@@ -38,16 +42,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
       alignItems="center"
       justifyContent="center"
     >
-      {isSnowOutAfterVote ? (
-        <Span overflow="hidden" borderRadius="0.5rem" display="flex">
-          <Img
-            width="2rem"
-            height="2rem"
-            alt="Blizzard NFT"
-            src={NFT_IMAGE[TYPES[network].BLIZZARD_STAKE_NFT]}
-          />
-        </Span>
-      ) : Icon ? (
+      {Icon ? (
         <Span overflow="hidden" borderRadius="1rem" display="flex">
           <Icon maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Span>
@@ -61,9 +56,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
           />
         </Span>
       )}
-      {isSnowOutAfterVote
-        ? 'bSNOW'
-        : ASSET_METADATA[type]?.symbol ?? 'Select Coin'}
+      {ASSET_METADATA[type]?.symbol ?? 'Select Coin'}
     </Motion>
   );
 };

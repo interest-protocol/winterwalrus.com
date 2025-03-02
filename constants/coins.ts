@@ -54,7 +54,7 @@ export const ASSET_METADATA = {
   [TYPES[Network.Testnet].BLIZZARD_STAKE_NFT]: {
     kind: 'nft',
     decimals: 9,
-    symbol: 'bSNOW',
+    symbol: 'SnowNFT',
     name: 'Blizzard Snow',
     type: TYPES[Network.Testnet].BLIZZARD_STAKE_NFT,
     Icon: NFT_IMAGE[TYPES[Network.Testnet].BLIZZARD_STAKE_NFT],
