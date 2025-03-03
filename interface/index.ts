@@ -10,4 +10,5 @@ export interface StakingObject {
   principal: string;
   display: string | null;
   activationEpoch: number;
+  withdrawEpoch: number | null;
 }

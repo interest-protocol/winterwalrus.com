@@ -42,7 +42,7 @@ export const msToDate = (ms: number, short: boolean = false) => {
   if (!scale)
     return `${ms} ${short ? 'ms' : `millisecond${ms === 1 ? '' : 's'}`}`;
 
-  const value = Math.floor(ms / scale);
+  const value = Math.round(ms / scale);
 
   return `${value} ${(short ? MS_SHORT_SCALES_MAP : MS_SCALES_MAP)[scale]}${
     short ? '' : `${value === 1 ? '' : 's'}`

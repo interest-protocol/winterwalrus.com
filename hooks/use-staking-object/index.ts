@@ -57,6 +57,11 @@ export const useStakingObject = (id?: string) => {
           ['data', 'content', 'fields', 'state', 'variant'],
           item
         ) as string,
+        withdrawEpoch: pathOr(
+          null,
+          ['data', 'content', 'fields', 'state', 'fields', 'withdraw_epoch'],
+          item
+        ),
         activationEpoch: Number(
           pathOr(
             path(

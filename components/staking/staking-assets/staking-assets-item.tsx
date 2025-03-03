@@ -51,8 +51,15 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
 
   if (!stakingObject) return null;
 
-  const { type, display, objectId, activationEpoch, state, principal } =
-    stakingObject;
+  const {
+    type,
+    state,
+    display,
+    objectId,
+    principal,
+    withdrawEpoch,
+    activationEpoch,
+  } = stakingObject;
 
   const onSuccess =
     (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
@@ -138,7 +145,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   };
 
   const handleBurn = async () => {
-    if (!isActivated(activationEpoch)) return;
+    if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
 
     if (type === TYPES[network].STAKED_WAL) {
       if (state === 'Staked') setContent(<StakingAssetsItemUnstakeModal />);
@@ -225,10 +232,14 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             color="#000000"
             onClick={handleBurn}
             borderRadius="0.5rem"
-            disabled={!isActivated(activationEpoch)}
-            opacity={isActivated(activationEpoch) ? 1 : 0.5}
+            disabled={!isActivated(withdrawEpoch ?? activationEpoch)}
+            opacity={isActivated(withdrawEpoch ?? activationEpoch) ? 1 : 0.5}
             bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C484F6'}
-            cursor={isActivated(activationEpoch) ? 'pointer' : 'not-allowed'}
+            cursor={
+              isActivated(withdrawEpoch ?? activationEpoch)
+                ? 'pointer'
+                : 'not-allowed'
+            }
           >
             {type === TYPES[network].STAKED_WAL
               ? state === 'Staked'
@@ -279,9 +290,11 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
               borderRadius="0.625rem"
               border="1px solid #FFFFFF1A"
             >
-              <P fontFamily="JetBrains Mono">{activationEpoch}</P>
+              <P fontFamily="JetBrains Mono">
+                {withdrawEpoch ?? activationEpoch}
+              </P>
               <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-                Activation Epoch
+                {state === 'Staked' ? 'Activation' : 'Withdraw'} Epoch
               </P>
             </Div>
           </Div>

@@ -5,9 +5,22 @@ import { useCoins } from '@/hooks/use-coins';
 import { useStakingObjects } from '@/hooks/use-staking-objects';
 
 const AppStateProvider: FC = () => {
-  const { coins } = useCoins();
   const { update } = useAppState();
-  const { principalByType, stakingObjectIds } = useStakingObjects();
+  const { coins, mutate: mutateCoins } = useCoins();
+  const {
+    principalByType,
+    stakingObjectIds,
+    mutate: mutateStakingObjects,
+  } = useStakingObjects();
+
+  useEffect(() => {
+    update({
+      mutate: () => {
+        mutateCoins();
+        mutateStakingObjects();
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (!coins) return;
@@ -16,8 +29,6 @@ const AppStateProvider: FC = () => {
   }, [coins]);
 
   useEffect(() => {
-    console.log('>> update ', { principalByType });
-
     if (!principalByType || !stakingObjectIds) return;
 
     update(({ balances }) => ({

@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { create } from 'zustand';
 
 interface AppState {
+  mutate: () => void;
   balances: Record<string, BigNumber>;
   stakingObjectIds: ReadonlyArray<string>;
   principalsByType: Record<string, BigNumber>;
@@ -20,6 +21,7 @@ interface AppState {
 export const useAppState = create<AppState>((set) => ({
   update: set,
   balances: {},
+  mutate: () => {},
   principalsByType: {},
   stakingObjectIds: [],
 }));
