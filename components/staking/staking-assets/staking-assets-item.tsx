@@ -26,6 +26,7 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakingAssetsItemProps } from '../staking.types';
 import { useBurn } from './staking-assets-item.hook';
+import StakingAssetsItemLoading from './staking-assets-item-loading';
 import {
   StakingAssetsItemUnstakeModal,
   StakingAssetsItemWithdrawModal,
@@ -40,7 +41,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [isOpen, setIsOpen] = useState(false);
-  const { stakingObject } = useStakingObject(id);
+  const { stakingObject, isLoading } = useStakingObject(id);
   const { nodeName } = useNodeName(stakingObject?.nodeId);
 
   const isActivated = useCallback(
@@ -48,6 +49,8 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
       !!(data?.currentEpoch && activationEpoch <= data.currentEpoch),
     [data?.currentEpoch]
   );
+
+  if (isLoading) return <StakingAssetsItemLoading />;
 
   if (!stakingObject) return null;
 

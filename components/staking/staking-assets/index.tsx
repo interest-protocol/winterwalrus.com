@@ -5,9 +5,25 @@ import { FC } from 'react';
 import { useAppState } from '@/hooks/use-app-state';
 
 import StakingAssetsItem from './staking-assets-item';
+import StakingAssetsItemLoading from './staking-assets-item-loading';
 
 const StakingAssets: FC = () => {
-  const { stakingObjectIds } = useAppState();
+  const { stakingObjectIds, loadingObjects } = useAppState();
+
+  if (loadingObjects)
+    return (
+      <Div
+        p="1rem"
+        gap="1rem"
+        display="flex"
+        color="#ffffff"
+        flexDirection="column"
+        borderRadius="0.625rem"
+        border="1px solid #FFFFFF1A"
+      >
+        <StakingAssetsItemLoading />
+      </Div>
+    );
 
   if (!stakingObjectIds?.length)
     return (

@@ -2,6 +2,7 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
 
 import { WalletSVG } from '@/components/svg';
 import { useAppState } from '@/hooks/use-app-state';
@@ -14,9 +15,9 @@ import { StakeFormFieldGenericProps } from './stake-form-field.types';
 
 const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
   const network = useNetwork();
-  const { balances } = useAppState();
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
+  const { balances, loadingCoins, loadingObjects } = useAppState();
 
   const type = useWatch({ control, name: `${name}.type` }) as string;
 
@@ -46,7 +47,11 @@ const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
     >
       <WalletSVG maxWidth="1rem" width="100%" />
       <Span fontFamily="JetBrains Mono">
-        {FixedPointMath.toNumber(balance ?? ZERO_BIG_NUMBER, 9, 4)}
+        {loadingCoins || loadingObjects ? (
+          <Skeleton width="2rem" />
+        ) : (
+          FixedPointMath.toNumber(balance ?? ZERO_BIG_NUMBER, 9, 4)
+        )}
       </Span>
     </Button>
   );

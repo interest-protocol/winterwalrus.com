@@ -4,6 +4,7 @@ import { Global } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Toaster } from 'react-hot-toast';
+import { SkeletonTheme } from 'react-loading-skeleton';
 
 import { BackgroundProvider } from '@/components';
 import AppStateProvider from '@/components/app-state-provider';
@@ -29,10 +30,12 @@ const App = ({ Component, pageProps }: AppProps) => (
         },
       }}
     />
-    <ModalProvider />
-    <AppStateProvider />
-    <BackgroundProvider />
-    <Component {...pageProps} />
+    <SkeletonTheme baseColor="#FFFFFF0D" highlightColor="#FFFFFF1A">
+      <ModalProvider />
+      <AppStateProvider />
+      <BackgroundProvider />
+      <Component {...pageProps} />
+    </SkeletonTheme>
   </Web3Provider>
 );
 

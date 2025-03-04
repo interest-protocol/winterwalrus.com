@@ -7,10 +7,13 @@ import { msToDate } from '@/utils';
 
 import Motion from '../motion';
 import { ChevronDownSVG, InfoSVG } from '../svg';
+import EpochLoading from './epoch-loading';
 
 const Epoch: FC = () => {
-  const { data } = useEpochData();
+  const { data, isLoading } = useEpochData();
   const [collapsed, setCollapsed] = useState(false);
+
+  if (isLoading) return <EpochLoading />;
 
   const toggleCollapsed = () => setCollapsed((e) => !e);
 

@@ -3,6 +3,8 @@ import { create } from 'zustand';
 
 interface AppState {
   mutate: () => void;
+  loadingCoins: boolean;
+  loadingObjects: boolean;
   balances: Record<string, BigNumber>;
   stakingObjectIds: ReadonlyArray<string>;
   principalsByType: Record<string, BigNumber>;
@@ -22,6 +24,8 @@ export const useAppState = create<AppState>((set) => ({
   update: set,
   balances: {},
   mutate: () => {},
+  loadingCoins: true,
   principalsByType: {},
   stakingObjectIds: [],
+  loadingObjects: false,
 }));

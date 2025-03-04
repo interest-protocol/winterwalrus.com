@@ -6,10 +6,11 @@ import { useStakingObjects } from '@/hooks/use-staking-objects';
 
 const AppStateProvider: FC = () => {
   const { update } = useAppState();
-  const { coins, mutate: mutateCoins } = useCoins();
+  const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
     principalByType,
     stakingObjectIds,
+    isLoading: loadingObjects,
     mutate: mutateStakingObjects,
   } = useStakingObjects();
 
@@ -37,6 +38,14 @@ const AppStateProvider: FC = () => {
       balances: { ...balances, ...principalByType },
     }));
   }, [principalByType, stakingObjectIds]);
+
+  useEffect(() => {
+    update({ loadingObjects });
+  }, [loadingObjects]);
+
+  useEffect(() => {
+    update({ loadingCoins });
+  }, [loadingCoins]);
 
   return null;
 };
