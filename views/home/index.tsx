@@ -8,14 +8,14 @@ const Home: FC = () => (
     <Background />
     <Div
       mx="auto"
-      mt="3rem"
-      px="2rem"
       gap="1rem"
       display="flex"
       maxWidth="34rem"
       position="relative"
       borderRadius="1rem"
+      mt={['1rem', '3rem']}
       flexDirection="column"
+      px={['0.5rem', '2rem']}
     >
       <Epoch />
       <Stake />

@@ -180,8 +180,13 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
       transition="all 300ms linear"
       nHover={{ borderColor: '#99EFE44D' }}
     >
-      <Div display="flex" alignItems="center" justifyContent="space-between">
-        <Div display="flex" alignItems="center" gap="0.5rem">
+      <Div
+        gap="1rem"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Div gap="0.5rem" display="flex" alignItems="center">
           <Div display="flex" gap="0.5rem">
             <Img
               alt={type}
@@ -218,6 +223,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             fontSize="0.75rem"
             borderRadius="1.7rem"
             alignSelf="flex-start"
+            display={['none', 'block']}
             color={state === 'Staked' ? '#FFFFFF' : '#83F34E'}
             bg={state === 'Staked' ? '#FFFFFF14' : '#83F34E14'}
           >
