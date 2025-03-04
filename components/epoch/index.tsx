@@ -32,6 +32,7 @@ const Epoch: FC = () => {
         bg="#FFFFFF0D"
         display="flex"
         color="#ffffff"
+        height="12.525rem"
         borderRadius="1rem"
         flexDirection="column"
         border="1px solid #FFFFFF1A"

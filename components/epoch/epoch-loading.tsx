@@ -12,6 +12,7 @@ const EpochLoading: FC = () => (
     bg="#FFFFFF0D"
     display="flex"
     color="#ffffff"
+    height="12.525rem"
     borderRadius="1rem"
     flexDirection="column"
     border="1px solid #FFFFFF1A"
@@ -49,10 +50,12 @@ const EpochLoading: FC = () => (
             <InfoSVG width="100%" maxWidth="0.75rem" />
           </Div>
           <P fontWeight="0.875rem">
-            <Skeleton width="1rem" height="0.875rem" />
+            <Skeleton width="4rem" height="0.875rem" />
           </P>
         </Div>
-        <Skeleton width="100%" height="0.3rem" borderRadius="0.15rem" />
+        <Div lineHeight="0.3rem">
+          <Skeleton width="100%" height="0.3rem" borderRadius="0.15rem" />
+        </Div>
       </Div>
       <Div
         gap="0.5rem"
