@@ -91,7 +91,7 @@ const StakeFormButton: FC = () => {
             (acc, object) => ({
               ...acc,
               [normalizeStructTag(object.objectType)]:
-                FixedPointMath.toBigNumber(getValues('out.value')).plus(
+                FixedPointMath.toBigNumber(getValues('in.value')).plus(
                   acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
                 ),
             }),
