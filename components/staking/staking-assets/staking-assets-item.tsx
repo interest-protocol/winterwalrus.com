@@ -168,13 +168,13 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
 
   return (
     <Div
-      p="1rem"
       gap="1rem"
       display="flex"
       key={unikey()}
       color="#ffffff"
       border="1px solid"
       flexDirection="column"
+      p={['0.5rem', '1rem']}
       borderColor="#FFFFFF1A"
       borderRadius="0.625rem"
       transition="all 300ms linear"
@@ -233,9 +233,10 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
         <Div display="flex" alignItems="center" gap="1rem">
           <Button
             all="unset"
-            px="1rem"
             py="0.5rem"
+            width="5.5rem"
             color="#000000"
+            textAlign="center"
             onClick={handleBurn}
             borderRadius="0.5rem"
             disabled={!isActivated(withdrawEpoch ?? activationEpoch)}

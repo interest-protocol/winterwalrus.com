@@ -1,3 +1,5 @@
+import 'react-loading-skeleton/dist/skeleton.css';
+
 import { Global } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
