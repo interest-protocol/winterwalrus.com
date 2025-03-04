@@ -2,6 +2,7 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Img, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
 
 import Motion from '@/components/motion';
 import { ASSET_METADATA, COIN_ICON, NFT_IMAGE } from '@/constants/coins';
@@ -13,9 +14,27 @@ import { StakeFormFieldGenericProps } from './stake-form-field.types';
 const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
   const network = useNetwork();
   const { control } = useFormContext();
-  const { data: epoch } = useEpochData();
+  const { data: epoch, isLoading } = useEpochData();
 
   const typeBefore = useWatch({ control, name: `${name}.type` }) as string;
+
+  if (isLoading)
+    return (
+      <Motion
+        gap="0.5rem"
+        color="white"
+        display="flex"
+        fontSize="1rem"
+        cursor="pointer"
+        overflow="hidden"
+        whileHover="hover"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Skeleton width="2rem" height="2rem" />
+        <Skeleton width="4rem" />
+      </Motion>
+    );
 
   const isSnowOutAfterVote =
     name === 'out' &&
