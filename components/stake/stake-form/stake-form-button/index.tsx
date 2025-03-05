@@ -1,212 +1,55 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount } from '@mysten/dapp-kit';
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { Button, P } from '@stylin.js/elements';
-import BigNumber from 'bignumber.js';
-import Link from 'next/link';
-import { path } from 'ramda';
+import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
-import { ExplorerMode, INTEREST_LABS } from '@/constants';
-import { COIN_DECIMALS, NFT_TYPES } from '@/constants/coins';
-import { useAppState } from '@/hooks/use-app-state';
-import useEpochData from '@/hooks/use-epoch-data';
-import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useNetwork } from '@/hooks/use-network';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { useStake, useUnstake } from './stake-form-button.hooks';
+import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
-  const stake = useStake();
-  const unstake = useUnstake();
   const network = useNetwork();
-  const { data } = useEpochData();
-  const { update } = useAppState();
-  const account = useCurrentAccount();
-  const getExplorerUrl = useGetExplorerUrl();
+  const { control, getValues } = useFormContext();
+  const { onStake, onUnstake, loading } = useStakeAction();
 
-  const { control, getValues, setValue } = useFormContext();
-
+  const coinIn = getValues('in.type');
   const coinOut = useWatch({ control, name: 'out.type' });
+  const amountIn = useWatch({ control, name: 'in.value' });
 
-  const reset = () => {
-    setValue('in.value', '0');
-    setValue('out.value', '0');
-    setValue('validator', INTEREST_LABS);
-  };
+  const insufficientAmount =
+    normalizeStructTag(coinIn) === normalizeStructTag(TYPES[network].WAL) &&
+    Number(amountIn) &&
+    Number(amountIn) < 1;
 
-  const onSuccess =
-    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
-      toast.dismiss(toastId);
-      toast.success(
-        <Link
-          target="_blank"
-          href={getExplorerUrl(
-            dryTx.effects.transactionDigest,
-            ExplorerMode.Transaction
-          )}
-        >
-          <P>
-            {coinOut === TYPES[network].STAKED_WAL
-              ? 'Unstaked successfully!'
-              : 'Staked successfully!'}
-          </P>
-          <P fontSize="0.875" opacity="0.75">
-            See on explorer
-          </P>
-        </Link>
-      );
-
-      update(
-        ({
-          balances,
-          stakingObjectIds,
-          principalsByType: oldPrincipalsByType,
-        }) => {
-          const possiblyDeletedObjects = stakingObjectIds.filter(
-            (stakingObjectId) =>
-              !dryTx.objectChanges.find(
-                (object) =>
-                  object.type === 'deleted' &&
-                  NFT_TYPES.includes(object.objectType) &&
-                  object.objectId === stakingObjectId
-              )
-          );
-
-          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
-            (acc, object) =>
-              object.type === 'created' &&
-              NFT_TYPES.includes(normalizeStructTag(object.objectType))
-                ? [...acc, object]
-                : acc,
-            [] as ReadonlyArray<{ objectId: string; objectType: string }>
-          );
-
-          const principalsByType = possiblyCreatedObjects.reduce(
-            (acc, object) => ({
-              ...acc,
-              [normalizeStructTag(object.objectType)]:
-                FixedPointMath.toBigNumber(
-                  getValues(
-                    coinOut === TYPES[network].STAKED_WAL
-                      ? 'out.value'
-                      : 'in.value'
-                  )
-                ).plus(
-                  acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-                ),
-            }),
-            oldPrincipalsByType
-          );
-
-          return {
-            principalsByType,
-            stakingObjectIds: [
-              ...possiblyDeletedObjects,
-              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
-            ],
-            balances: dryTx.balanceChanges.reduce(
-              (acc, { coinType, amount, owner }) =>
-                path(['AddressOwner'], owner) === account?.address
-                  ? {
-                      ...acc,
-                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
-                        acc[coinType] ?? ZERO_BIG_NUMBER
-                      ),
-                    }
-                  : acc,
-              { ...balances, ...principalsByType }
-            ),
-          };
-        }
-      );
-
-      reset();
-    };
-
-  const onFailure = (toastId: string) => (error?: string) => {
-    toast.dismiss(toastId);
-    toast.error(error ?? 'Error executing transaction');
-  };
-
-  const handleStake = async () => {
-    const form = getValues();
-
-    if (!form.in.value || !form.out.value) return;
-
-    const id = toast.loading('Staking...');
-
-    try {
-      const isAfterVote =
-        data && data.currentEpoch
-          ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
-          : false;
-
-      await stake({
-        coinOut,
-        isAfterVote,
-        coinIn: form.in.type,
-        nodeId: form.validator,
-        onSuccess: onSuccess(id),
-        onFailure: onFailure(id),
-        coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            COIN_DECIMALS[form.in.type]
-          ).toFixed(0)
-        ),
-      });
-    } catch (e) {
-      onFailure(id)((e as Error).message);
-    }
-  };
-
-  const handleUnstake = async () => {
-    const form = getValues();
-
-    if (!form.in.value || !form.out.value) return;
-
-    const id = toast.loading('Unstaking...');
-
-    try {
-      await unstake({
-        coinIn: form.in.type,
-        onSuccess: onSuccess(id),
-        onFailure: onFailure(id),
-        coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            COIN_DECIMALS[form.in.type]
-          ).toFixed(0)
-        ),
-      });
-    } catch (e) {
-      onFailure(id)((e as Error).message);
-    }
-  };
+  const disabled = insufficientAmount || loading;
 
   return (
     <Button
       all="unset"
       py="1rem"
       px="1.5rem"
-      bg="#99EFE4"
       color="#0C0F1D"
-      cursor="pointer"
       fontWeight="500"
       textAlign="center"
       position="relative"
+      disabled={disabled}
       borderRadius="0.625rem"
-      onClick={
-        coinOut === TYPES[network].STAKED_WAL ? handleUnstake : handleStake
-      }
+      opacity={disabled ? 0.7 : 1}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
+      bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
+      onClick={coinOut === TYPES[network].STAKED_WAL ? onUnstake : onStake}
     >
-      {coinOut === TYPES[network].STAKED_WAL ? 'Unstake' : 'Stake'}
+      {insufficientAmount
+        ? 'You must stake at least 1 WAL'
+        : normalizeStructTag(coinOut) ===
+            normalizeStructTag(TYPES[network].STAKED_WAL)
+          ? loading
+            ? 'Unstaking...'
+            : 'Unstake'
+          : loading
+            ? 'Staking...'
+            : 'Stake'}
     </Button>
   );
 };
