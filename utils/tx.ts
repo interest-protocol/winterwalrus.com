@@ -40,13 +40,17 @@ export const signAndExecute = async ({
   currentAccount,
   signTransaction,
 }: SignAndExecuteArgs): Promise<TimedSuiTransactionBlockResponse> => {
+  tx.setSenderIfNotSet(currentAccount.address);
+
+  const txDryResult = await client.dryRunTransactionBlock({
+    transactionBlock: await tx.build({ client }),
+  });
+
   const { signature, bytes: transactionBlock } =
     await signTransaction.mutateAsync({
       transaction: tx,
       account: currentAccount,
     });
-
-  const txDryResult = await client.dryRunTransactionBlock({ transactionBlock });
 
   throwTxIfNotSuccessful(txDryResult, fallback);
 

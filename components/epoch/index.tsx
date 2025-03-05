@@ -32,10 +32,10 @@ const Epoch: FC = () => {
         bg="#FFFFFF0D"
         display="flex"
         color="#ffffff"
-        height="12.525rem"
         borderRadius="1rem"
         flexDirection="column"
         border="1px solid #FFFFFF1A"
+        height={collapsed ? 'auto' : '12.525rem'}
       >
         <Div display="flex" justifyContent="space-between" alignItems="center">
           <H2 fontSize="0.825rem">Epoch {data?.currentEpoch ?? '--'}</H2>
