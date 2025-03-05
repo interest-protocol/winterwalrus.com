@@ -3,12 +3,12 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
-import { Transaction } from '@mysten/sui/transactions';
+import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import { STAKING_COIN } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
-import { getCoinOfValue, signAndExecute } from '@/utils';
+import { signAndExecute } from '@/utils';
 
 import { StakeArgs } from '../stake-form-button.types';
 
@@ -31,20 +31,17 @@ export const useStake = () => {
 
     const tx = new Transaction();
 
-    const inCoin = await getCoinOfValue({
-      tx,
-      client,
-      coinValue,
-      coinType: coinIn,
-      account: currentAccount.address,
-    });
+    const walCoin = coinWithBalance({
+      type: coinIn,
+      balance: coinValue,
+    })(tx);
 
     const { returnValues } = await blizzardSdk[
       isAfterVote ? 'mintAfterVotesFinished' : 'mint'
     ]({
       tx,
       nodeId,
-      walCoin: inCoin,
+      walCoin,
       blizzardStaking: STAKING_COIN[coinOut],
     });
 

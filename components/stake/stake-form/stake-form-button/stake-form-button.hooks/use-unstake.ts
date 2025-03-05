@@ -4,11 +4,12 @@ import {
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
+import { coinWithBalance } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { useNetwork } from '@/hooks/use-network';
-import { getCoinOfValue, signAndExecute } from '@/utils';
+import { signAndExecute } from '@/utils';
 
 import { UnstakeArgs } from '../stake-form-button.types';
 
@@ -29,13 +30,10 @@ export const useUnstake = () => {
       }).objectId,
     });
 
-    const lstCoin = await getCoinOfValue({
-      tx,
-      client,
-      coinValue,
-      coinType: coinIn,
-      account: currentAccount.address,
-    });
+    const lstCoin = coinWithBalance({
+      type: coinIn,
+      balance: coinValue,
+    })(tx);
 
     const { returnValues: stakedWalVector } = await blizzardSdk.burnLst({
       tx,
