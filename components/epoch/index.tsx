@@ -1,7 +1,9 @@
 import { Div, H2, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
+import { EPOCH_COLLAPSE_STORAGE_KEY } from '@/constants';
 import useEpochData from '@/hooks/use-epoch-data';
 import { msToDate } from '@/utils';
 
@@ -11,7 +13,10 @@ import EpochLoading from './epoch-loading';
 
 const Epoch: FC = () => {
   const { data, isLoading } = useEpochData();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useLocalStorage(
+    EPOCH_COLLAPSE_STORAGE_KEY,
+    false
+  );
 
   if (isLoading) return <EpochLoading />;
 
