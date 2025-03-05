@@ -31,6 +31,8 @@ export const useStake = () => {
 
     const tx = new Transaction();
 
+    tx.setSender(currentAccount.address);
+
     const walCoin = coinWithBalance({
       type: coinIn,
       balance: coinValue,

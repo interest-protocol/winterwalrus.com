@@ -30,6 +30,8 @@ export const useUnstake = () => {
       }).objectId,
     });
 
+    tx.setSender(currentAccount.address);
+
     const lstCoin = coinWithBalance({
       type: coinIn,
       balance: coinValue,
