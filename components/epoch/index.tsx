@@ -18,7 +18,7 @@ const Epoch: FC = () => {
     false
   );
 
-  if (isLoading) return <EpochLoading />;
+  if (isLoading) return <EpochLoading collapsed={collapsed} />;
 
   const toggleCollapsed = () => setCollapsed((e) => !e);
 

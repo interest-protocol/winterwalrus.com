@@ -4,8 +4,9 @@ import Skeleton from 'react-loading-skeleton';
 
 import Motion from '../motion';
 import { InfoSVG } from '../svg';
+import { EpochLoadingProps } from './epoch.types';
 
-const EpochLoading: FC = () => (
+const EpochLoading: FC<EpochLoadingProps> = ({ collapsed }) => (
   <Motion
     p="1rem"
     gap="1rem"
@@ -35,84 +36,86 @@ const EpochLoading: FC = () => (
         <Skeleton width="1rem" height="0.8rem" />
       </Div>
     </Div>
-    <Motion
-      layout
-      gap="1.5rem"
-      display="flex"
-      alignItems="stretch"
-      flexDirection="column"
-      justifyContent="space-between"
-    >
-      <Div gap="0.5rem" display="flex" flexDirection="column">
-        <Div display="flex" justifyContent="space-between">
-          <Div display="flex" alignItems="center" gap="0.25rem">
-            <P color="#FFFFFF80">Progress</P>
-            <InfoSVG width="100%" maxWidth="0.75rem" />
-          </Div>
-          <P fontWeight="0.875rem">
-            <Skeleton width="4rem" height="0.875rem" />
-          </P>
-        </Div>
-        <Div lineHeight="0.3rem">
-          <Skeleton width="100%" height="0.3rem" borderRadius="0.15rem" />
-        </Div>
-      </Div>
-      <Div
-        gap="0.5rem"
-        display="grid"
-        fontSize="0.755rem"
-        gridTemplateColumns="1fr 1fr 1fr"
+    {!collapsed && (
+      <Motion
+        layout
+        gap="1.5rem"
+        display="flex"
+        alignItems="stretch"
+        flexDirection="column"
+        justifyContent="space-between"
       >
-        <Div
-          p="1rem"
-          gap="0.25rem"
-          display="flex"
-          alignItems="center"
-          flexDirection="column"
-          borderRadius="0.625rem"
-          border="1px solid #FFFFFF1A"
-        >
-          <P>
-            <Skeleton width="1rem" height="0.755rem" />
-          </P>
-          <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-            Duration
-          </P>
+        <Div gap="0.5rem" display="flex" flexDirection="column">
+          <Div display="flex" justifyContent="space-between">
+            <Div display="flex" alignItems="center" gap="0.25rem">
+              <P color="#FFFFFF80">Progress</P>
+              <InfoSVG width="100%" maxWidth="0.75rem" />
+            </Div>
+            <P fontWeight="0.875rem">
+              <Skeleton width="4rem" height="0.875rem" />
+            </P>
+          </Div>
+          <Div lineHeight="0.3rem">
+            <Skeleton width="100%" height="0.3rem" borderRadius="0.15rem" />
+          </Div>
         </Div>
         <Div
-          p="1rem"
-          gap="0.25rem"
-          display="flex"
-          alignItems="center"
-          flexDirection="column"
-          borderRadius="0.625rem"
-          border="1px solid #FFFFFF1A"
+          gap="0.5rem"
+          display="grid"
+          fontSize="0.755rem"
+          gridTemplateColumns="1fr 1fr 1fr"
         >
-          <P>
-            <Skeleton width="1rem" height="0.755rem" />
-          </P>
-          <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-            Remaining
-          </P>
+          <Div
+            p="1rem"
+            gap="0.25rem"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            borderRadius="0.625rem"
+            border="1px solid #FFFFFF1A"
+          >
+            <P>
+              <Skeleton width="1rem" height="0.755rem" />
+            </P>
+            <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
+              Duration
+            </P>
+          </Div>
+          <Div
+            p="1rem"
+            gap="0.25rem"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            borderRadius="0.625rem"
+            border="1px solid #FFFFFF1A"
+          >
+            <P>
+              <Skeleton width="1rem" height="0.755rem" />
+            </P>
+            <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
+              Remaining
+            </P>
+          </Div>
+          <Div
+            p="1rem"
+            gap="0.25rem"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            borderRadius="0.625rem"
+            border="1px solid #FFFFFF1A"
+          >
+            <P>
+              <Skeleton width="2rem" height="0.755rem" />
+            </P>
+            <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
+              Voting
+            </P>
+          </Div>
         </Div>
-        <Div
-          p="1rem"
-          gap="0.25rem"
-          display="flex"
-          alignItems="center"
-          flexDirection="column"
-          borderRadius="0.625rem"
-          border="1px solid #FFFFFF1A"
-        >
-          <P>
-            <Skeleton width="2rem" height="0.755rem" />
-          </P>
-          <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-            Voting
-          </P>
-        </Div>
-      </Div>
-    </Motion>
+      </Motion>
+    )}{' '}
   </Motion>
 );
 
