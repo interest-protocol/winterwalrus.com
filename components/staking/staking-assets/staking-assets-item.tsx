@@ -142,8 +142,8 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                 ? 'Unstake'
                 : 'Withdraw'
               : loading
-                ? 'Burning...'
-                : 'Burn'}
+                ? 'Getting...'
+                : 'Get SNOW'}
           </Button>
           <Motion
             cursor="pointer"

@@ -55,7 +55,7 @@ export const useStakingAction = (
             ExplorerMode.Transaction
           )}
         >
-          <P>Burned successfully</P>
+          <P>You got SNOW</P>
           <P fontSize="0.875" opacity="0.75">
             See on explorer
           </P>
@@ -136,7 +136,7 @@ export const useStakingAction = (
       return;
     }
     setLoading(true);
-    const id = toast.loading('Burning...');
+    const id = toast.loading('Getting SNOW...');
 
     try {
       await burn({
