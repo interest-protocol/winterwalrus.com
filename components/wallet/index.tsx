@@ -3,75 +3,80 @@ import '@mysten/dapp-kit/dist/index.css';
 import {
   ConnectModal,
   useCurrentAccount,
+  useCurrentWallet,
   useDisconnectWallet,
 } from '@mysten/dapp-kit';
 import { formatAddress } from '@mysten/sui/utils';
-import { Button, Div } from '@stylin.js/elements';
+import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
-import { LogoutSVG } from '../svg';
+import { ChevronDownSVG, WalletSVG } from '../svg';
 
 const Wallet: FC = () => {
+  const { connectionStatus } = useCurrentWallet();
   const disconnect = useDisconnectWallet();
   const currentAccount = useCurrentAccount();
 
+  if (connectionStatus === 'connecting')
+    return (
+      <Button
+        all="unset"
+        py="1rem"
+        gap="1rem"
+        px="1.5rem"
+        display="flex"
+        bg="#99EFE41A"
+        color="#F1F1F1"
+        cursor="pointer"
+        alignItems="center"
+        borderRadius="0.75rem"
+      >
+        <Skeleton width="7rem" />
+        <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
+      </Button>
+    );
+
   if (currentAccount)
     return (
-      <Div
-        p="0.2rem"
+      <Button
+        all="unset"
+        py="1rem"
+        gap="1rem"
+        px="1.5rem"
+        display="flex"
+        bg="#99EFE41A"
+        color="#F1F1F1"
         cursor="pointer"
-        borderRadius="5rem"
-        background="linear-gradient(180deg, rgba(235, 235, 235, 0.10) -27.27%, rgba(196, 196, 196, 0.15) 127.27%)"
+        alignItems="center"
+        borderRadius="0.75rem"
+        onClick={() => disconnect.mutate()}
       >
-        <Button
-          all="unset"
-          px="2rem"
-          gap="1rem"
-          display="flex"
-          bg="#A8A8A81A"
-          height="2.8rem"
-          color="#F1F1F1"
-          alignItems="center"
-          borderRadius="5rem"
-          onClick={() => disconnect.mutate()}
-        >
-          {formatAddress(currentAccount.address)}
-          <LogoutSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-        </Button>
-      </Div>
+        {formatAddress(currentAccount.address)}
+        <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
+      </Button>
     );
 
   return (
     <ConnectModal
       trigger={
-        <Div
+        <Button
+          all="unset"
+          py="1rem"
+          gap="1rem"
+          px="1.5rem"
+          bg="#99EFE4"
+          display="flex"
+          color="#000000"
           cursor="pointer"
           position="relative"
-          borderRadius="5rem"
+          alignItems="center"
+          borderRadius="0.75rem"
           backdropFilter="blur(16px)"
-          bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
         >
-          <Div
-            inset="0"
-            position="absolute"
-            borderRadius="5rem"
-            backdropFilter="blur(16px)"
-            bg="linear-gradient(0deg, #FFFFFF00 0%, #FFFFFFAA 100%)"
-          />
-          <Button
-            all="unset"
-            px="2rem"
-            m="0.2rem"
-            color="#0C0F1D"
-            height="2.8rem"
-            borderRadius="5rem"
-            position="relative"
-            backdropFilter="blur(16px)"
-            bg="linear-gradient(180deg, #99EFE4 0%, #49CAB9 100%)"
-          >
-            Connect
-          </Button>
-        </Div>
+          <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+          Connect Wallet
+        </Button>
       }
     />
   );

@@ -1,0 +1,5 @@
+export const MYSTEN_LABS_K8S =
+  '0x81dae13f34dfe76170901f9f24a920c3b361acee7136bbc2ef6a0a15bfa085c8';
+
+export const INTEREST_LABS =
+  '0x2eab79988f43bc772f4eb56be964a018b0ec627d1e92ae11985b69272030206e';

@@ -1,13 +1,11 @@
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
 
-import BackgroundPerspective from './background-perspective';
-import BackgroundSnow from './background-snow';
+import BackgroundBlur from './background-blur';
 
 const Background: FC = () => (
   <AnimatePresence>
-    <BackgroundPerspective />
-    <BackgroundSnow />
+    <BackgroundBlur />
   </AnimatePresence>
 );
 

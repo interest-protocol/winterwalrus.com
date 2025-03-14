@@ -1,13 +1,10 @@
-import { Div } from '@stylin.js/elements';
-import { motion } from 'motion/react';
 import { FC, useEffect, useState } from 'react';
 
 import { useBackgroundTranslate } from '@/hooks/use-background-position';
 import { useSafeHeight } from '@/hooks/use-safe-height';
 
+import Motion from '../motion';
 import { GoldenLogoSVG, LogoSVG } from '../svg';
-
-const Motion = motion.create(Div);
 
 const BackgroundSnow: FC = () => {
   const maxHeight = useSafeHeight();

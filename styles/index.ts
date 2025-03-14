@@ -23,16 +23,12 @@ export const GlobalStyles = css`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'JetBrains Mono', serif;
+    font-family: 'DM Sans', serif;
   }
 
   html {
     background: #0c0f1d;
     scroll-behavior: smooth;
-  }
-
-  body {
-    cursor: url('icon.svg'), auto;
   }
 
   body,
@@ -44,22 +40,23 @@ export const GlobalStyles = css`
     color: inherit;
     text-decoration: none;
   }
+
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
-    padding: 2rem;
+    width: 3px;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
+    background: #0007;
+    padding-left: 2px;
     border-radius: 0.5rem;
-    background: transparent;
     transition: all 300ms ease-in-out;
   }
 
   /* Track on hover */
   ::-webkit-scrollbar-track:hover {
-    background: #fff1;
+    background: #0003;
   }
 
   /* Handle */
@@ -67,5 +64,10 @@ export const GlobalStyles = css`
     background: #888;
     border-radius: 0.5rem;
     border: 5px solid transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #99efe4cc;
   }
 `;

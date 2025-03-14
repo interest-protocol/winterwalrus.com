@@ -1,14 +1,25 @@
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
-import { Background, Layout } from '@/components';
-
-// #8B4445
+import { Background, Epoch, Layout, Stake, Staking } from '@/components';
 
 const Home: FC = () => (
   <Layout>
-    <Div color="#629590">
-      <Background />
+    <Background />
+    <Div
+      mx="auto"
+      gap="1rem"
+      display="flex"
+      maxWidth="34rem"
+      position="relative"
+      borderRadius="1rem"
+      mt={['1rem', '3rem']}
+      flexDirection="column"
+      px={['0.5rem', '2rem']}
+    >
+      <Epoch />
+      <Stake />
+      <Staking />
     </Div>
   </Layout>
 );
