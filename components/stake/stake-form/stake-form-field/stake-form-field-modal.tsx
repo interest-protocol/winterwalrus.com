@@ -5,14 +5,16 @@ import { useFormContext } from 'react-hook-form';
 
 import { ASSET_METADATA } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakeFormFieldGenericProps } from './stake-form-field.types';
 
 const StakeFormFieldModal: FC<StakeFormFieldGenericProps> = () => {
-  const { balances, principalsByType } = useAppState();
+  const { handleClose } = useModal();
   const { setValue } = useFormContext();
+  const { balances, principalsByType } = useAppState();
 
   return (
     <Div
@@ -36,7 +38,9 @@ const StakeFormFieldModal: FC<StakeFormFieldGenericProps> = () => {
           bg="#FFFFFF1A"
           display="flex"
           fontWeight="500"
+          cursor="pointer"
           borderRadius="0.5rem"
+          onClick={handleClose}
         >
           ESC
         </Span>

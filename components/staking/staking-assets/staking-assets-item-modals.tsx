@@ -38,6 +38,7 @@ export const StakingAssetsItemWithdrawModal: FC = () => {
           bg="#FFFFFF1A"
           display="flex"
           fontWeight="500"
+          cursor="pointer"
           borderRadius="0.5rem"
           onClick={handleClose}
         >
@@ -99,6 +100,7 @@ export const StakingAssetsItemUnstakeModal: FC = () => {
           bg="#FFFFFF1A"
           display="flex"
           fontWeight="500"
+          cursor="pointer"
           borderRadius="0.5rem"
           onClick={handleClose}
         >
