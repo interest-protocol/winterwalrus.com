@@ -9,7 +9,7 @@ import { useSafeHeight } from '@/hooks/use-safe-height';
 
 const Motion = motion.create(Div);
 
-const ModalProvider: FC = () => {
+const ModalManager: FC = () => {
   const safeHeight = useSafeHeight();
 
   const {
@@ -76,4 +76,4 @@ const ModalProvider: FC = () => {
   );
 };
 
-export default ModalProvider;
+export default ModalManager;

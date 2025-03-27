@@ -4,7 +4,7 @@ import { useAppState } from '@/hooks/use-app-state';
 import { useCoins } from '@/hooks/use-coins';
 import { useStakingObjects } from '@/hooks/use-staking-objects';
 
-const AppStateProvider: FC = () => {
+const AppStateManager: FC = () => {
   const { update } = useAppState();
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
@@ -50,4 +50,4 @@ const AppStateProvider: FC = () => {
   return null;
 };
 
-export default AppStateProvider;
+export default AppStateManager;

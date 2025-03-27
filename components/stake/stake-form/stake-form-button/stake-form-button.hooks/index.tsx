@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { path } from 'ramda';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import {
   COIN_DECIMALS,
@@ -20,6 +19,7 @@ import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useNetwork } from '@/hooks/use-network';
+import { useToast } from '@/hooks/use-toast';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -28,6 +28,7 @@ import { useUnstake } from './use-unstake';
 
 export const useStakeAction = () => {
   const stake = useStake();
+  const toast = useToast();
   const network = useNetwork();
   const unstake = useUnstake();
   const { data } = useEpochData();

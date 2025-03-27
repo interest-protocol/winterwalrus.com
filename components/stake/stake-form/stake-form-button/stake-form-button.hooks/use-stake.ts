@@ -23,8 +23,6 @@ export const useStake = () => {
     coinIn,
     coinOut,
     coinValue,
-    onSuccess,
-    onFailure,
     isAfterVote,
   }: StakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
