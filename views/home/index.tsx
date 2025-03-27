@@ -17,10 +17,10 @@ const Home: FC = () => (
       flexDirection="column"
       px={['0.5rem', '2rem']}
     >
-      <Epoch />
       <Stake />
       <Staking />
     </Div>
+    <Epoch />
   </Layout>
 );
 

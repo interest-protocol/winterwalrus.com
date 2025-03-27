@@ -32,29 +32,49 @@ const Epoch: FC = () => {
   return (
     <AnimatePresence>
       <Motion
+        m="1rem"
         p="1rem"
         gap="1rem"
+        bottom="0"
+        width="20rem"
         bg="#FFFFFF0D"
         display="flex"
         color="#ffffff"
+        position="absolute"
         borderRadius="1rem"
         flexDirection="column"
         border="1px solid #FFFFFF1A"
-        height={collapsed ? 'auto' : '12.525rem'}
       >
-        <Div display="flex" justifyContent="space-between" alignItems="center">
-          <H2 fontSize="0.825rem">Epoch {data?.currentEpoch ?? '--'}</H2>
-          <Div display="flex" gap="1rem" alignItems="center">
-            <P
-              px="0.5rem"
-              py="0.25rem"
-              bg="#83F34E14"
-              color="#83F34E"
-              fontSize="0.75rem"
-              borderRadius="1.7rem"
-            >
-              {percentage > 50 ? 'Minting Stake NFT' : 'Minting LST Coin'}
-            </P>
+        <Div
+          gap="1rem"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Div display="flex" alignItems="center" gap="0.5rem">
+            <H2 fontSize="0.825rem">Epoch {data?.currentEpoch ?? '--'}</H2>
+            <InfoSVG width="100%" maxWidth="0.75rem" />
+          </Div>
+          <Div display="flex" gap="1rem" alignItems="center" flex="1">
+            <Div gap="0.5rem" display="flex" flex="1" alignItems="center">
+              <Div
+                width="100%"
+                bg="#00000052"
+                overflow="hidden"
+                borderRadius="0.15rem"
+              >
+                <Motion
+                  height="0.3rem"
+                  overflow="hidden"
+                  borderRadius="0.15rem"
+                  width={`${percentage}%`}
+                  bg={`linear-gradient(90deg, #99EFE4 ${
+                    (50 / percentage) * 100 - 1
+                  }%, #C484F6 ${1 + (50 / percentage) * 100}%)`}
+                />
+              </Div>
+              <P fontWeight="0.875rem">{percentage}%</P>
+            </Div>
             <Motion
               cursor="pointer"
               display="inline-flex"
@@ -78,31 +98,6 @@ const Epoch: FC = () => {
             justifyContent="space-between"
             animate={{ scaleY: collapsed ? 0 : 1 }}
           >
-            <Div gap="0.5rem" display="flex" flexDirection="column">
-              <Div display="flex" justifyContent="space-between">
-                <Div display="flex" alignItems="center" gap="0.25rem">
-                  <P color="#FFFFFF80">Progress</P>
-                  <InfoSVG width="100%" maxWidth="0.75rem" />
-                </Div>
-                <P fontWeight="0.875rem">{percentage}%</P>
-              </Div>
-              <Div
-                width="100%"
-                bg="#00000052"
-                overflow="hidden"
-                borderRadius="0.15rem"
-              >
-                <Motion
-                  height="0.3rem"
-                  overflow="hidden"
-                  borderRadius="0.15rem"
-                  width={`${percentage}%`}
-                  bg={`linear-gradient(90deg, #99EFE4 ${
-                    (50 / percentage) * 100 - 1
-                  }%, #C484F6 ${1 + (50 / percentage) * 100}%)`}
-                />
-              </Div>
-            </Div>
             <Div
               gap="0.5rem"
               display="grid"
