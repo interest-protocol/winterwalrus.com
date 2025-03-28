@@ -11,7 +11,6 @@ import {
 } from '@/components/svg';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
-import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -25,7 +24,6 @@ const PIZZA_ICONS: Record<0.25 | 0.5 | 1, FC<SVGProps>> = {
 };
 
 const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
-  const network = useNetwork();
   const { balances } = useAppState();
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
@@ -36,10 +34,10 @@ const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
-    type === TYPES[network].SNOW;
+    type === TYPES.WWAL;
 
   const balance =
-    balances[isSnowOutAfterVote ? TYPES[network].BLIZZARD_STAKE_NFT : type];
+    balances[isSnowOutAfterVote ? TYPES.BLIZZARD_STAKE_NFT : type];
 
   return (
     <Div display="flex" gap="0.5rem">

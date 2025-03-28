@@ -3,12 +3,10 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import useEpochData from '@/hooks/use-epoch-data';
-import { useNetwork } from '@/hooks/use-network';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 const StakeFormManager: FC = () => {
-  const network = useNetwork();
   const { data: quotes } = useQuotes();
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
@@ -25,7 +23,7 @@ const StakeFormManager: FC = () => {
     }
 
     const rate =
-      quotes[coinOut === TYPES[network].STAKED_WAL ? 'quoteSWal' : 'quoteLst'];
+      quotes[coinOut === TYPES.STAKED_WAL ? 'quoteSWal' : 'quoteLst'];
 
     if (!rate) return;
 

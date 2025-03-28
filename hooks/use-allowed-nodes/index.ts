@@ -25,6 +25,8 @@ export const useAllowedNodes = (stakingObject?: string) => {
         options: { showContent: true },
       });
 
+      console.log({ nodeObjects });
+
       return nodeObjects.map((nodeObject) => ({
         id: path(['data', 'objectId'], nodeObject) as string,
         name: String(

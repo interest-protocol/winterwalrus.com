@@ -5,8 +5,6 @@ import { BigNumber } from 'bignumber.js';
 import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
 
-import { useNetwork } from '../use-network';
-
 interface Response {
   stakingObjectIds: ReadonlyArray<string>;
   objectsActivation: Record<string, number>;
@@ -14,7 +12,6 @@ interface Response {
 }
 
 export const useStakingObjects = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
@@ -33,8 +30,8 @@ export const useStakingObjects = () => {
         options: { showContent: true },
         filter: {
           MatchAny: [
-            { StructType: TYPES[network].STAKED_WAL },
-            { StructType: TYPES[network].BLIZZARD_STAKE_NFT },
+            { StructType: TYPES.STAKED_WAL },
+            { StructType: TYPES.BLIZZARD_STAKE_NFT },
           ],
         },
       });

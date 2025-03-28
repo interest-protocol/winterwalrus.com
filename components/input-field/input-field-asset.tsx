@@ -8,14 +8,12 @@ import Motion from '@/components/motion';
 import { ASSET_METADATA, COIN_ICON, NFT_IMAGE } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useModal } from '@/hooks/use-modal';
-import { useNetwork } from '@/hooks/use-network';
 
 import { ChevronDownSVG } from '../svg';
 import { InputFieldAssetProps } from './input-field.types';
 import InputFieldModal from './input-field-modal';
 
 const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, assetList }) => {
-  const network = useNetwork();
   const form = useFormContext();
   const { setContent } = useModal();
   const { data: epoch, isLoading } = useEpochData();
@@ -46,11 +44,9 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, assetList }) => {
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
-    typeBefore === TYPES[network].SNOW;
+    typeBefore === TYPES.WWAL;
 
-  const type = isLstOutAfterVote
-    ? TYPES[network].BLIZZARD_STAKE_NFT
-    : typeBefore;
+  const type = isLstOutAfterVote ? TYPES.BLIZZARD_STAKE_NFT : typeBefore;
 
   const Icon = COIN_ICON[type];
   const image = NFT_IMAGE[type];

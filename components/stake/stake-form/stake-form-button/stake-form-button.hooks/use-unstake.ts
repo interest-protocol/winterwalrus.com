@@ -1,4 +1,4 @@
-import { SHARED_OBJECTS, TYPES } from '@interest-protocol/blizzard-sdk';
+import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -8,13 +8,11 @@ import { coinWithBalance } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
-import { useNetwork } from '@/hooks/use-network';
 import { signAndExecute } from '@/utils';
 
 import { UnstakeArgs } from '../stake-form-button.types';
 
 export const useUnstake = () => {
-  const network = useNetwork();
   const client = useSuiClient();
   const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
@@ -25,7 +23,7 @@ export const useUnstake = () => {
 
     const { returnValues: withdrawIXs, tx } = await blizzardSdk.fcfs({
       value: coinValue,
-      blizzardStaking: SHARED_OBJECTS[network].SNOW_STAKING({
+      blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
         mutable: true,
       }).objectId,
     });
@@ -41,17 +39,15 @@ export const useUnstake = () => {
       tx,
       lstCoin,
       withdrawIXs,
-      minWalValue: coinValue,
-      blizzardStaking: SHARED_OBJECTS[network].SNOW_STAKING({
+      blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
         mutable: true,
       }).objectId,
     });
 
-    blizzardSdk.vectorTransfer({
+    blizzardSdk.vectorTransferStakedWal({
       tx,
       vector: stakedWalVector,
       to: currentAccount.address,
-      type: TYPES[network].STAKED_WAL,
     });
 
     return signAndExecute({

@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import useSWR from 'swr';
 
 export const useWalPrice = () =>
@@ -8,7 +9,7 @@ export const useWalPrice = () =>
         accept: '*/*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ coins: ['0x2::sui::SUI'] }),
+      body: JSON.stringify({ coins: [TYPES.WAL] }),
     })
       .then((res) => res.json?.())
       .then((data) => data[0].price)

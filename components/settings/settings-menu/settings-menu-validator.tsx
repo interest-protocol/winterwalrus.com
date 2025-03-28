@@ -8,7 +8,6 @@ import Motion from '@/components/motion';
 import { ChevronRightSVG } from '@/components/svg';
 import { INTEREST_LABS } from '@/constants';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
-import { useNetwork } from '@/hooks/use-network';
 
 import { SettingsMenusProps } from './settings-menu.types';
 import SettingsMenuItem from './settings-menu-item';
@@ -17,10 +16,9 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
   show,
   toggleShow,
 }) => {
-  const network = useNetwork();
   const { setValue, getValues } = useFormContext();
   const { nodes } = useAllowedNodes(
-    SHARED_OBJECTS[network].SNOW_STAKING({ mutable: true }).objectId
+    SHARED_OBJECTS.WWAL_STAKING({ mutable: true }).objectId
   );
 
   return (

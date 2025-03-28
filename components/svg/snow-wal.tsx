@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { SVGProps } from './svg.types';
 
-const SnowWal: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
+const WWal: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   <svg
     style={{ maxWidth, maxHeight }}
     viewBox="0 0 1000 1000"
@@ -17,4 +17,4 @@ const SnowWal: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
   </svg>
 );
 
-export default SnowWal;
+export default WWal;

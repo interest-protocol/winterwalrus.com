@@ -5,14 +5,12 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useCoins } from '@/hooks/use-coins';
-import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
-  const network = useNetwork();
   const { coins } = useCoins();
   const { control, getValues } = useFormContext();
   const { onStake, onUnstake, loading } = useStakeAction();
@@ -29,13 +27,12 @@ const StakeFormButton: FC = () => {
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
   const insufficientAmountIn =
-    normalizeStructTag(coinIn) === normalizeStructTag(TYPES[network].WAL) &&
+    normalizeStructTag(coinIn) === normalizeStructTag(TYPES.WAL) &&
     Number(amountIn) &&
     Number(amountIn) < 1;
 
   const insufficientAmountOut =
-    normalizeStructTag(coinOut) ===
-      normalizeStructTag(TYPES[network].STAKED_WAL) &&
+    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
     Number(amountOut) &&
     Number(amountOut) < 1;
 
@@ -61,7 +58,7 @@ const StakeFormButton: FC = () => {
       onClick={
         disabled
           ? undefined
-          : coinOut === TYPES[network].STAKED_WAL
+          : coinOut === TYPES.STAKED_WAL
             ? onUnstake
             : onStake
       }
@@ -73,7 +70,7 @@ const StakeFormButton: FC = () => {
           : insufficientBalance
             ? 'Insufficient Balance'
             : normalizeStructTag(coinOut) ===
-                normalizeStructTag(TYPES[network].STAKED_WAL)
+                normalizeStructTag(TYPES.STAKED_WAL)
               ? loading
                 ? 'Unstaking...'
                 : 'Unstake'

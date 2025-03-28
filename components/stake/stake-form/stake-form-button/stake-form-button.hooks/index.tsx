@@ -19,7 +19,6 @@ import {
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -28,7 +27,6 @@ import { useUnstake } from './use-unstake';
 
 export const useStakeAction = () => {
   const stake = useStake();
-  const network = useNetwork();
   const unstake = useUnstake();
   const { data } = useEpochData();
   const { update } = useAppState();
@@ -58,7 +56,7 @@ export const useStakeAction = () => {
           )}
         >
           <P>
-            {coinOut === TYPES[network].STAKED_WAL
+            {coinOut === TYPES.STAKED_WAL
               ? 'Unstaked successfully!'
               : 'Staked successfully!'}
           </P>
@@ -99,9 +97,7 @@ export const useStakeAction = () => {
               [normalizeStructTag(object.objectType)]:
                 FixedPointMath.toBigNumber(
                   getValues(
-                    coinOut === TYPES[network].STAKED_WAL
-                      ? 'out.value'
-                      : 'in.value'
+                    coinOut === TYPES.STAKED_WAL ? 'out.value' : 'in.value'
                   )
                 ).plus(
                   acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER

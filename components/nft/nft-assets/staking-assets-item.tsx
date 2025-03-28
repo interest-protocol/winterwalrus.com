@@ -13,7 +13,6 @@ import { ChevronDownSVG, ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode, NFT_IMAGE } from '@/constants';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { useNetwork } from '@/hooks/use-network';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -23,7 +22,6 @@ import { useStakingAction } from './staking-assets-item.hooks';
 import StakingAssetsItemLoading from './staking-assets-item-loading';
 
 const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
-  const network = useNetwork();
   const { data } = useEpochData();
   const getExplorerUrl = useGetExplorerUrl();
   const [isOpen, setIsOpen] = useState(false);
@@ -126,7 +124,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             onClick={onBurn}
             textAlign="center"
             borderRadius="0.5rem"
-            bg={type === TYPES[network].STAKED_WAL ? '#99EFE4' : '#C484F6'}
+            bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
             disabled={loading || !isActivated(withdrawEpoch ?? activationEpoch)}
             opacity={
               loading || isActivated(withdrawEpoch ?? activationEpoch) ? 1 : 0.5
@@ -137,13 +135,13 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                 : 'not-allowed'
             }
           >
-            {type === TYPES[network].STAKED_WAL
+            {type === TYPES.STAKED_WAL
               ? state === 'Staked'
                 ? 'Unstake'
                 : 'Withdraw'
               : loading
                 ? 'Getting...'
-                : 'Get SNOW'}
+                : 'Get LST'}
           </Button>
           <Motion
             cursor="pointer"

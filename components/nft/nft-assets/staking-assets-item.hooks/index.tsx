@@ -13,7 +13,6 @@ import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
-import { useNetwork } from '@/hooks/use-network';
 import { StakingObject } from '@/interface';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -28,7 +27,6 @@ export const useStakingAction = (
   isActivated: (epoch: number) => boolean
 ) => {
   const burn = useBurn();
-  const network = useNetwork();
   const { update } = useAppState();
   const { setContent } = useModal();
   const account = useCurrentAccount();
@@ -130,7 +128,7 @@ export const useStakingAction = (
   const onBurn = async () => {
     if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
 
-    if (type === TYPES[network].STAKED_WAL) {
+    if (type === TYPES.STAKED_WAL) {
       if (state === 'Staked') setContent(<StakingAssetsItemUnstakeModal />);
       else setContent(<StakingAssetsItemWithdrawModal />);
       return;
