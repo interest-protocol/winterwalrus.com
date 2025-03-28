@@ -30,7 +30,13 @@ const Epoch: FC = () => {
   ).toFixed(2);
 
   return (
-    <Div position="absolute" bottom="0" width="20rem">
+    <Div
+      mx="auto"
+      bottom="0"
+      width="100%"
+      maxWidth={['34rem', '34rem', '34rem', '34rem', '20rem']}
+      position={['static', 'static', 'static', 'static', 'fixed']}
+    >
       <AnimatePresence>
         <Motion
           m="1rem"

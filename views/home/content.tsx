@@ -30,9 +30,9 @@ const Content: FC = () => {
       maxWidth="34rem"
       position="relative"
       borderRadius="1rem"
-      mt={['1rem', '3rem']}
       flexDirection="column"
       px={['0.5rem', '2rem']}
+      my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
       <Div display="flex" gap="0.5rem">
         {[
