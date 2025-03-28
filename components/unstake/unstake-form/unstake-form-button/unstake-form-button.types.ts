@@ -1,11 +1,8 @@
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 
-export interface StakeArgs {
-  nodeId: string;
+export interface UnstakeArgs {
   coinIn: string;
-  coinOut: string;
   coinValue: bigint;
-  isAfterVote: boolean;
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }

@@ -1,10 +1,10 @@
 import useSwr from 'swr';
 
-import { MYSTEN_LABS_K8S } from '@/constants';
+import { INTEREST_LABS } from '@/constants';
 
 import useBlizzardSdk from '../use-blizzard-sdk';
 
-const useEpochAPR = (nodeId = MYSTEN_LABS_K8S) => {
+const useEpochAPR = (nodeId = INTEREST_LABS) => {
   const blizzardSdk = useBlizzardSdk();
 
   return useSwr(

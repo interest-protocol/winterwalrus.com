@@ -1,4 +1,3 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
 import { Div, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
@@ -8,7 +7,6 @@ import Motion from '@/components/motion';
 import { ChevronRightSVG } from '@/components/svg';
 import { INTEREST_LABS } from '@/constants';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
-import { useNetwork } from '@/hooks/use-network';
 
 import { SettingsMenusProps } from './settings-menu.types';
 import SettingsMenuItem from './settings-menu-item';
@@ -17,11 +15,8 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
   show,
   toggleShow,
 }) => {
-  const network = useNetwork();
   const { setValue, getValues } = useFormContext();
-  const { nodes } = useAllowedNodes(
-    SHARED_OBJECTS[network].SNOW_STAKING({ mutable: true }).objectId
-  );
+  const { nodes } = useAllowedNodes(getValues('out.type'));
 
   return (
     <Motion>
@@ -47,6 +42,8 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
         {show && (
           <Motion
             ml="1.5rem"
+            overflowY="auto"
+            maxHeight="10rem"
             style={{ originY: 0 }}
             exit={{ scaleY: 0, height: 0, opacity: 0 }}
             animate={{

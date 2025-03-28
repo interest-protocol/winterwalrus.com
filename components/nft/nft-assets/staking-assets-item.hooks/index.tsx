@@ -7,40 +7,40 @@ import BigNumber from 'bignumber.js';
 import Link from 'next/link';
 import { path } from 'ramda';
 import { useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import {
-  ASSET_METADATA,
-  ExplorerMode,
-  INTEREST_LABS,
-  NFT_TYPES,
-} from '@/constants';
+import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
-import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { useModal } from '@/hooks/use-modal';
+import { StakingObject } from '@/interface';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { useStake } from './use-stake';
+import {
+  StakingAssetsItemUnstakeModal,
+  StakingAssetsItemWithdrawModal,
+} from '../staking-assets-item-modals';
+import { useBurn } from './use-burn';
 
-export const useStakeAction = () => {
-  const stake = useStake();
-  const { data } = useEpochData();
+export const useStakingAction = (
+  stakingObject: StakingObject | null | undefined,
+  isActivated: (epoch: number) => boolean
+) => {
+  const burn = useBurn();
   const { update } = useAppState();
+  const { setContent } = useModal();
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
 
-  const { control, getValues, setValue } = useFormContext();
+  if (!stakingObject)
+    return {
+      loading,
+      onBurn: () => {},
+    };
 
-  const coinOut = useWatch({ control, name: 'out.type' });
-
-  const reset = () => {
-    setValue('in.value', '0');
-    setValue('out.value', '0');
-    setValue('validator', INTEREST_LABS);
-  };
+  const { type, state, objectId, principal, withdrawEpoch, activationEpoch } =
+    stakingObject;
 
   const onSuccess =
     (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
@@ -53,7 +53,7 @@ export const useStakeAction = () => {
             ExplorerMode.Transaction
           )}
         >
-          <P>Staked successfully!</P>
+          <P>You got SNOW</P>
           <P fontSize="0.875" opacity="0.75">
             See on explorer
           </P>
@@ -88,14 +88,11 @@ export const useStakeAction = () => {
           const principalsByType = possiblyCreatedObjects.reduce(
             (acc, object) => ({
               ...acc,
-              [normalizeStructTag(object.objectType)]:
-                FixedPointMath.toBigNumber(
-                  getValues(
-                    coinOut === TYPES.STAKED_WAL ? 'out.value' : 'in.value'
-                  )
-                ).plus(
-                  acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-                ),
+              [normalizeStructTag(object.objectType)]: BigNumber(
+                principal
+              ).plus(
+                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+              ),
             }),
             oldPrincipalsByType
           );
@@ -121,8 +118,6 @@ export const useStakeAction = () => {
           };
         }
       );
-
-      reset();
     };
 
   const onFailure = (toastId: string) => (error?: string) => {
@@ -130,32 +125,22 @@ export const useStakeAction = () => {
     toast.error(error ?? 'Error executing transaction');
   };
 
-  const onStake = async () => {
-    const form = getValues();
+  const onBurn = async () => {
+    if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
 
-    if (!form.in.value || !form.out.value) return;
+    if (type === TYPES.STAKED_WAL) {
+      if (state === 'Staked') setContent(<StakingAssetsItemUnstakeModal />);
+      else setContent(<StakingAssetsItemWithdrawModal />);
+      return;
+    }
     setLoading(true);
-    const id = toast.loading('Staking...');
+    const id = toast.loading('Getting SNOW...');
 
     try {
-      const isAfterVote =
-        data && data.currentEpoch
-          ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
-          : false;
-
-      await stake({
-        coinOut,
-        isAfterVote,
-        coinIn: form.in.type,
-        nodeId: form.validator,
+      await burn({
+        objectId,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
-        coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            ASSET_METADATA[form.in.type].decimals
-          ).toFixed(0)
-        ),
       });
     } catch (e) {
       onFailure(id)((e as Error).message);
@@ -164,5 +149,5 @@ export const useStakeAction = () => {
     }
   };
 
-  return { onStake, loading };
+  return { onBurn, loading };
 };

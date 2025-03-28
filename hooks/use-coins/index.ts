@@ -4,10 +4,7 @@ import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import useSWR from 'swr';
 
-import { useNetwork } from '../use-network';
-
 export const useCoins = () => {
-  const network = useNetwork();
   const client = useSuiClient();
   const currentAccount = useCurrentAccount();
 
@@ -24,8 +21,8 @@ export const useCoins = () => {
         (acc, { coinType, totalBalance }) =>
           [
             normalizeStructTag(SUI_TYPE_ARG),
-            normalizeStructTag(TYPES[network].WAL),
-            normalizeStructTag(TYPES[network].SNOW),
+            normalizeStructTag(TYPES.WAL),
+            normalizeStructTag(TYPES.WWAL),
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,

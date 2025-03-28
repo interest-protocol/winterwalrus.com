@@ -7,13 +7,11 @@ import {
 import invariant from 'tiny-invariant';
 
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
-import { useNetwork } from '@/hooks/use-network';
 import { signAndExecute } from '@/utils';
 
-import { UnstakeArgs } from '../../staking.types';
+import { UnstakeArgs } from '../../nft.types';
 
 export const useBurn = () => {
-  const network = useNetwork();
   const client = useSuiClient();
   const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
@@ -24,7 +22,7 @@ export const useBurn = () => {
 
     const { returnValues: wal, tx } = await blizzardSdk.burnStakeNft({
       nft: objectId,
-      blizzardStaking: SHARED_OBJECTS[network].SNOW_STAKING({
+      blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
         mutable: true,
       }).objectId,
     });
