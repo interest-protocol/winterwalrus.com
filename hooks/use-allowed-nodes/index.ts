@@ -2,22 +2,20 @@ import { useSuiClient } from '@mysten/dapp-kit';
 import { path } from 'ramda';
 import useSWR from 'swr';
 
+import { STAKING_OBJECT } from '@/constants';
+import { Node } from '@/interface';
+
 import useBlizzardSdk from '../use-blizzard-sdk';
 
-interface Node {
-  id: string;
-  name: string;
-}
-
-export const useAllowedNodes = (stakingObject?: string) => {
+export const useAllowedNodes = (lst?: string) => {
   const suiClient = useSuiClient();
   const blizzardSdk = useBlizzardSdk();
 
   const { data: nodes, ...rest } = useSWR<ReadonlyArray<Node>>(
-    [useAllowedNodes.name, stakingObject],
+    [useAllowedNodes.name, lst],
     async () => {
-      if (!stakingObject) return [];
-
+      if (!lst) return [];
+      const stakingObject = STAKING_OBJECT[lst];
       const ids = await blizzardSdk.allowedNodes(stakingObject);
 
       const nodeObjects = await suiClient.multiGetObjects({

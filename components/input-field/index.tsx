@@ -4,12 +4,19 @@ import { useFormContext } from 'react-hook-form';
 
 import { parseInputEventToNumberString } from '@/utils';
 
-import { StakeFormFieldProps } from './stake-form-field.types';
-import StakeFormFieldBalance from './stake-form-field-balance';
-import StakeFormFieldCoin from './stake-form-field-coin';
-import StakeFormFieldPrice from './stake-form-field-price';
+import { InputFieldProps } from './input-field.types';
+import InputFieldAsset from './input-field-asset';
+import InputFieldBalance from './input-field-balance';
+import InputFieldBalances from './input-field-balances';
+import InputFieldPrice from './input-field-price';
 
-const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
+const StakeFormField: FC<InputFieldProps> = ({
+  name,
+  label,
+  disabled,
+  assetList,
+  topContent,
+}) => {
   const { register, setValue } = useFormContext();
 
   return (
@@ -24,7 +31,14 @@ const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
       flexDirection="column"
       border="1px solid #FFFFFF1A"
     >
-      <Span opacity="0.8">{label}</Span>
+      <Div display="flex" justifyContent="space-between">
+        <Span opacity="0.8">{label}</Span>
+        {topContent === 'balance' ? (
+          <InputFieldBalances name={name} />
+        ) : (
+          topContent
+        )}
+      </Div>
       <Div
         display="grid"
         maxWidth="100%"
@@ -46,11 +60,11 @@ const StakeFormField: FC<StakeFormFieldProps> = ({ label, name, disabled }) => {
             },
           })}
         />
-        <StakeFormFieldCoin name={name} />
+        <InputFieldAsset name={name} assetList={assetList} />
       </Div>
       <Div display="flex" justifyContent="space-between">
-        <StakeFormFieldPrice name={name} />
-        <StakeFormFieldBalance name={name} />
+        <InputFieldPrice name={name} />
+        <InputFieldBalance name={name} />
       </Div>
     </Label>
   );

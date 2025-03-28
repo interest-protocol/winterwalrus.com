@@ -1,3 +1,4 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 
 import { useAppState } from '@/hooks/use-app-state';
@@ -6,10 +7,12 @@ import { useStakingObjects } from '@/hooks/use-staking-objects';
 
 const AppStateProvider: FC = () => {
   const { update } = useAppState();
+  const currentAccount = useCurrentAccount();
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
     principalByType,
     stakingObjectIds,
+    objectsActivation,
     isLoading: loadingObjects,
     mutate: mutateStakingObjects,
   } = useStakingObjects();
@@ -24,6 +27,20 @@ const AppStateProvider: FC = () => {
   }, []);
 
   useEffect(() => {
+    if (currentAccount) return;
+
+    update({
+      balances: {},
+      mutate: () => {},
+      loadingCoins: false,
+      principalsByType: {},
+      stakingObjectIds: [],
+      loadingObjects: false,
+      objectsActivation: {},
+    });
+  }, [currentAccount]);
+
+  useEffect(() => {
     if (!coins) return;
 
     update(({ balances }) => ({ balances: { ...balances, ...coins } }));
@@ -34,10 +51,11 @@ const AppStateProvider: FC = () => {
 
     update(({ balances }) => ({
       stakingObjectIds,
+      objectsActivation,
       principalsByType: principalByType,
       balances: { ...balances, ...principalByType },
     }));
-  }, [principalByType, stakingObjectIds]);
+  }, [principalByType, stakingObjectIds, objectsActivation]);
 
   useEffect(() => {
     update({ loadingObjects });

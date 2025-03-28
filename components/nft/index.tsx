@@ -6,9 +6,9 @@ import { useAppState } from '@/hooks/use-app-state';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import StakingAssets from './staking-assets';
+import StakingAssets from './nft-assets';
 
-const Staking: FC = () => {
+const NFT: FC = () => {
   const { principalsByType } = useAppState();
 
   return (
@@ -61,4 +61,4 @@ const Staking: FC = () => {
   );
 };
 
-export default Staking;
+export default NFT;

@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -6,7 +5,7 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
-const StakeFormManager: FC = () => {
+const UnstakeFormManager: FC = () => {
   const { data: quotes } = useQuotes();
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
@@ -22,8 +21,7 @@ const StakeFormManager: FC = () => {
       return;
     }
 
-    const rate =
-      quotes[coinOut === TYPES.STAKED_WAL ? 'quoteSWal' : 'quoteLst'];
+    const rate = quotes.quoteLst;
 
     if (!rate) return;
 
@@ -36,4 +34,4 @@ const StakeFormManager: FC = () => {
   return null;
 };
 
-export default StakeFormManager;
+export default UnstakeFormManager;

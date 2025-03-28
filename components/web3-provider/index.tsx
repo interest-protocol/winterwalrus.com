@@ -12,10 +12,10 @@ const queryClient = new QueryClient();
 const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     <SuiClientProvider
-      defaultNetwork="testnet"
+      defaultNetwork="mainnet"
       networks={
         createNetworkConfig({
-          testnet: { url: getFullnodeUrl('testnet') },
+          mainnet: { url: getFullnodeUrl('mainnet') },
         }).networkConfig
       }
     >

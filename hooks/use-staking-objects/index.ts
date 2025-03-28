@@ -5,30 +5,33 @@ import { BigNumber } from 'bignumber.js';
 import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
 
-import { useNetwork } from '../use-network';
-
 interface Response {
   stakingObjectIds: ReadonlyArray<string>;
+  objectsActivation: Record<string, number>;
   principalByType: Record<string, BigNumber>;
 }
 
 export const useStakingObjects = () => {
-  const network = useNetwork();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Response>(
     [useStakingObjects.name],
     async () => {
-      if (!currentAccount) return { stakingObjectIds: [], principalByType: {} };
+      if (!currentAccount)
+        return {
+          stakingObjectIds: [],
+          principalByType: {},
+          objectsActivation: {},
+        };
 
       const objects = await suiClient.getOwnedObjects({
         owner: currentAccount.address,
         options: { showContent: true },
         filter: {
           MatchAny: [
-            { StructType: TYPES[network].STAKED_WAL },
-            { StructType: TYPES[network].BLIZZARD_STAKE_NFT },
+            { StructType: TYPES.STAKED_WAL },
+            { StructType: TYPES.BLIZZARD_STAKE_NFT },
           ],
         },
       });
@@ -75,6 +78,49 @@ export const useStakingObjects = () => {
       );
 
       return {
+        objectsActivation: stakingObjects.reduce(
+          (acc, item) => {
+            const type = normalizeStructTag(
+              path(['data', 'content', 'type'], item) as string
+            );
+            const value = Number(
+              pathOr(
+                null,
+                [
+                  'data',
+                  'content',
+                  'fields',
+                  'state',
+                  'fields',
+                  'withdraw_epoch',
+                ],
+                item
+              ) ??
+                pathOr(
+                  path(
+                    [
+                      'data',
+                      'content',
+                      'fields',
+                      'inner',
+                      'fields',
+                      'inner',
+                      'activation_epoch',
+                    ],
+                    item
+                  ),
+                  ['data', 'content', 'fields', 'activation_epoch'],
+                  item
+                )
+            );
+
+            return {
+              ...acc,
+              [type]: value,
+            };
+          },
+          {} as Record<string, number>
+        ),
         principalByType: stakingObjects.reduce(
           (acc, item) => {
             const type = normalizeStructTag(

@@ -4,15 +4,13 @@ import { Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useNetwork } from '@/hooks/use-network';
 import { useQuotes } from '@/hooks/use-quotes';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatDollars } from '@/utils';
 
-import { StakeFormFieldGenericProps } from './stake-form-field.types';
+import { InputFieldGenericProps } from './input-field.types';
 
-const StakeFormFieldPrice: FC<StakeFormFieldGenericProps> = ({ name }) => {
-  const network = useNetwork();
+const InputFieldPrice: FC<InputFieldGenericProps> = ({ name }) => {
   const { control } = useFormContext();
   const { data: quotes } = useQuotes();
   const { data: suiPrice } = useWalPrice();
@@ -22,9 +20,7 @@ const StakeFormFieldPrice: FC<StakeFormFieldGenericProps> = ({ name }) => {
   const price =
     suiPrice && quotes
       ? suiPrice *
-        (normalizeStructTag(type) === TYPES[network].SNOW
-          ? quotes?.quoteLst ?? 1
-          : 1)
+        (normalizeStructTag(type) === TYPES.WWAL ? quotes?.quoteLst ?? 1 : 1)
       : 0;
 
   return (
@@ -34,4 +30,4 @@ const StakeFormFieldPrice: FC<StakeFormFieldGenericProps> = ({ name }) => {
   );
 };
 
-export default StakeFormFieldPrice;
+export default InputFieldPrice;

@@ -7,6 +7,7 @@ interface AppState {
   loadingObjects: boolean;
   balances: Record<string, BigNumber>;
   stakingObjectIds: ReadonlyArray<string>;
+  objectsActivation: Record<string, number>;
   principalsByType: Record<string, BigNumber>;
   update: {
     (
@@ -28,4 +29,5 @@ export const useAppState = create<AppState>((set) => ({
   principalsByType: {},
   stakingObjectIds: [],
   loadingObjects: false,
+  objectsActivation: {},
 }));

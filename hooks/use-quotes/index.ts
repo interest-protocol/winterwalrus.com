@@ -24,7 +24,7 @@ export const useQuotes = () => {
         blizzardSdk[quoteFn]({
           epoch: epoch?.currentEpoch,
           value: BigInt(FixedPointMath.toBigNumber(1).toString()),
-          blizzardStaking: SHARED_OBJECTS.testnet.SNOW_STAKING({
+          blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
             mutable: true,
           }).objectId,
         }).then((value) => FixedPointMath.toNumber(BigNumber(value ?? 0)))

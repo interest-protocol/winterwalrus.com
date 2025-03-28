@@ -7,14 +7,12 @@ import Skeleton from 'react-loading-skeleton';
 import { WalletSVG } from '@/components/svg';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
-import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { StakeFormFieldGenericProps } from './stake-form-field.types';
+import { InputFieldGenericProps } from './input-field.types';
 
-const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
-  const network = useNetwork();
+const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
   const { balances, loadingCoins, loadingObjects } = useAppState();
@@ -25,10 +23,10 @@ const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
-    type === TYPES[network].SNOW;
+    type === TYPES.WWAL;
 
   const balance =
-    balances[isSnowOutAfterVote ? TYPES[network].BLIZZARD_STAKE_NFT : type];
+    balances[isSnowOutAfterVote ? TYPES.BLIZZARD_STAKE_NFT : type];
 
   return (
     <Button
@@ -57,4 +55,4 @@ const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
   );
 };
 
-export default StakeFormFieldBalance;
+export default InputFieldBalance;

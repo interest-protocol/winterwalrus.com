@@ -6,7 +6,7 @@ import {
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
-import { STAKING_COIN } from '@/constants';
+import { STAKING_OBJECT } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { signAndExecute } from '@/utils';
 
@@ -44,7 +44,7 @@ export const useStake = () => {
       tx,
       nodeId,
       walCoin,
-      blizzardStaking: STAKING_COIN[coinOut],
+      blizzardStaking: STAKING_OBJECT[coinOut],
     });
 
     if (isAfterVote) blizzardSdk.keepStakeNft({ tx, nft: returnValues });

@@ -1,73 +1,47 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { Button, Div } from '@stylin.js/elements';
-import { FC } from 'react';
+import { Div } from '@stylin.js/elements';
+import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { SwapSVG } from '@/components/svg';
-import { useNetwork } from '@/hooks/use-network';
+import { COIN_LIST, LST_LIST } from '@/constants';
 
+import InputField from '../../input-field';
 import StakeFormButton from './stake-form-button';
-import StakeFormField from './stake-form-field';
 import StakeFormManager from './stake-form-manager';
+import StakeFormTag from './stake-form-tag';
 
 const StakeForm: FC = () => {
-  const network = useNetwork();
   const { setValue, getValues } = useFormContext();
 
-  const handleFlipTokens = () => {
-    const coinIn = getValues('in.type');
-    setValue('in', {
-      type:
-        getValues('out.type') === TYPES[network].STAKED_WAL
-          ? TYPES[network].WAL
-          : TYPES[network].SNOW,
-      value: '0',
-    });
-    setValue('out', {
-      value: '0',
-      type:
-        coinIn === TYPES[network].WAL
-          ? TYPES[network].STAKED_WAL
-          : TYPES[network].SNOW,
-    });
-  };
+  useEffect(() => {
+    const [inType, outType] = getValues(['in.type', 'out.type']);
+
+    if (COIN_LIST[0].type === inType) return;
+
+    setValue('in', { type: outType, value: '0' });
+    setValue('out', { type: inType, value: '0' });
+  }, []);
 
   return (
     <>
       <StakeFormManager />
       <Div display="flex" flexDirection="column" gap="0.25rem">
-        <StakeFormField name="in" label="In" />
-        <Div
-          zIndex="0"
-          display="flex"
-          position="relative"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Button
-            all="unset"
-            width="3rem"
-            height="3rem"
-            display="flex"
-            cursor="pointer"
-            color="#FFFFFF80"
-            overflow="hidden"
-            borderRadius="50%"
-            position="absolute"
-            alignItems="center"
-            background="#FFFFFF0D"
-            justifyContent="center"
-            onClick={handleFlipTokens}
-            backdropFilter="blur(20px)"
-            nHover={{ color: '#99EFE4' }}
-          >
-            <SwapSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
-          </Button>
-        </Div>
-        <StakeFormField name="out" label="Out" disabled />
+        <InputField
+          name="in"
+          label="In"
+          topContent="balance"
+          assetList={COIN_LIST}
+        />
+        <InputField
+          disabled
+          name="out"
+          label="Out"
+          assetList={LST_LIST}
+          topContent={<StakeFormTag />}
+        />
       </Div>
       <StakeFormButton />
     </>
   );
 };
+
 export default StakeForm;
