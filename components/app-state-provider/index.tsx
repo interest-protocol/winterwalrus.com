@@ -10,6 +10,7 @@ const AppStateProvider: FC = () => {
   const {
     principalByType,
     stakingObjectIds,
+    objectsActivation,
     isLoading: loadingObjects,
     mutate: mutateStakingObjects,
   } = useStakingObjects();
@@ -34,10 +35,11 @@ const AppStateProvider: FC = () => {
 
     update(({ balances }) => ({
       stakingObjectIds,
+      objectsActivation,
       principalsByType: principalByType,
       balances: { ...balances, ...principalByType },
     }));
-  }, [principalByType, stakingObjectIds]);
+  }, [principalByType, stakingObjectIds, objectsActivation]);
 
   useEffect(() => {
     update({ loadingObjects });

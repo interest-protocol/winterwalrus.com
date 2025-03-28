@@ -9,9 +9,9 @@ import { useQuotes } from '@/hooks/use-quotes';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatDollars } from '@/utils';
 
-import { StakeFormFieldGenericProps } from './stake-form-field.types';
+import { InputFieldGenericProps } from './input-field.types';
 
-const StakeFormFieldPrice: FC<StakeFormFieldGenericProps> = ({ name }) => {
+const InputFieldPrice: FC<InputFieldGenericProps> = ({ name }) => {
   const network = useNetwork();
   const { control } = useFormContext();
   const { data: quotes } = useQuotes();
@@ -34,4 +34,4 @@ const StakeFormFieldPrice: FC<StakeFormFieldGenericProps> = ({ name }) => {
   );
 };
 
-export default StakeFormFieldPrice;
+export default InputFieldPrice;

@@ -4,7 +4,8 @@ import {
   TYPES,
 } from '@interest-protocol/blizzard-sdk';
 
-import { SnowSVG, WalSVG } from '@/components/svg';
+import { SnowWalSVG, WalSVG } from '@/components/svg';
+import { AssetMetadata } from '@/interface';
 
 export const COIN_DECIMALS = {
   [TYPES[Network.Testnet].WAL]: 9,
@@ -13,7 +14,7 @@ export const COIN_DECIMALS = {
 
 export const COIN_ICON = {
   [TYPES[Network.Testnet].WAL]: WalSVG,
-  [TYPES[Network.Testnet].SNOW]: SnowSVG,
+  [TYPES[Network.Testnet].SNOW]: SnowWalSVG,
 };
 
 export const NFT_TYPES: ReadonlyArray<string> = [
@@ -25,6 +26,36 @@ export const NFT_IMAGE = {
   [TYPES[Network.Testnet].STAKED_WAL]: '/staked-wal.png',
   [TYPES[Network.Testnet].BLIZZARD_STAKE_NFT]: '/blizzard-nft.png',
 } as const;
+
+export const COIN_LIST: ReadonlyArray<AssetMetadata> = [
+  {
+    name: 'WAL',
+    kind: 'coin',
+    decimals: 9,
+    symbol: 'WAL',
+    type: TYPES[Network.Testnet].WAL,
+    Icon: COIN_ICON[TYPES[Network.Testnet].WAL],
+  },
+];
+
+export const LST_LIST: ReadonlyArray<AssetMetadata> = [
+  {
+    decimals: 9,
+    kind: 'lst',
+    name: 'SnowWAL',
+    symbol: 'sWAL',
+    type: TYPES[Network.Testnet].SNOW,
+    Icon: COIN_ICON[TYPES[Network.Testnet].SNOW],
+  },
+  {
+    decimals: 9,
+    kind: 'lst',
+    symbol: 'sWAL',
+    name: 'SnowWAL',
+    type: TYPES[Network.Testnet].SNOW,
+    Icon: COIN_ICON[TYPES[Network.Testnet].SNOW],
+  },
+];
 
 export const ASSET_METADATA = {
   [TYPES[Network.Testnet].WAL]: {
@@ -38,8 +69,8 @@ export const ASSET_METADATA = {
   [TYPES[Network.Testnet].SNOW]: {
     decimals: 9,
     kind: 'coin',
-    name: 'Snow',
-    symbol: 'SNOW',
+    name: 'SnowWAL',
+    symbol: 'sWAL',
     type: TYPES[Network.Testnet].SNOW,
     Icon: COIN_ICON[TYPES[Network.Testnet].SNOW],
   },

@@ -18,7 +18,7 @@ import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
-import { StakingAssetsItemProps } from '../staking.types';
+import { StakingAssetsItemProps } from '../nft.types';
 import { useStakingAction } from './staking-assets-item.hooks';
 import StakingAssetsItemLoading from './staking-assets-item-loading';
 

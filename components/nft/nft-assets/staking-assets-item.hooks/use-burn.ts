@@ -10,7 +10,7 @@ import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { useNetwork } from '@/hooks/use-network';
 import { signAndExecute } from '@/utils';
 
-import { UnstakeArgs } from '../../staking.types';
+import { UnstakeArgs } from '../../nft.types';
 
 export const useBurn = () => {
   const network = useNetwork();

@@ -1,20 +1,26 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Img, Span } from '@stylin.js/elements';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
 import Motion from '@/components/motion';
 import { ASSET_METADATA, COIN_ICON, NFT_IMAGE } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
+import { useModal } from '@/hooks/use-modal';
 import { useNetwork } from '@/hooks/use-network';
 
-import { StakeFormFieldGenericProps } from './stake-form-field.types';
+import { ChevronDownSVG } from '../svg';
+import { InputFieldAssetProps } from './input-field.types';
+import InputFieldModal from './input-field-modal';
 
-const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
+const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, assetList }) => {
   const network = useNetwork();
-  const { control } = useFormContext();
+  const form = useFormContext();
+  const { setContent } = useModal();
   const { data: epoch, isLoading } = useEpochData();
+
+  const { control } = form;
 
   const typeBefore = useWatch({ control, name: `${name}.type` }) as string;
 
@@ -36,18 +42,25 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
       </Motion>
     );
 
-  const isSnowOutAfterVote =
+  const isLstOutAfterVote =
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
     typeBefore === TYPES[network].SNOW;
 
-  const type = isSnowOutAfterVote
+  const type = isLstOutAfterVote
     ? TYPES[network].BLIZZARD_STAKE_NFT
     : typeBefore;
 
   const Icon = COIN_ICON[type];
   const image = NFT_IMAGE[type];
+
+  const openAssetModal = () =>
+    setContent(
+      <FormProvider {...form}>
+        <InputFieldModal name={name} assetList={assetList} />
+      </FormProvider>
+    );
 
   return (
     <Motion
@@ -59,6 +72,7 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
       overflow="hidden"
       whileHover="hover"
       alignItems="center"
+      onClick={() => assetList.length > 1 && openAssetModal()}
       justifyContent="center"
     >
       {Icon ? (
@@ -76,8 +90,9 @@ const StakeFormFieldCoin: FC<StakeFormFieldGenericProps> = ({ name }) => {
         </Span>
       )}
       {ASSET_METADATA[type]?.symbol ?? 'Select Coin'}
+      {assetList.length > 1 && <ChevronDownSVG maxWidth="1rem" width="100%" />}
     </Motion>
   );
 };
 
-export default StakeFormFieldCoin;
+export default InputFieldAsset;

@@ -11,9 +11,9 @@ import { useNetwork } from '@/hooks/use-network';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { StakeFormFieldGenericProps } from './stake-form-field.types';
+import { InputFieldGenericProps } from './input-field.types';
 
-const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
+const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
   const network = useNetwork();
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
@@ -57,4 +57,4 @@ const StakeFormFieldBalance: FC<StakeFormFieldGenericProps> = ({ name }) => {
   );
 };
 
-export default StakeFormFieldBalance;
+export default InputFieldBalance;
