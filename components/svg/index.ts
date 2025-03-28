@@ -11,6 +11,7 @@ export { default as LogoutSVG } from './logout';
 export { default as PizzaPart25PercentSVG } from './pizza-part-25';
 export { default as PizzaPart50PercentSVG } from './pizza-part-50';
 export { default as PizzaPart100PercentSVG } from './pizza-part-100';
+export { default as SearchSVG } from './search';
 export { default as SnowSVG } from './snow';
 export { default as WWalSVG } from './snow-wal';
 export { default as SwapSVG } from './swap';

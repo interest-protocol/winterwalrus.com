@@ -38,14 +38,6 @@ export const LST_LIST: ReadonlyArray<AssetMetadata> = [
     type: TYPES.WWAL,
     Icon: COIN_ICON[TYPES.WWAL],
   },
-  {
-    decimals: 9,
-    kind: 'lst',
-    symbol: 'sWAL',
-    name: '❄️ WAL',
-    type: TYPES.WWAL,
-    Icon: COIN_ICON[TYPES.WWAL],
-  },
 ];
 
 export const ASSET_METADATA = {
