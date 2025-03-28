@@ -4,6 +4,7 @@ import { FC, useMemo, useState } from 'react';
 import unikey from 'unikey';
 
 import { NFT, Stake } from '@/components';
+import Unstake from '@/components/unstake';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 
@@ -44,6 +45,7 @@ const Content: FC = () => {
             py="0.5rem"
             px="0.75rem"
             key={unikey()}
+            cursor="pointer"
             border="1px solid"
             borderColor="#99EFE4"
             borderRadius="0.75rem"
@@ -58,7 +60,7 @@ const Content: FC = () => {
       {
         [
           <Stake key={unikey()} />,
-          <Stake key={unikey()} />,
+          <Unstake key={unikey()} />,
           <NFT key={unikey()} />,
         ][tab]
       }

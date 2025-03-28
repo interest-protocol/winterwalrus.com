@@ -1,4 +1,3 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -7,10 +6,11 @@ import {
 import { coinWithBalance } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
+import { STAKING_OBJECT } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { signAndExecute } from '@/utils';
 
-import { UnstakeArgs } from '../stake-form-button.types';
+import { UnstakeArgs } from '../unstake-form-button.types';
 
 export const useUnstake = () => {
   const client = useSuiClient();
@@ -21,11 +21,12 @@ export const useUnstake = () => {
   return async ({ coinIn, coinValue, onSuccess, onFailure }: UnstakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
 
-    const { returnValues: withdrawIXs, tx } = await blizzardSdk.fcfs({
+    const {
+      returnValues: [, withdrawIXs],
+      tx,
+    } = await blizzardSdk.fcfs({
       value: coinValue,
-      blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
-        mutable: true,
-      }).objectId,
+      blizzardStaking: STAKING_OBJECT[coinIn],
     });
 
     tx.setSender(currentAccount.address);
@@ -35,14 +36,16 @@ export const useUnstake = () => {
       balance: coinValue,
     })(tx);
 
-    const { returnValues: stakedWalVector } = await blizzardSdk.burnLst({
+    const {
+      returnValues: [extraLst, stakedWalVector],
+    } = await blizzardSdk.burnLst({
       tx,
       lstCoin,
       withdrawIXs,
-      blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
-        mutable: true,
-      }).objectId,
+      blizzardStaking: STAKING_OBJECT[coinIn],
     });
+
+    tx.transferObjects([extraLst], currentAccount.address);
 
     blizzardSdk.vectorTransferStakedWal({
       tx,

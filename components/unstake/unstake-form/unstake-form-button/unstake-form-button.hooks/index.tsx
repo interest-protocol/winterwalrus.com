@@ -17,16 +17,14 @@ import {
   NFT_TYPES,
 } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
-import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { useStake } from './use-stake';
+import { useUnstake } from './use-unstake';
 
-export const useStakeAction = () => {
-  const stake = useStake();
-  const { data } = useEpochData();
+export const useUnstakeAction = () => {
+  const unstake = useUnstake();
   const { update } = useAppState();
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
@@ -53,7 +51,7 @@ export const useStakeAction = () => {
             ExplorerMode.Transaction
           )}
         >
-          <P>Staked successfully!</P>
+          <P>Unstaked successfully!</P>
           <P fontSize="0.875" opacity="0.75">
             See on explorer
           </P>
@@ -130,24 +128,16 @@ export const useStakeAction = () => {
     toast.error(error ?? 'Error executing transaction');
   };
 
-  const onStake = async () => {
+  const onUnstake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
     setLoading(true);
-    const id = toast.loading('Staking...');
+    const id = toast.loading('Unstaking...');
 
     try {
-      const isAfterVote =
-        data && data.currentEpoch
-          ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
-          : false;
-
-      await stake({
-        coinOut,
-        isAfterVote,
+      await unstake({
         coinIn: form.in.type,
-        nodeId: form.validator,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
         coinValue: BigInt(
@@ -164,5 +154,5 @@ export const useStakeAction = () => {
     }
   };
 
-  return { onStake, loading };
+  return { onUnstake, loading };
 };

@@ -3,12 +3,7 @@ import { SHARED_OBJECTS, TYPES } from '@interest-protocol/blizzard-sdk';
 import { WalSVG, WWalSVG } from '@/components/svg';
 import { AssetMetadata } from '@/interface';
 
-export const COIN_DECIMALS = {
-  [TYPES.WAL]: 9,
-  [TYPES.WWAL]: 9,
-};
-
-export const COIN_ICON = {
+const COIN_ICON = {
   [TYPES.WAL]: WalSVG,
   [TYPES.WWAL]: WWalSVG,
 };
@@ -38,7 +33,7 @@ export const LST_LIST: ReadonlyArray<AssetMetadata> = [
   {
     decimals: 9,
     kind: 'lst',
-    name: 'WWALWAL',
+    name: '❄️ WAL',
     symbol: 'sWAL',
     type: TYPES.WWAL,
     Icon: COIN_ICON[TYPES.WWAL],
@@ -47,7 +42,7 @@ export const LST_LIST: ReadonlyArray<AssetMetadata> = [
     decimals: 9,
     kind: 'lst',
     symbol: 'sWAL',
-    name: 'WWALWAL',
+    name: '❄️ WAL',
     type: TYPES.WWAL,
     Icon: COIN_ICON[TYPES.WWAL],
   },
@@ -81,14 +76,14 @@ export const ASSET_METADATA = {
   [TYPES.BLIZZARD_STAKE_NFT]: {
     kind: 'nft',
     decimals: 9,
-    symbol: 'WWALNFT',
-    name: 'Blizzard WWAL',
+    symbol: 'wWALNFT',
+    name: 'Blizzard wWAL',
     type: TYPES.BLIZZARD_STAKE_NFT,
     Icon: NFT_IMAGE[TYPES.BLIZZARD_STAKE_NFT],
   },
 };
 
-export const STAKING_COIN = {
+export const STAKING_OBJECT = {
   [TYPES.WWAL]: SHARED_OBJECTS.WWAL_STAKING({
     mutable: true,
   }).objectId,

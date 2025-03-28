@@ -1,3 +1,4 @@
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { FC, useEffect } from 'react';
 
 import { useAppState } from '@/hooks/use-app-state';
@@ -6,6 +7,7 @@ import { useStakingObjects } from '@/hooks/use-staking-objects';
 
 const AppStateProvider: FC = () => {
   const { update } = useAppState();
+  const currentAccount = useCurrentAccount();
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
     principalByType,
@@ -23,6 +25,20 @@ const AppStateProvider: FC = () => {
       },
     });
   }, []);
+
+  useEffect(() => {
+    if (currentAccount) return;
+
+    update({
+      balances: {},
+      mutate: () => {},
+      loadingCoins: false,
+      principalsByType: {},
+      stakingObjectIds: [],
+      loadingObjects: false,
+      objectsActivation: {},
+    });
+  }, [currentAccount]);
 
   useEffect(() => {
     if (!coins) return;

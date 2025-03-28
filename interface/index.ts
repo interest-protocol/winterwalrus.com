@@ -24,3 +24,8 @@ export interface AssetMetadata {
   kind: 'lst' | 'nft' | 'coin';
   Icon: string | FC<SVGProps>;
 }
+
+export interface Node {
+  id: string;
+  name: string;
+}

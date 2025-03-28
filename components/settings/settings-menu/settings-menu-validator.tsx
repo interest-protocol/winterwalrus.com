@@ -1,4 +1,3 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
 import { Div, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
@@ -17,9 +16,7 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
   toggleShow,
 }) => {
   const { setValue, getValues } = useFormContext();
-  const { nodes } = useAllowedNodes(
-    SHARED_OBJECTS.WWAL_STAKING({ mutable: true }).objectId
-  );
+  const { nodes } = useAllowedNodes(getValues('out.type'));
 
   return (
     <Motion>
@@ -45,6 +42,8 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
         {show && (
           <Motion
             ml="1.5rem"
+            overflowY="auto"
+            maxHeight="10rem"
             style={{ originY: 0 }}
             exit={{ scaleY: 0, height: 0, opacity: 0 }}
             animate={{

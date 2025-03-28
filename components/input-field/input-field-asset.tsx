@@ -5,7 +5,7 @@ import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
 import Motion from '@/components/motion';
-import { ASSET_METADATA, COIN_ICON, NFT_IMAGE } from '@/constants/coins';
+import { ASSET_METADATA } from '@/constants/coins';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useModal } from '@/hooks/use-modal';
 
@@ -48,8 +48,7 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, assetList }) => {
 
   const type = isLstOutAfterVote ? TYPES.BLIZZARD_STAKE_NFT : typeBefore;
 
-  const Icon = COIN_ICON[type];
-  const image = NFT_IMAGE[type];
+  const Icon = ASSET_METADATA[type].Icon;
 
   const openAssetModal = () =>
     setContent(
@@ -71,18 +70,18 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, assetList }) => {
       onClick={() => assetList.length > 1 && openAssetModal()}
       justifyContent="center"
     >
-      {Icon ? (
-        <Span overflow="hidden" borderRadius="1rem" display="flex">
-          <Icon maxWidth="2rem" maxHeight="2rem" width="100%" />
-        </Span>
-      ) : (
+      {typeof Icon === 'string' ? (
         <Span overflow="hidden" borderRadius="0.5rem" display="flex">
           <Img
-            src={image}
+            src={Icon}
             width="2rem"
             height="2rem"
             alt={ASSET_METADATA[type]?.symbol}
           />
+        </Span>
+      ) : (
+        <Span overflow="hidden" borderRadius="1rem" display="flex">
+          <Icon maxWidth="2rem" maxHeight="2rem" width="100%" />
         </Span>
       )}
       {ASSET_METADATA[type]?.symbol ?? 'Select Coin'}

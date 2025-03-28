@@ -8,12 +8,12 @@ import { useCoins } from '@/hooks/use-coins';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { useStakeAction } from './stake-form-button.hooks';
+import { useUnstakeAction } from './unstake-form-button.hooks';
 
-const StakeFormButton: FC = () => {
+const UnstakeFormButton: FC = () => {
   const { coins } = useCoins();
   const { control, getValues } = useFormContext();
-  const { onStake, loading } = useStakeAction();
+  const { onUnstake, loading } = useUnstakeAction();
 
   const coinIn = getValues('in.type');
   const coinOut = getValues('out.type');
@@ -26,18 +26,12 @@ const StakeFormButton: FC = () => {
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
-  const insufficientAmountIn =
-    normalizeStructTag(coinIn) === normalizeStructTag(TYPES.WAL) &&
-    Number(amountIn) &&
-    Number(amountIn) < 1;
-
   const insufficientAmountOut =
     normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
     Number(amountOut) &&
     Number(amountOut) < 1;
 
-  const insufficientAmount =
-    insufficientAmountOut || insufficientAmountIn || insufficientBalance;
+  const insufficientAmount = insufficientAmountOut || insufficientBalance;
 
   const disabled = insufficientAmount || loading;
 
@@ -53,21 +47,19 @@ const StakeFormButton: FC = () => {
       disabled={disabled}
       borderRadius="0.625rem"
       opacity={disabled ? 0.7 : 1}
-      onClick={disabled ? undefined : onStake}
+      onClick={disabled ? undefined : onUnstake}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {insufficientAmountIn
-        ? 'You must stake at least 1 WAL'
-        : insufficientAmountOut
-          ? 'You must unstake at least 1 sWAL'
-          : insufficientBalance
-            ? 'Insufficient Balance'
-            : loading
-              ? 'Staking...'
-              : 'Stake'}
+      {insufficientAmountOut
+        ? 'You must unstake at least 1 sWAL'
+        : insufficientBalance
+          ? 'Insufficient Balance'
+          : loading
+            ? 'Unstaking...'
+            : 'Unstake'}
     </Button>
   );
 };
 
-export default StakeFormButton;
+export default UnstakeFormButton;
