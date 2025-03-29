@@ -1,11 +1,12 @@
 import { Div, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useLocalStorage } from 'usehooks-ts';
 
 import Motion from '@/components/motion';
 import { ChevronRightSVG } from '@/components/svg';
-import { INTEREST_LABS } from '@/constants';
+import { INTEREST_LABS, VALIDATOR_STORAGE_KEY } from '@/constants';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 
 import { SettingsMenusProps } from './settings-menu.types';
@@ -15,7 +16,16 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
   show,
   toggleShow,
 }) => {
-  const { setValue, getValues } = useFormContext();
+  const { getValues, setValue } = useFormContext();
+  const [validator, setValidator] = useLocalStorage(
+    VALIDATOR_STORAGE_KEY,
+    INTEREST_LABS
+  );
+
+  useEffect(() => {
+    setValue('validator', validator);
+  }, [validator]);
+
   const { nodes } = useAllowedNodes(getValues('out.type'));
 
   return (
@@ -58,8 +68,8 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
                 name={name}
                 title={name}
                 withBorder={!!index}
-                selected={id === getValues('validator')}
-                onSelect={() => setValue('validator', id)}
+                selected={id === validator}
+                onSelect={() => setValidator(id)}
                 tag={id === INTEREST_LABS ? 'default' : null}
               />
             ))}
