@@ -2,7 +2,7 @@ import { Div, P } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useLocalStorage } from 'usehooks-ts';
+import { useSessionStorage } from 'usehooks-ts';
 
 import Motion from '@/components/motion';
 import { ChevronRightSVG } from '@/components/svg';
@@ -17,7 +17,7 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
   toggleShow,
 }) => {
   const { getValues, setValue } = useFormContext();
-  const [validator, setValidator] = useLocalStorage(
+  const [validator, setValidator] = useSessionStorage(
     VALIDATOR_STORAGE_KEY,
     INTEREST_LABS
   );
