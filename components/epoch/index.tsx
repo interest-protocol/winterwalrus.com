@@ -34,7 +34,7 @@ const Epoch: FC = () => {
       mx="auto"
       bottom="0"
       width="100%"
-      maxWidth={['34rem', '34rem', '34rem', '34rem', '20rem']}
+      maxWidth={['34rem', '34rem', '34rem', '34rem', '22rem']}
       position={['static', 'static', 'static', 'static', 'fixed']}
     >
       <AnimatePresence>

@@ -9,7 +9,7 @@ import SettingsMenuValidator from './settings-menu-validator';
 const Motion = motion.create(Div);
 
 const SettingsMenu: FC = () => {
-  const [menu, setMenu] = useState<'explorer' | 'rpc' | 'node' | null>(null);
+  const [menu, setMenu] = useState<'explorer' | 'rpc' | null>(null);
 
   return (
     <Motion
@@ -30,10 +30,7 @@ const SettingsMenu: FC = () => {
       border="1px solid #FFFFFF1A"
     >
       <Motion py="0.5rem" borderRadius="0.75rem" width="20rem">
-        <SettingsMenuValidator
-          show={menu === 'node'}
-          toggleShow={() => setMenu(menu === 'node' ? null : 'node')}
-        />
+        <SettingsMenuValidator />
         <Hr border="none" borderBottom="1px solid #242424" mx="1rem" />
         <SettingsMenuExplorer
           show={menu === 'explorer'}
