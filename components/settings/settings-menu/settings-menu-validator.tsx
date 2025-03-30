@@ -1,22 +1,22 @@
 import { Div, P } from '@stylin.js/elements';
-import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FormProvider, useFormContext } from 'react-hook-form';
 
 import Motion from '@/components/motion';
-import { ChevronRightSVG } from '@/components/svg';
-import { INTEREST_LABS } from '@/constants';
-import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
+import { useModal } from '@/hooks/use-modal';
 
-import { SettingsMenusProps } from './settings-menu.types';
-import SettingsMenuItem from './settings-menu-item';
+import SettingsMenuValidatorModal from './settings-menu-validator-modal';
 
-const SettingsMenuValidator: FC<SettingsMenusProps> = ({
-  show,
-  toggleShow,
-}) => {
-  const { setValue, getValues } = useFormContext();
-  const { nodes } = useAllowedNodes(getValues('out.type'));
+const SettingsMenuValidator: FC = () => {
+  const form = useFormContext();
+  const { setContent } = useModal();
+
+  const openValidator = () =>
+    setContent(
+      <FormProvider {...form}>
+        <SettingsMenuValidatorModal />
+      </FormProvider>
+    );
 
   return (
     <Motion>
@@ -26,46 +26,11 @@ const SettingsMenuValidator: FC<SettingsMenusProps> = ({
         display="flex"
         cursor="pointer"
         alignItems="center"
-        onClick={toggleShow}
+        onClick={openValidator}
         justifyContent="space-between"
       >
         <P>Validator</P>
-        <Motion animate={{ rotate: show ? '90deg' : '0deg' }}>
-          <ChevronRightSVG
-            width="100%"
-            maxWidth="1.25rem"
-            maxHeight="1.25rem"
-          />
-        </Motion>
       </Div>
-      <AnimatePresence>
-        {show && (
-          <Motion
-            ml="1.5rem"
-            overflowY="auto"
-            maxHeight="10rem"
-            style={{ originY: 0 }}
-            exit={{ scaleY: 0, height: 0, opacity: 0 }}
-            animate={{
-              scaleY: [0, 1],
-              height: [0, 'auto'],
-              opacity: [0, 1, 1],
-            }}
-          >
-            {nodes?.map(({ id, name }, index) => (
-              <SettingsMenuItem
-                key={id}
-                name={name}
-                title={name}
-                withBorder={!!index}
-                selected={id === getValues('validator')}
-                onSelect={() => setValue('validator', id)}
-                tag={id === INTEREST_LABS ? 'default' : null}
-              />
-            ))}
-          </Motion>
-        )}
-      </AnimatePresence>
     </Motion>
   );
 };
