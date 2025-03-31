@@ -4,12 +4,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SEO } from '@/components';
-import {
-  COIN_TYPES,
-  INTEREST_LABS,
-  LST_TYPES_KEY,
-  LST_TYPES_MAP,
-} from '@/constants';
+import { COIN_TYPES, LST_TYPES_KEY, LST_TYPES_MAP } from '@/constants';
 import Home from '@/views/home';
 
 const HomePage: NextPage = () => {
@@ -26,18 +21,14 @@ const HomePage: NextPage = () => {
         type: LST_TYPES_MAP[lst],
         value: 0,
       },
-      validator: INTEREST_LABS,
     },
   });
 
   useEffect(() => {
-    console.log('Rerender');
-
     if (LST_TYPES_KEY.includes(lst)) {
       form.setValue('out.type', LST_TYPES_MAP[lst]);
       return;
     }
-    // push('/', undefined, { shallow: true });
   }, [query]);
 
   return (

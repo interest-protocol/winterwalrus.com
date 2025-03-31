@@ -41,7 +41,9 @@ const StakeFormButton: FC = () => {
   const insufficientAmount =
     insufficientAmountOut || insufficientAmountIn || insufficientBalance;
 
-  const disabled = insufficientAmount || loading;
+  const validator = getValues('validator');
+
+  const disabled = !validator || insufficientAmount || loading;
 
   return (
     <Button
@@ -59,15 +61,17 @@ const StakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {insufficientAmountIn
-        ? 'You must stake at least 1 WAL'
-        : insufficientAmountOut
-          ? 'You must unstake at least 1 sWAL'
-          : insufficientBalance
-            ? 'Insufficient Balance'
-            : loading
-              ? 'Staking...'
-              : 'Stake'}
+      {!validator
+        ? 'Select a validator '
+        : insufficientAmountIn
+          ? 'You must stake at least 1 WAL'
+          : insufficientAmountOut
+            ? 'You must unstake at least 1 sWAL'
+            : insufficientBalance
+              ? 'Insufficient Balance'
+              : loading
+                ? 'Staking...'
+                : 'Stake'}
     </Button>
   );
 };

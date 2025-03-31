@@ -1,6 +1,5 @@
 import { Div, Input, Label, P, Span } from '@stylin.js/elements';
-import { FC, useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FC, useState } from 'react';
 import { useSessionStorage } from 'usehooks-ts';
 
 import { SearchSVG } from '@/components/svg';
@@ -11,27 +10,11 @@ import { useModal } from '@/hooks/use-modal';
 const SettingsMenuValidatorModal: FC = () => {
   const { handleClose } = useModal();
   const { nodes } = useAllowedNodes();
-  const { setValue } = useFormContext();
   const [search, setSearch] = useState('');
   const [validator, setValidator] = useSessionStorage(
     VALIDATOR_STORAGE_KEY,
     INTEREST_LABS
   );
-
-  useEffect(() => {
-    if (nodes?.some(({ id }) => id === validator))
-      setValue('validator', validator);
-  }, [validator]);
-
-  useEffect(() => {
-    if (!nodes || !nodes.length) return;
-
-    const node = nodes.find(({ id }) => id === validator);
-
-    if (node) return;
-
-    setValue('validator', nodes[0].id);
-  }, [nodes]);
 
   return (
     <Div
