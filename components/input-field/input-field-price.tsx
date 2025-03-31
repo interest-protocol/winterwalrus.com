@@ -20,7 +20,7 @@ const InputFieldPrice: FC<InputFieldGenericProps> = ({ name }) => {
   const price =
     suiPrice && quotes
       ? suiPrice *
-        (normalizeStructTag(type) === TYPES.WWAL ? quotes?.quoteLst ?? 1 : 1)
+        (normalizeStructTag(type) === TYPES.WAL ? 1 : quotes?.quoteLst ?? 1)
       : 0;
 
   return (
