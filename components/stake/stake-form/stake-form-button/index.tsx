@@ -5,21 +5,23 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useCoins } from '@/hooks/use-coins';
+import { useFees } from '@/hooks/use-fees';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
+  const { fees } = useFees();
   const { coins } = useCoins();
   const { onStake, loading } = useStakeAction();
   const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
-  const coinOut = getValues('out.type');
-
   const amountIn = useWatch({ control, name: 'in.value' });
-  const amountOut = useWatch({ control, name: 'out.value' });
+
+  const minAmountIn =
+    1 + (1 * (fees?.staking ?? 0)) / 100 + (1 * (fees?.unstaking ?? 0)) / 100;
 
   const insufficientBalance =
     Number(amountIn) &&
@@ -30,16 +32,9 @@ const StakeFormButton: FC = () => {
     coinIn &&
     normalizeStructTag(coinIn) === normalizeStructTag(TYPES.WAL) &&
     Number(amountIn) &&
-    Number(amountIn) < 1;
+    Number(amountIn) < minAmountIn;
 
-  const insufficientAmountOut =
-    coinOut &&
-    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.WAL) &&
-    Number(amountOut) &&
-    Number(amountOut) < 1;
-
-  const insufficientAmount =
-    insufficientAmountOut || insufficientAmountIn || insufficientBalance;
+  const insufficientAmount = insufficientAmountIn || insufficientBalance;
 
   const validator = getValues('validator');
 
@@ -64,14 +59,12 @@ const StakeFormButton: FC = () => {
       {!validator
         ? 'Select a validator '
         : insufficientAmountIn
-          ? 'You must stake at least 1 WAL'
-          : insufficientAmountOut
-            ? 'You must unstake at least 1 sWAL'
-            : insufficientBalance
-              ? 'Insufficient Balance'
-              : loading
-                ? 'Staking...'
-                : 'Stake'}
+          ? `You must stake at least ${minAmountIn}`
+          : insufficientBalance
+            ? 'Insufficient Balance'
+            : loading
+              ? 'Staking...'
+              : 'Stake'}
     </Button>
   );
 };
