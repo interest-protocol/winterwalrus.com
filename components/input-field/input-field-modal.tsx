@@ -26,8 +26,8 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
     <Div
       p="1.5rem"
       gap="1.5rem"
-      height="70vh"
       width="27rem"
+      height="90vh"
       display="flex"
       color="#ffffff"
       borderRadius="1rem"
@@ -108,13 +108,13 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                 <Span display="flex" overflow="hidden" borderRadius="0.25rem">
                   <Img
                     width="100%"
-                    alt={symbol}
+                    alt={name}
                     src={iconUrl}
                     maxWidth="2.5rem"
                     maxHeight="2.5rem"
                   />
                 </Span>
-                <P fontSize="0.875rem">{name}</P>
+                <P fontSize="0.875rem">{symbol}</P>
               </Div>
               <Div display="flex" alignItems="center">
                 <Span
@@ -137,6 +137,7 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                 display="flex"
                 textAlign="right"
                 flexDirection="column"
+                justifyContent="center"
               >
                 <P fontSize="0.875rem" fontFamily="JetBrains Mono">
                   {
