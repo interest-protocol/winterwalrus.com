@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div, Img, Input, Label, P, Span } from '@stylin.js/elements';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
@@ -82,6 +83,9 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               type.toLowerCase() === search ||
               name.toLowerCase().includes(search) ||
               symbol.toLowerCase().includes(search)
+          )
+          .sort((a, b) =>
+            a.type === TYPES.WWAL ? -1 : b.type === TYPES.WWAL ? 1 : 0
           )
           .map(({ symbol, type, decimals, name, iconUrl }) => (
             <Div

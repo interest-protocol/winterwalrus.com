@@ -24,9 +24,7 @@ export const useUnstakeAction = () => {
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
-
   const { control, getValues, setValue } = useFormContext();
-
   const coinOut = useWatch({ control, name: 'out.type' });
 
   const reset = () => {
@@ -135,8 +133,11 @@ export const useUnstakeAction = () => {
         coinIn: form.in.type,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
-        coinValue: BigInt(
+        coinInValue: BigInt(
           FixedPointMath.toBigNumber(form.in.value, 9).toFixed(0)
+        ),
+        coinOutValue: BigInt(
+          FixedPointMath.toBigNumber(form.out.value, 9).toFixed(0)
         ),
       });
     } catch (e) {

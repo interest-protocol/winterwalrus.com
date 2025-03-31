@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
@@ -9,7 +10,7 @@ export const useFees = () => {
   const { query } = useRouter();
   const blizzardSdk = useBlizzardSdk();
 
-  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase() || 'WWAL'];
+  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
 
   const { data: fees, ...rest } = useSWR([useFees.name, lst], async () => {
     if (!lst)

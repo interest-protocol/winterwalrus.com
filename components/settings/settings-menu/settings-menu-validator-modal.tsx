@@ -1,3 +1,4 @@
+import { formatAddress } from '@mysten/sui/utils';
 import { Div, Input, Label, P, Span } from '@stylin.js/elements';
 import { FC, useState } from 'react';
 import { useSessionStorage } from 'usehooks-ts';
@@ -101,6 +102,7 @@ const SettingsMenuValidatorModal: FC = () => {
               key={id}
               display="flex"
               border="1px solid"
+              alignItems="center"
               borderRadius="1rem"
               justifyContent="space-between"
               bg={id === validator ? '#FFFFFF11' : 'transparent'}
@@ -115,8 +117,9 @@ const SettingsMenuValidatorModal: FC = () => {
                 handleClose();
               }}
             >
-              <Div display="flex" gap="1rem" alignItems="center">
+              <Div display="flex" gap="0.25rem" flexDirection="column">
                 <P>{name}</P>
+                <P>{formatAddress(id)}</P>
               </Div>
               {!index && (
                 <P

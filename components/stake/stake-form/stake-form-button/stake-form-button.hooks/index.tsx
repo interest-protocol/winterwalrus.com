@@ -26,7 +26,6 @@ export const useStakeAction = () => {
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
-
   const { control, getValues, setValue } = useFormContext();
 
   const coinOut = useWatch({ control, name: 'out.type' });

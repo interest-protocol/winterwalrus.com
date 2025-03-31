@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { BigNumber } from 'bignumber.js';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -18,7 +19,7 @@ export const useQuotes = () => {
   const blizzardSdk = useBlizzardSdk();
   const { data: epoch } = useEpochData();
 
-  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase() || 'WWAL'];
+  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
 
   return useSWR([useQuotes.name, epoch?.currentEpoch, lst], async () => {
     if (!epoch) return { quoteSWal: null, quoteLst: null };
