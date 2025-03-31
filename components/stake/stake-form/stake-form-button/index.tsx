@@ -23,6 +23,8 @@ const StakeFormButton: FC = () => {
   const minAmountIn =
     1 + (1 * (fees?.staking ?? 0)) / 100 + (1 * (fees?.unstaking ?? 0)) / 100;
 
+  const maxMinAmount = fees?.staking || fees?.unstaking ? 1.1 : 1;
+
   const insufficientBalance =
     Number(amountIn) &&
     Number(amountIn) >
@@ -59,7 +61,7 @@ const StakeFormButton: FC = () => {
       {!validator
         ? 'Select a validator '
         : insufficientAmountIn
-          ? `You must stake at least ${minAmountIn}`
+          ? `You must stake at least ${maxMinAmount}`
           : insufficientBalance
             ? 'Insufficient Balance'
             : loading

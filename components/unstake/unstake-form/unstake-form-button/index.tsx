@@ -18,7 +18,9 @@ const UnstakeFormButton: FC = () => {
   const coinIn = getValues('in.type');
   const amountIn = useWatch({ control, name: 'in.value' });
 
-  const minAmountIn = 1 + (1 * (fees?.unstaking ?? 0)) / 100;
+  const minAmountIn = 1 + (fees?.unstaking ?? 0) / 100;
+
+  const minMaxAmountIn = fees?.unstaking ? 1.1 : 1;
 
   const insufficientBalance =
     Number(amountIn) &&
@@ -49,7 +51,7 @@ const UnstakeFormButton: FC = () => {
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
       {insufficientAmountIn
-        ? `You must unstake at least ${minAmountIn}`
+        ? `You must unstake at least ${minMaxAmountIn}`
         : insufficientBalance
           ? 'Insufficient Balance'
           : loading
