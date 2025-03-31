@@ -10,14 +10,13 @@ import { useModal } from '@/hooks/use-modal';
 
 const SettingsMenuValidatorModal: FC = () => {
   const { handleClose } = useModal();
+  const { nodes } = useAllowedNodes();
+  const { setValue } = useFormContext();
   const [search, setSearch] = useState('');
-  const { getValues, setValue } = useFormContext();
   const [validator, setValidator] = useSessionStorage(
     VALIDATOR_STORAGE_KEY,
     INTEREST_LABS
   );
-
-  const { nodes } = useAllowedNodes(getValues('out.type'));
 
   useEffect(() => {
     setValue('validator', validator);

@@ -12,8 +12,8 @@ import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
   const { coins } = useCoins();
-  const { control, getValues } = useFormContext();
   const { onStake, loading } = useStakeAction();
+  const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
   const coinOut = getValues('out.type');
@@ -27,12 +27,14 @@ const StakeFormButton: FC = () => {
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
   const insufficientAmountIn =
+    coinIn &&
     normalizeStructTag(coinIn) === normalizeStructTag(TYPES.WAL) &&
     Number(amountIn) &&
     Number(amountIn) < 1;
 
   const insufficientAmountOut =
-    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
+    coinOut &&
+    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.WAL) &&
     Number(amountOut) &&
     Number(amountOut) < 1;
 

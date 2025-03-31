@@ -7,6 +7,9 @@ export interface InputFieldGenericProps {
 }
 
 export interface InputFieldAssetProps extends InputFieldGenericProps {
+  types: ReadonlyArray<string>;
+}
+export interface InputFieldModalProps extends InputFieldGenericProps {
   assetList: ReadonlyArray<AssetMetadata>;
 }
 

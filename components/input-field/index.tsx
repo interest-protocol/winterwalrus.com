@@ -13,8 +13,8 @@ import InputFieldPrice from './input-field-price';
 const StakeFormField: FC<InputFieldProps> = ({
   name,
   label,
+  types,
   disabled,
-  assetList,
   topContent,
 }) => {
   const { register, setValue } = useFormContext();
@@ -60,7 +60,7 @@ const StakeFormField: FC<InputFieldProps> = ({
             },
           })}
         />
-        <InputFieldAsset name={name} assetList={assetList} />
+        <InputFieldAsset name={name} types={types} />
       </Div>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />

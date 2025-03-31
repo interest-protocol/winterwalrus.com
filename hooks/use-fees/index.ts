@@ -1,15 +1,18 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
+
+import { LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
 
 import useBlizzardSdk from '../use-blizzard-sdk';
 
 export const useFees = () => {
+  const { query } = useRouter();
   const blizzardSdk = useBlizzardSdk();
 
-  const { data: fees, ...rest } = useSWR([useFees.name], async () => {
-    const fees = await blizzardSdk.getFees(
-      SHARED_OBJECTS.WWAL_STAKING({ mutable: false }).objectId
-    );
+  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase() || 'WWAL'];
+
+  const { data: fees, ...rest } = useSWR([useFees.name, lst], async () => {
+    const fees = await blizzardSdk.getFees(STAKING_OBJECT[lst]);
 
     return {
       staking: +fees.mint / 100,

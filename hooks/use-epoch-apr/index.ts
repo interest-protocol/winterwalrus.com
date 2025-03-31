@@ -10,9 +10,7 @@ const useEpochAPR = (nodeId = INTEREST_LABS) => {
   return useSwr(
     ['epoch-apr', nodeId],
     () => blizzardSdk.lastEpochApr({ nodeId }),
-    {
-      refreshInterval: 5000,
-    }
+    { refreshInterval: 5000 }
   );
 };
 

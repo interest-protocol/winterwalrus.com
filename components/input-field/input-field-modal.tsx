@@ -1,19 +1,22 @@
 import { Div, Img, Input, Label, P, Span } from '@stylin.js/elements';
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { LST_TYPES, LST_TYPES_KEY, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { formatDollars, ZERO_BIG_NUMBER } from '@/utils';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { SearchSVG } from '../svg';
-import { InputFieldAssetProps } from './input-field.types';
+import { InputFieldModalProps } from './input-field.types';
 
-const InputFieldModal: FC<InputFieldAssetProps> = ({
+const InputFieldModal: FC<InputFieldModalProps> = ({
   assetList,
   name: fieldName,
 }) => {
+  const { push } = useRouter();
   const { handleClose } = useModal();
   const { setValue } = useFormContext();
   const [search, setSearch] = useState('');
@@ -80,10 +83,11 @@ const InputFieldModal: FC<InputFieldAssetProps> = ({
               name.toLowerCase().includes(search) ||
               symbol.toLowerCase().includes(search)
           )
-          .map(({ symbol, type, decimals, name, kind, Icon }) => (
+          .map(({ symbol, type, decimals, name, iconUrl }) => (
             <Div
               p="1rem"
               key={type}
+              gap="0.5rem"
               display="grid"
               cursor="pointer"
               borderRadius="1rem"
@@ -91,23 +95,26 @@ const InputFieldModal: FC<InputFieldAssetProps> = ({
               gridTemplateColumns="2fr 1fr 1fr"
               nHover={{ borderColor: '#99EFE44D' }}
               onClick={() => {
-                setValue(`${fieldName}.value`, 0);
+                push(
+                  `/${LST_TYPES_KEY[
+                    LST_TYPES.findIndex((item) => item === type)
+                  ].toLowerCase()}`
+                );
                 setValue(`${fieldName}.type`, type);
                 handleClose();
               }}
             >
               <Div display="flex" gap="1rem" alignItems="center">
-                {typeof Icon === 'string' ? (
-                  <Span display="flex" overflow="hidden" borderRadius="0.25rem">
-                    <Img src={Icon} alt={symbol} maxWidth="2.5rem" />
-                  </Span>
-                ) : (
-                  <Span display="flex" overflow="hidden" borderRadius="50%">
-                    <Icon width="100%" maxWidth="2.5rem" />
-                  </Span>
-                )}
-
-                <P>{name}</P>
+                <Span display="flex" overflow="hidden" borderRadius="0.25rem">
+                  <Img
+                    width="100%"
+                    alt={symbol}
+                    src={iconUrl}
+                    maxWidth="2.5rem"
+                    maxHeight="2.5rem"
+                  />
+                </Span>
+                <P fontSize="0.875rem">{name}</P>
               </Div>
               <Div display="flex" alignItems="center">
                 <Span
@@ -118,7 +125,11 @@ const InputFieldModal: FC<InputFieldAssetProps> = ({
                   borderRadius="1.5rem"
                   textTransform="uppercase"
                 >
-                  {kind}
+                  {LST_TYPES.includes(type)
+                    ? 'lst'
+                    : NFT_TYPES.includes(type)
+                      ? 'nft'
+                      : 'coin'}
                 </Span>
               </Div>
               <Div
@@ -137,9 +148,9 @@ const InputFieldModal: FC<InputFieldAssetProps> = ({
                     ).toFixed(4)
                   }
                 </P>
-                <P fontSize="0.75rem" opacity="0.6" fontFamily="JetBrains Mono">
+                {/* <P fontSize="0.75rem" opacity="0.6" fontFamily="JetBrains Mono">
                   {formatDollars(1000)}
-                </P>
+                </P> */}
               </Div>
             </Div>
           ))}
