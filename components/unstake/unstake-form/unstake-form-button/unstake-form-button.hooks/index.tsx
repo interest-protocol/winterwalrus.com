@@ -10,12 +10,7 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import {
-  ASSET_METADATA,
-  ExplorerMode,
-  INTEREST_LABS,
-  NFT_TYPES,
-} from '@/constants';
+import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -141,10 +136,7 @@ export const useUnstakeAction = () => {
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
         coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            ASSET_METADATA[form.in.type].decimals
-          ).toFixed(0)
+          FixedPointMath.toBigNumber(form.in.value, 9).toFixed(0)
         ),
       });
     } catch (e) {

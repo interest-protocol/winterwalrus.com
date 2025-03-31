@@ -27,7 +27,7 @@ const UnstakeFormButton: FC = () => {
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
   const insufficientAmountOut =
-    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
+    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.WAL) &&
     Number(amountOut) &&
     Number(amountOut) < 1;
 
@@ -52,7 +52,7 @@ const UnstakeFormButton: FC = () => {
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
       {insufficientAmountOut
-        ? 'You must unstake at least 1 sWAL'
+        ? 'You must unstake at least 1 WAL'
         : insufficientBalance
           ? 'Insufficient Balance'
           : loading

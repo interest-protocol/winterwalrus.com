@@ -4,6 +4,8 @@ import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import useSWR from 'swr';
 
+import { LST_TYPES } from '@/constants';
+
 export const useCoins = () => {
   const client = useSuiClient();
   const currentAccount = useCurrentAccount();
@@ -22,7 +24,7 @@ export const useCoins = () => {
           [
             normalizeStructTag(SUI_TYPE_ARG),
             normalizeStructTag(TYPES.WAL),
-            normalizeStructTag(TYPES.WWAL),
+            ...LST_TYPES.map(normalizeStructTag),
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,
