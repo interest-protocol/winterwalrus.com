@@ -20,7 +20,7 @@ const StakeFormField: FC<InputFieldProps> = ({
   const { register, setValue } = useFormContext();
 
   return (
-    <Label
+    <Div
       p="1rem"
       gap="1rem"
       bg="#FFFFFF0D"
@@ -39,7 +39,7 @@ const StakeFormField: FC<InputFieldProps> = ({
           topContent
         )}
       </Div>
-      <Div
+      <Label
         display="grid"
         maxWidth="100%"
         alignItems="center"
@@ -61,12 +61,12 @@ const StakeFormField: FC<InputFieldProps> = ({
           })}
         />
         <InputFieldAsset name={name} types={types} />
-      </Div>
+      </Label>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />
         <InputFieldBalance name={name} />
       </Div>
-    </Label>
+    </Div>
   );
 };
 
