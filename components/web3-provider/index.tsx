@@ -15,7 +15,9 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
       defaultNetwork="mainnet"
       networks={
         createNetworkConfig({
-          mainnet: { url: getFullnodeUrl('mainnet') },
+          mainnet: {
+            url: process.env.NEXT_PUBLIC_RPC ?? getFullnodeUrl('mainnet'),
+          },
         }).networkConfig
       }
     >
