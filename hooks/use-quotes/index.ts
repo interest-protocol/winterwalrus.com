@@ -21,19 +21,22 @@ export const useQuotes = () => {
 
   const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
 
-  return useSWR([useQuotes.name, epoch?.currentEpoch, lst], async () => {
-    if (!epoch) return { quoteSWal: null, quoteLst: null };
+  return useSWR(
+    [useQuotes.name, epoch?.currentEpoch, lst, blizzardSdk],
+    async () => {
+      if (!epoch || !blizzardSdk) return { quoteSWal: null, quoteLst: null };
 
-    const [quoteLst, quoteSWal] = await Promise.all(
-      QUOTE_FNS.map((quoteFn) =>
-        blizzardSdk[quoteFn]({
-          epoch: epoch?.currentEpoch,
-          blizzardStaking: STAKING_OBJECT[lst],
-          value: BigInt(FixedPointMath.toBigNumber(1).toString()),
-        }).then((value) => FixedPointMath.toNumber(BigNumber(value ?? 0)))
-      )
-    );
+      const [quoteLst, quoteSWal] = await Promise.all(
+        QUOTE_FNS.map((quoteFn) =>
+          blizzardSdk[quoteFn]({
+            epoch: epoch?.currentEpoch,
+            blizzardStaking: STAKING_OBJECT[lst],
+            value: BigInt(FixedPointMath.toBigNumber(1).toString()),
+          }).then((value) => FixedPointMath.toNumber(BigNumber(value ?? 0)))
+        )
+      );
 
-    return { quoteSWal, quoteLst };
-  });
+      return { quoteSWal, quoteLst };
+    }
+  );
 };

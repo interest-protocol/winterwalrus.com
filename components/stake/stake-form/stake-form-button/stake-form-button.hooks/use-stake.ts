@@ -28,6 +28,7 @@ export const useStake = () => {
     isAfterVote,
   }: StakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
+    invariant(blizzardSdk, 'Failed to load sdk');
 
     const tx = new Transaction();
 

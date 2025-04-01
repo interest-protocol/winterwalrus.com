@@ -19,7 +19,7 @@ export const useAllowedNodes = () => {
   const { data: nodes, ...rest } = useSWR<ReadonlyArray<Node>>(
     [useAllowedNodes.name, lst],
     async () => {
-      if (!lst) return [];
+      if (!lst || !blizzardSdk) return [];
 
       const ids = await blizzardSdk.allowedNodes(STAKING_OBJECT[lst]);
 

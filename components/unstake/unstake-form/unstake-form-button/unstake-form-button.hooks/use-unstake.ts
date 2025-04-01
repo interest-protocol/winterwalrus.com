@@ -26,6 +26,7 @@ export const useUnstake = () => {
     coinOutValue,
   }: UnstakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
+    invariant(blizzardSdk, 'Failed to load sdk');
 
     const {
       returnValues: [, withdrawIXs],

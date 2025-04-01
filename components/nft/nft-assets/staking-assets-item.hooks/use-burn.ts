@@ -19,6 +19,7 @@ export const useBurn = () => {
 
   return async ({ objectId, onSuccess, onFailure }: UnstakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
+    invariant(blizzardSdk, 'Failed to load sdk');
 
     const { returnValues: wal, tx } = await blizzardSdk.burnStakeNft({
       nft: objectId,
