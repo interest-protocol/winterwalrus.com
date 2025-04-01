@@ -36,11 +36,13 @@ const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
       cursor="pointer"
       {...(name === 'in' && {
         nHover: { color: '#99EFE4' },
-        onClick: () =>
+        onClick: () => {
           setValue(
             `${name}.value`,
             FixedPointMath.toNumber(balance ?? ZERO_BIG_NUMBER)
-          ),
+          );
+          setValue(`${name}.valueBN`, balance ?? ZERO_BIG_NUMBER);
+        },
       })}
     >
       <WalletSVG maxWidth="1rem" width="100%" />

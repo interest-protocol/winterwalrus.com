@@ -8,6 +8,7 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 const StakeFormManager: FC = () => {
   const { fees } = useFees();
@@ -18,7 +19,7 @@ const StakeFormManager: FC = () => {
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
   const coinOut = useWatch({ control, name: 'out.type' });
-  const valueIn = useWatch({ control, name: 'in.value' });
+  const valueInBN = useWatch({ control, name: 'in.valueBN' });
 
   useEffect(() => {
     if (nodes?.some(({ id }) => id === validator))
@@ -45,8 +46,9 @@ const StakeFormManager: FC = () => {
   useEffect(() => {
     if (!epoch || !quotes || !fees) return;
 
-    if (isNaN(valueIn) || !valueIn || Number(valueIn) === 0) {
+    if (!valueInBN || valueInBN.isZero()) {
       setValue('out.value', 0);
+      setValue('out.valueBN', ZERO_BIG_NUMBER);
       return;
     }
 
@@ -54,15 +56,11 @@ const StakeFormManager: FC = () => {
 
     if (!rate) return;
 
-    setValue(
-      'out.value',
-      FixedPointMath.toNumber(
-        FixedPointMath.toBigNumber(valueIn)
-          .times(1 - fees.staking / 100)
-          .times(rate)
-      )
-    );
-  }, [valueIn, epoch, quotes, coinOut, fees]);
+    const valueBN = valueInBN.times(1 - fees.staking / 100).times(rate);
+
+    setValue('out.valueBN', valueBN);
+    setValue('out.value', FixedPointMath.toNumber(valueBN));
+  }, [valueInBN, epoch, quotes, coinOut, fees]);
 
   return null;
 };

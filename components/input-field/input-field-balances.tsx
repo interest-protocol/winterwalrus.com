@@ -52,14 +52,18 @@ const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
             key={unikey()}
             cursor="pointer"
             nHover={{ color: '#99EFE4' }}
-            onClick={() =>
+            onClick={() => {
               setValue(
                 `${name}.value`,
                 FixedPointMath.toNumber(
                   balance?.times(factor) ?? ZERO_BIG_NUMBER
                 )
-              )
-            }
+              );
+              setValue(
+                `${name}.valueBN`,
+                balance?.times(factor) ?? ZERO_BIG_NUMBER
+              );
+            }}
           >
             <Span fontFamily="JetBrains Mono">{factor * 100}%</Span>
             <Icon maxWidth="1rem" width="100%" />

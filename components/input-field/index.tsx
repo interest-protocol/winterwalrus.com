@@ -2,6 +2,7 @@ import { Div, Input, Label, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { InputFieldProps } from './input-field.types';
@@ -57,6 +58,7 @@ const StakeFormField: FC<InputFieldProps> = ({
             onChange: (event) => {
               const value = parseInputEventToNumberString(event);
               setValue(`${name}.value`, value);
+              setValue(`${name}.valueBN`, FixedPointMath.toBigNumber(value));
             },
           })}
         />

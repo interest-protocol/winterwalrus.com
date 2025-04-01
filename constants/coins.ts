@@ -7,7 +7,7 @@ export const LST_TYPES_MAP: Record<string, string> = {
   PWAL: TYPES.PWAL,
   MWAL: TYPES.MWAL,
   NWAL: TYPES.NWAL,
-  UPWAL: TYPES.UP_WAL,
+  // UPWAL: TYPES.UP_WAL,
   BREADWAL: TYPES.BREAD_WAL,
 };
 export const LST_TYPES = Object.values(LST_TYPES_MAP);
@@ -55,7 +55,7 @@ export const LST_LIST: ReadonlyArray<AssetMetadata> = [
   ASSET_METADATA[LST_TYPES_MAP.BREADWAL],
   ASSET_METADATA[LST_TYPES_MAP.MWAL],
   ASSET_METADATA[LST_TYPES_MAP.NWAL],
-  ASSET_METADATA[LST_TYPES_MAP.UPWAL],
+  // ASSET_METADATA[LST_TYPES_MAP.UPWAL],
   ASSET_METADATA[LST_TYPES_MAP.PWAL],
 ];
 
@@ -75,7 +75,7 @@ export const STAKING_OBJECT = {
   [LST_TYPES_MAP.PWAL]: SHARED_OBJECTS.PWAL_STAKING({
     mutable: true,
   }).objectId,
-  [LST_TYPES_MAP.UPWAL]: SHARED_OBJECTS.UP_WAL_STAKING({
-    mutable: true,
-  }).objectId,
+  // [LST_TYPES_MAP.UPWAL]: SHARED_OBJECTS.UP_WAL_STAKING({
+  //   mutable: true,
+  // }).objectId,
 };
