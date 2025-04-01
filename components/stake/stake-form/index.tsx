@@ -2,12 +2,12 @@ import { Div } from '@stylin.js/elements';
 import { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { COIN_TYPES, LST_TYPES } from '@/constants';
+import { COIN_TYPES } from '@/constants';
 
 import InputField from '../../input-field';
 import StakeFormButton from './stake-form-button';
 import StakeFormManager from './stake-form-manager';
-import StakeFormTag from './stake-form-tag';
+import StakeInputOut from './stake-input-out';
 
 const StakeForm: FC = () => {
   const { setValue, getValues } = useFormContext();
@@ -31,13 +31,7 @@ const StakeForm: FC = () => {
           types={COIN_TYPES}
           topContent="balance"
         />
-        <InputField
-          disabled
-          name="out"
-          label="Out"
-          types={LST_TYPES}
-          topContent={<StakeFormTag />}
-        />
+        <StakeInputOut />
       </Div>
       <StakeFormButton />
     </>

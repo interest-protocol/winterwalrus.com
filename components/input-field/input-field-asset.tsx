@@ -5,7 +5,6 @@ import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
 import Motion from '@/components/motion';
-import { ASSET_METADATA } from '@/constants/coins';
 import useMetadata from '@/hooks/use-metadata';
 import { useModal } from '@/hooks/use-modal';
 
@@ -21,8 +20,14 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const { control } = form;
 
   const type = useWatch({ control, name: `${name}.type` });
+  const nftType = `nft:${type}`;
 
-  if (isLoading || !metadata?.[type])
+  console.log({
+    metadata: metadata?.[type],
+    nftMetadata: metadata?.[nftType],
+  });
+
+  if (isLoading || (!metadata?.[type] && !metadata?.[nftType]))
     return (
       <Motion
         gap="0.5rem"
@@ -64,13 +69,11 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
         <Img
           width="2rem"
           height="2rem"
-          alt={metadata[type].symbol}
-          src={metadata[type].iconUrl}
+          alt={metadata[type]?.symbol ?? metadata[nftType].symbol}
+          src={metadata[type]?.iconUrl ?? metadata[nftType].iconUrl}
         />
       </Span>
-      {metadata?.[type]?.symbol ??
-        ASSET_METADATA[type]?.symbol ??
-        'Select Coin'}
+      {metadata?.[type]?.symbol ?? metadata?.[nftType]?.symbol ?? 'Select Coin'}
       {types.length > 1 && <ChevronDownSVG maxWidth="1rem" width="100%" />}
     </Motion>
   );

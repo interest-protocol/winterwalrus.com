@@ -39,13 +39,48 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
     type: TYPES.STAKED_WAL,
     iconUrl: '/staked-wal.png',
   },
-  [TYPES.BLIZZARD_STAKE_NFT]: {
+  [`nft:${LST_TYPES_MAP.WWAL}`]: {
     decimals: 9,
     symbol: 'wWALNFT',
     name: 'Blizzard wWAL',
-    type: TYPES.BLIZZARD_STAKE_NFT,
+    type: LST_TYPES_MAP.WWAL,
     iconUrl: '/blizzard-nft.png',
   },
+  [`nft:${LST_TYPES_MAP.PWAL}`]: {
+    decimals: 9,
+    symbol: 'pWALNFT',
+    name: 'Blizzard pWAL',
+    type: LST_TYPES_MAP.PWAL,
+    iconUrl: '/blizzard-nft.png',
+  },
+  [`nft:${LST_TYPES_MAP.MWAL}`]: {
+    decimals: 9,
+    symbol: 'mWALNFT',
+    name: 'Blizzard mWAL',
+    type: LST_TYPES_MAP.MWAL,
+    iconUrl: '/blizzard-nft.png',
+  },
+  [`nft:${LST_TYPES_MAP.NWAL}`]: {
+    decimals: 9,
+    symbol: 'nWALNFT',
+    name: 'Blizzard nWAL',
+    type: LST_TYPES_MAP.NWAL,
+    iconUrl: '/blizzard-nft.png',
+  },
+  [`nft:${LST_TYPES_MAP.BREADWAL}`]: {
+    decimals: 9,
+    symbol: 'breadWALNFT',
+    name: 'Blizzard breadWAL',
+    type: LST_TYPES_MAP.BREADWAL,
+    iconUrl: '/blizzard-nft.png',
+  },
+  // [LST_TYPES_MAP.UPWAL]: {
+  //   decimals: 9,
+  //   symbol: 'upWALNFT',
+  //   name: 'Blizzard upWAL',
+  //   type: LST_TYPES_MAP.UPWAL,
+  //   iconUrl: '/blizzard-nft.png',
+  // },
 };
 
 export const COIN_TYPES: ReadonlyArray<string> = [TYPES.WAL];

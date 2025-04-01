@@ -13,6 +13,8 @@ const useMetadata = (types: ReadonlyArray<string>) =>
       {}
     );
 
+    console.log({ localMetadata });
+
     const missingTypes = types.filter((type) => !ASSET_METADATA[type]);
 
     const missingMetadata = missingTypes.length

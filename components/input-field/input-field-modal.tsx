@@ -130,11 +130,13 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                   borderRadius="1.5rem"
                   textTransform="uppercase"
                 >
-                  {LST_TYPES.includes(type)
-                    ? 'lst'
-                    : NFT_TYPES.includes(type)
-                      ? 'nft'
-                      : 'coin'}
+                  {symbol.endsWith('NFT')
+                    ? 'nft'
+                    : LST_TYPES.includes(type)
+                      ? 'lst'
+                      : NFT_TYPES.includes(type)
+                        ? 'nft'
+                        : 'coin'}
                 </Span>
               </Div>
               <Div
