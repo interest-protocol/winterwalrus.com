@@ -58,7 +58,10 @@ const StakeFormField: FC<InputFieldProps> = ({
             onChange: (event) => {
               const value = parseInputEventToNumberString(event);
               setValue(`${name}.value`, value);
-              setValue(`${name}.valueBN`, FixedPointMath.toBigNumber(value));
+              setValue(
+                `${name}.valueBN`,
+                FixedPointMath.toBigNumber(Number(value) || 0)
+              );
             },
           })}
         />
