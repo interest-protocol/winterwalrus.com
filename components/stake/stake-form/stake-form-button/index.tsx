@@ -4,6 +4,7 @@ import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import { useCoins } from '@/hooks/use-coins';
 import { useFees } from '@/hooks/use-fees';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -15,6 +16,7 @@ const StakeFormButton: FC = () => {
   const { fees } = useFees();
   const { coins } = useCoins();
   const { onStake, loading } = useStakeAction();
+  const { nodes, isLoading } = useAllowedNodes();
   const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
@@ -40,7 +42,8 @@ const StakeFormButton: FC = () => {
 
   const validator = getValues('validator');
 
-  const disabled = !validator || insufficientAmount || loading;
+  const disabled =
+    !validator || insufficientAmount || loading || isLoading || !nodes?.length;
 
   return (
     <Button
@@ -58,15 +61,17 @@ const StakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {!validator
-        ? 'Select a validator '
-        : insufficientAmountIn
-          ? `You must stake at least ${maxMinAmount}`
-          : insufficientBalance
-            ? 'Insufficient Balance'
-            : loading
-              ? 'Staking...'
-              : 'Stake'}
+      {!nodes && isLoading
+        ? 'Checking validators...'
+        : nodes?.length && !validator
+          ? 'Select a validator'
+          : insufficientAmountIn
+            ? `You must stake at least ${maxMinAmount}`
+            : insufficientBalance
+              ? 'Insufficient Balance'
+              : loading
+                ? 'Staking...'
+                : 'Stake'}
     </Button>
   );
 };
