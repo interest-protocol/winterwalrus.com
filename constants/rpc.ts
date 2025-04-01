@@ -35,7 +35,7 @@ export const RPC_MAP: Record<Network, Record<RPC, string>> = {
   },
   [Network.MAINNET]: {
     [RPC.Shinami]:
-      'https://api.shinami.com/node/v1/sui_mainnet_f8ba2ad72d9ad60899e56d2f9d813e2b',
+      'https://api.shinami.com/node/v1/sui_mainnet_1d67c28ca82e04c25dade19ac7baa1a4',
     [RPC.Mysten]: 'https://fullnode.mainnet.sui.io:443',
     [RPC.Blockvision]: 'https://sui-mainnet-endpoint.blockvision.org',
     [RPC.SuiScan]: 'https://rpc-mainnet.suiscan.xyz',
