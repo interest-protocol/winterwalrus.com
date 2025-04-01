@@ -18,7 +18,13 @@ export const useUnstake = () => {
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
 
-  return async ({ coinIn, coinValue, onSuccess, onFailure }: UnstakeArgs) => {
+  return async ({
+    coinIn,
+    onSuccess,
+    onFailure,
+    coinInValue,
+    coinOutValue,
+  }: UnstakeArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
     invariant(blizzardSdk, 'Failed to load sdk');
 
@@ -26,7 +32,7 @@ export const useUnstake = () => {
       returnValues: [, withdrawIXs],
       tx,
     } = await blizzardSdk.fcfs({
-      value: coinValue,
+      value: coinOutValue,
       blizzardStaking: STAKING_OBJECT[coinIn],
     });
 
@@ -34,7 +40,7 @@ export const useUnstake = () => {
 
     const lstCoin = coinWithBalance({
       type: coinIn,
-      balance: coinValue,
+      balance: coinInValue,
     })(tx);
 
     const {

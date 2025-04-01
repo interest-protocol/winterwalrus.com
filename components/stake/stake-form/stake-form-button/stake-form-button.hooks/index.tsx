@@ -10,16 +10,10 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import {
-  ASSET_METADATA,
-  ExplorerMode,
-  INTEREST_LABS,
-  NFT_TYPES,
-} from '@/constants';
+import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
@@ -31,7 +25,6 @@ export const useStakeAction = () => {
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
-
   const { control, getValues, setValue } = useFormContext();
 
   const coinOut = useWatch({ control, name: 'out.type' });
@@ -39,6 +32,8 @@ export const useStakeAction = () => {
   const reset = () => {
     setValue('in.value', '0');
     setValue('out.value', '0');
+    setValue('in.valueBN', ZERO_BIG_NUMBER);
+    setValue('out.valueBN', ZERO_BIG_NUMBER);
     setValue('validator', INTEREST_LABS);
   };
 
@@ -88,14 +83,11 @@ export const useStakeAction = () => {
           const principalsByType = possiblyCreatedObjects.reduce(
             (acc, object) => ({
               ...acc,
-              [normalizeStructTag(object.objectType)]:
-                FixedPointMath.toBigNumber(
-                  getValues(
-                    coinOut === TYPES.STAKED_WAL ? 'out.value' : 'in.value'
-                  )
-                ).plus(
-                  acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-                ),
+              [normalizeStructTag(object.objectType)]: getValues(
+                coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
+              ).plus(
+                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+              ),
             }),
             oldPrincipalsByType
           );
@@ -150,12 +142,7 @@ export const useStakeAction = () => {
         nodeId: form.validator,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
-        coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            ASSET_METADATA[form.in.type].decimals
-          ).toFixed(0)
-        ),
+        coinValue: BigInt(form.in.valueBN.toFixed(0)),
       });
     } catch (e) {
       onFailure(id)((e as Error).message);

@@ -4,22 +4,28 @@ import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import { useCoins } from '@/hooks/use-coins';
+import { useFees } from '@/hooks/use-fees';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
+  const { fees } = useFees();
   const { coins } = useCoins();
-  const { control, getValues } = useFormContext();
   const { onStake, loading } = useStakeAction();
+  const { nodes, isLoading } = useAllowedNodes();
+  const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
-  const coinOut = getValues('out.type');
-
   const amountIn = useWatch({ control, name: 'in.value' });
-  const amountOut = useWatch({ control, name: 'out.value' });
+
+  const minAmountIn =
+    1 + (1 * (fees?.staking ?? 0)) / 100 + (1 * (fees?.unstaking ?? 0)) / 100;
+
+  const maxMinAmount = fees?.staking || fees?.unstaking ? 1.1 : 1;
 
   const insufficientBalance =
     Number(amountIn) &&
@@ -27,19 +33,17 @@ const StakeFormButton: FC = () => {
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
   const insufficientAmountIn =
+    coinIn &&
     normalizeStructTag(coinIn) === normalizeStructTag(TYPES.WAL) &&
     Number(amountIn) &&
-    Number(amountIn) < 1;
+    Number(amountIn) < minAmountIn;
 
-  const insufficientAmountOut =
-    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
-    Number(amountOut) &&
-    Number(amountOut) < 1;
+  const insufficientAmount = insufficientAmountIn || insufficientBalance;
 
-  const insufficientAmount =
-    insufficientAmountOut || insufficientAmountIn || insufficientBalance;
+  const validator = getValues('validator');
 
-  const disabled = insufficientAmount || loading;
+  const disabled =
+    !validator || insufficientAmount || loading || isLoading || !nodes?.length;
 
   return (
     <Button
@@ -57,15 +61,17 @@ const StakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {insufficientAmountIn
-        ? 'You must stake at least 1 WAL'
-        : insufficientAmountOut
-          ? 'You must unstake at least 1 sWAL'
-          : insufficientBalance
-            ? 'Insufficient Balance'
-            : loading
-              ? 'Staking...'
-              : 'Stake'}
+      {!nodes && isLoading
+        ? 'Checking validators...'
+        : nodes?.length && !validator
+          ? 'Select a validator'
+          : insufficientAmountIn
+            ? `You must stake at least ${maxMinAmount}`
+            : insufficientBalance
+              ? 'Insufficient Balance'
+              : loading
+                ? 'Staking...'
+                : 'Stake'}
     </Button>
   );
 };

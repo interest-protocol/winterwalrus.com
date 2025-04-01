@@ -34,7 +34,7 @@ const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
     name === 'out' &&
     epoch &&
     epoch.msUntilNextEpoch / epoch.epochDurationMs < 0.5 &&
-    type === TYPES.WWAL;
+    type !== TYPES.WAL;
 
   const balance =
     balances[isSnowOutAfterVote ? TYPES.BLIZZARD_STAKE_NFT : type];
@@ -51,16 +51,19 @@ const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
             display="flex"
             key={unikey()}
             cursor="pointer"
-            {...(name === 'in' && {
-              nHover: { color: '#99EFE4' },
-              onClick: () =>
-                setValue(
-                  `${name}.value`,
-                  FixedPointMath.toNumber(
-                    balance?.times(factor) ?? ZERO_BIG_NUMBER
-                  )
-                ),
-            })}
+            nHover={{ color: '#99EFE4' }}
+            onClick={() => {
+              setValue(
+                `${name}.value`,
+                FixedPointMath.toNumber(
+                  balance?.times(factor) ?? ZERO_BIG_NUMBER
+                )
+              );
+              setValue(
+                `${name}.valueBN`,
+                balance?.times(factor) ?? ZERO_BIG_NUMBER
+              );
+            }}
           >
             <Span fontFamily="JetBrains Mono">{factor * 100}%</Span>
             <Icon maxWidth="1rem" width="100%" />

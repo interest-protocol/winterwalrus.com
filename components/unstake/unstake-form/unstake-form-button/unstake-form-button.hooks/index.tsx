@@ -10,15 +10,9 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import {
-  ASSET_METADATA,
-  ExplorerMode,
-  INTEREST_LABS,
-  NFT_TYPES,
-} from '@/constants';
+import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useUnstake } from './use-unstake';
@@ -29,14 +23,14 @@ export const useUnstakeAction = () => {
   const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
-
   const { control, getValues, setValue } = useFormContext();
-
   const coinOut = useWatch({ control, name: 'out.type' });
 
   const reset = () => {
     setValue('in.value', '0');
     setValue('out.value', '0');
+    setValue('in.valueBN', ZERO_BIG_NUMBER);
+    setValue('out.valueBN', ZERO_BIG_NUMBER);
     setValue('validator', INTEREST_LABS);
   };
 
@@ -86,14 +80,11 @@ export const useUnstakeAction = () => {
           const principalsByType = possiblyCreatedObjects.reduce(
             (acc, object) => ({
               ...acc,
-              [normalizeStructTag(object.objectType)]:
-                FixedPointMath.toBigNumber(
-                  getValues(
-                    coinOut === TYPES.STAKED_WAL ? 'out.value' : 'in.value'
-                  )
-                ).plus(
-                  acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-                ),
+              [normalizeStructTag(object.objectType)]: getValues(
+                coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
+              ).plus(
+                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+              ),
             }),
             oldPrincipalsByType
           );
@@ -131,7 +122,13 @@ export const useUnstakeAction = () => {
   const onUnstake = async () => {
     const form = getValues();
 
-    if (!form.in.value || !form.out.value) return;
+    if (
+      !form.in.valueBN ||
+      form.in.valueBN.isZero() ||
+      !form.out.valueBN ||
+      form.out.valueBN.isZero()
+    )
+      return;
     setLoading(true);
     const id = toast.loading('Unstaking...');
 
@@ -140,12 +137,8 @@ export const useUnstakeAction = () => {
         coinIn: form.in.type,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
-        coinValue: BigInt(
-          FixedPointMath.toBigNumber(
-            form.in.value,
-            ASSET_METADATA[form.in.type].decimals
-          ).toFixed(0)
-        ),
+        coinInValue: BigInt(form.in.valueBN.toFixed(0)),
+        coinOutValue: BigInt(form.out.valueBN.toFixed(0)),
       });
     } catch (e) {
       onFailure(id)((e as Error).message);

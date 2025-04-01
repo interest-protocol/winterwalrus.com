@@ -2,9 +2,7 @@ import { BlizzardSDK } from '@interest-protocol/blizzard-sdk';
 import useSWR from 'swr';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { Network, RPC, RPC_STORAGE_KEY } from '@/constants';
-
-import { RPC_MAP } from './../../constants/rpc';
+import { Network, RPC, RPC_MAP, RPC_STORAGE_KEY } from '@/constants';
 
 const useBlizzardSdk = () => {
   const localRPC = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;

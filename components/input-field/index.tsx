@@ -2,6 +2,7 @@ import { Div, Input, Label, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { parseInputEventToNumberString } from '@/utils';
 
 import { InputFieldProps } from './input-field.types';
@@ -13,14 +14,14 @@ import InputFieldPrice from './input-field-price';
 const StakeFormField: FC<InputFieldProps> = ({
   name,
   label,
+  types,
   disabled,
-  assetList,
   topContent,
 }) => {
   const { register, setValue } = useFormContext();
 
   return (
-    <Label
+    <Div
       p="1rem"
       gap="1rem"
       bg="#FFFFFF0D"
@@ -39,7 +40,7 @@ const StakeFormField: FC<InputFieldProps> = ({
           topContent
         )}
       </Div>
-      <Div
+      <Label
         display="grid"
         maxWidth="100%"
         alignItems="center"
@@ -57,16 +58,17 @@ const StakeFormField: FC<InputFieldProps> = ({
             onChange: (event) => {
               const value = parseInputEventToNumberString(event);
               setValue(`${name}.value`, value);
+              setValue(`${name}.valueBN`, FixedPointMath.toBigNumber(value));
             },
           })}
         />
-        <InputFieldAsset name={name} assetList={assetList} />
-      </Div>
+        <InputFieldAsset name={name} types={types} />
+      </Label>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />
         <InputFieldBalance name={name} />
       </Div>
-    </Label>
+    </Div>
   );
 };
 

@@ -1,37 +1,36 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { normalizeStructTag } from '@mysten/sui/utils';
 import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useCoins } from '@/hooks/use-coins';
+import { useFees } from '@/hooks/use-fees';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useUnstakeAction } from './unstake-form-button.hooks';
 
 const UnstakeFormButton: FC = () => {
+  const { fees } = useFees();
   const { coins } = useCoins();
   const { control, getValues } = useFormContext();
   const { onUnstake, loading } = useUnstakeAction();
 
   const coinIn = getValues('in.type');
-  const coinOut = getValues('out.type');
-
   const amountIn = useWatch({ control, name: 'in.value' });
-  const amountOut = useWatch({ control, name: 'out.value' });
+
+  const minAmountIn = 1 + (fees?.unstaking ?? 0) / 100;
+
+  const minMaxAmountIn = fees?.unstaking ? 1.1 : 1;
 
   const insufficientBalance =
     Number(amountIn) &&
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
 
-  const insufficientAmountOut =
-    normalizeStructTag(coinOut) === normalizeStructTag(TYPES.STAKED_WAL) &&
-    Number(amountOut) &&
-    Number(amountOut) < 1;
+  const insufficientAmountIn =
+    coinIn && Number(amountIn) && Number(amountIn) < minAmountIn;
 
-  const insufficientAmount = insufficientAmountOut || insufficientBalance;
+  const insufficientAmount = insufficientAmountIn || insufficientBalance;
 
   const disabled = insufficientAmount || loading;
 
@@ -51,8 +50,8 @@ const UnstakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {insufficientAmountOut
-        ? 'You must unstake at least 1 sWAL'
+      {insufficientAmountIn
+        ? `You must unstake at least ${minMaxAmountIn}`
         : insufficientBalance
           ? 'Insufficient Balance'
           : loading

@@ -1,29 +1,33 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
+import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
+
+import { LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
 
 import useBlizzardSdk from '../use-blizzard-sdk';
 
 export const useFees = () => {
+  const { query } = useRouter();
   const blizzardSdk = useBlizzardSdk();
 
+  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
+
   const { data: fees, ...rest } = useSWR(
-    [useFees.name, blizzardSdk],
+    [useFees.name, lst, blizzardSdk],
     async () => {
-      if (!blizzardSdk)
+      if (!lst || !blizzardSdk)
         return {
           staking: 0,
           unstaking: 0,
           transmute: 0,
         };
 
-      const fees = await blizzardSdk.getFees(
-        SHARED_OBJECTS.WWAL_STAKING({ mutable: false }).objectId
-      );
+      const fees = await blizzardSdk.getFees(STAKING_OBJECT[lst]);
 
       return {
-        staking: +fees.mint / 100,
-        unstaking: +fees.burn / 100,
-        transmute: +fees.transmute / 100,
+        staking: Number(fees.mint) / 100,
+        unstaking: Number(fees.burn) / 100,
+        transmute: Number(fees.transmute) / 100,
       };
     }
   );

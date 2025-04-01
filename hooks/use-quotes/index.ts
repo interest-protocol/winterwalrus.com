@@ -1,7 +1,9 @@
-import { SHARED_OBJECTS } from '@interest-protocol/blizzard-sdk';
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { BigNumber } from 'bignumber.js';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
+import { LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import useBlizzardSdk from '../use-blizzard-sdk';
@@ -13,11 +15,14 @@ const QUOTE_FNS: ReadonlyArray<'toWalAtEpoch' | 'toLstAtEpoch'> = [
 ];
 
 export const useQuotes = () => {
+  const { query } = useRouter();
   const blizzardSdk = useBlizzardSdk();
   const { data: epoch } = useEpochData();
 
+  const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
+
   return useSWR(
-    [useQuotes.name, epoch?.currentEpoch, blizzardSdk],
+    [useQuotes.name, epoch?.currentEpoch, lst, blizzardSdk],
     async () => {
       if (!epoch || !blizzardSdk) return { quoteSWal: null, quoteLst: null };
 
@@ -25,10 +30,8 @@ export const useQuotes = () => {
         QUOTE_FNS.map((quoteFn) =>
           blizzardSdk[quoteFn]({
             epoch: epoch?.currentEpoch,
+            blizzardStaking: STAKING_OBJECT[lst],
             value: BigInt(FixedPointMath.toBigNumber(1).toString()),
-            blizzardStaking: SHARED_OBJECTS.WWAL_STAKING({
-              mutable: true,
-            }).objectId,
           }).then((value) => FixedPointMath.toNumber(BigNumber(value ?? 0)))
         )
       );
