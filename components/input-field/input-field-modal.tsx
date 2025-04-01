@@ -111,8 +111,9 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               <Div display="flex" gap="1rem" alignItems="center">
                 <Span display="flex" overflow="hidden" borderRadius="0.25rem">
                   <Img
-                    width="100%"
                     alt={name}
+                    width="100%"
+                    height="100%"
                     src={iconUrl}
                     maxWidth="2.5rem"
                     maxHeight="2.5rem"
