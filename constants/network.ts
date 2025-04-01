@@ -3,4 +3,5 @@ export enum Network {
   MAINNET = 'mainnet',
 }
 
-export const NETWORK = process.env.NEXT_PUBLIC_NETWORK as Network;
+export const NETWORK =
+  (process.env.NEXT_PUBLIC_NETWORK as Network) ?? Network.MAINNET;
