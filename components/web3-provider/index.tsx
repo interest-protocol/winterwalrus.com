@@ -3,33 +3,29 @@ import {
   SuiClientProvider,
   WalletProvider,
 } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/sui/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
-import { useReadLocalStorage } from 'usehooks-ts';
-
-import { NETWORK, RPC, RPC_MAP, RPC_STORAGE_KEY } from '@/constants';
 
 const queryClient = new QueryClient();
 
-const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
-  const rpc = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SuiClientProvider
-        defaultNetwork={NETWORK}
-        networks={
-          createNetworkConfig({
-            [NETWORK]: { url: RPC_MAP[NETWORK][rpc] },
-          }).networkConfig
-        }
-      >
-        <WalletProvider autoConnect stashedWallet={{ name: 'coins.memez.gg' }}>
-          {children}
-        </WalletProvider>
-      </SuiClientProvider>
-    </QueryClientProvider>
-  );
-};
+const Web3Provider: FC<PropsWithChildren> = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    <SuiClientProvider
+      defaultNetwork="mainnet"
+      networks={
+        createNetworkConfig({
+          mainnet: {
+            url: process.env.NEXT_PUBLIC_RPC ?? getFullnodeUrl('mainnet'),
+          },
+        }).networkConfig
+      }
+    >
+      <WalletProvider autoConnect stashedWallet={{ name: 'Winter Walrus' }}>
+        {children}
+      </WalletProvider>
+    </SuiClientProvider>
+  </QueryClientProvider>
+);
 
 export default Web3Provider;
