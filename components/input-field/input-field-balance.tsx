@@ -16,8 +16,6 @@ const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
 
   const type = useWatch({ control, name: `${name}.type` }) as string;
 
-  console.log({ type });
-
   const balance = balances[type];
 
   return (
