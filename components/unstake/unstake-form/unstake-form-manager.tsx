@@ -1,6 +1,9 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { LST_TYPES_MAP } from '@/constants';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
@@ -13,8 +16,28 @@ const UnstakeFormManager: FC = () => {
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
 
-  const coinOut = useWatch({ control, name: 'out.type' });
-  const valueInBN = useWatch({ control, name: 'in.valueBN' });
+  const [coinIn, coinOut, valueInBN] = useWatch({
+    control,
+    name: ['in.type', 'out.type', 'in.valueBN'],
+  });
+
+  const { query } = useRouter();
+  const lst = String(query.lst).toUpperCase();
+
+  useEffect(() => {
+    console.log({ fn: UnstakeFormManager.name });
+
+    console.log({ coinIn, type: LST_TYPES_MAP[lst] });
+    if (coinIn === LST_TYPES_MAP[lst]) return;
+
+    console.log({ coinIn });
+    setValue('in.type', LST_TYPES_MAP[lst]);
+    console.log({ coinOut, type: TYPES.WAL });
+    if (coinOut === TYPES.WAL) return;
+
+    console.log({ coinOut });
+    setValue('out.type', TYPES.WAL);
+  }, [coinIn, coinOut]);
 
   useEffect(() => {
     if (!epoch || !quotes || !fees) return;
