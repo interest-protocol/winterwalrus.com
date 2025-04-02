@@ -6,7 +6,6 @@ export interface StakingObject {
   type: string;
   state: string;
   nodeId: string;
-  symbol?: string;
   objectId: string;
   principal: string;
   display: string | null;

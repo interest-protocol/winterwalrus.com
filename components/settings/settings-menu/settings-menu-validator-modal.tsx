@@ -1,7 +1,7 @@
 import { formatAddress } from '@mysten/sui/utils';
 import { Div, Input, Label, P, Span } from '@stylin.js/elements';
 import { FC, useState } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import { useSessionStorage } from 'usehooks-ts';
 
 import { SearchSVG } from '@/components/svg';
 import { INTEREST_LABS, VALIDATOR_STORAGE_KEY } from '@/constants';
@@ -12,7 +12,7 @@ const SettingsMenuValidatorModal: FC = () => {
   const { handleClose } = useModal();
   const { nodes } = useAllowedNodes();
   const [search, setSearch] = useState('');
-  const [validator, setValidator] = useLocalStorage(
+  const [validator, setValidator] = useSessionStorage(
     VALIDATOR_STORAGE_KEY,
     INTEREST_LABS
   );
@@ -88,6 +88,13 @@ const SettingsMenuValidatorModal: FC = () => {
               !search ||
               id.toLowerCase() === search ||
               name.toLowerCase().includes(search)
+          )
+          .sort((a, b) =>
+            a.id === INTEREST_LABS && b.id !== INTEREST_LABS
+              ? -1
+              : b.id === INTEREST_LABS && a.id !== INTEREST_LABS
+                ? 1
+                : 0
           )
           .map(({ name, id }, index) => (
             <Div

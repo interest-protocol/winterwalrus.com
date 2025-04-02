@@ -6,7 +6,6 @@ import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { not } from 'ramda';
 import { memo, useCallback, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
 import Motion from '@/components/motion';
@@ -74,30 +73,13 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
       >
         <Div gap="0.5rem" display="flex" alignItems="center">
           <Div display="flex" gap="0.5rem">
-            <Div
-              display="flex"
+            <Img
+              alt={type}
               width="2.5rem"
               height="2.5rem"
-              alignItems="center"
-              position="relative"
               borderRadius="0.5rem"
-              justifyContent="center"
-            >
-              <Skeleton
-                width="2.5rem"
-                height="2.5rem"
-                borderRadius="0.5rem"
-                style={{ position: 'absolute', inset: 0 }}
-              />
-              <Img
-                alt={type}
-                width="2.5rem"
-                height="2.5rem"
-                position="relative"
-                borderRadius="0.5rem"
-                src={display ?? NFT_IMAGE[type]}
-              />
-            </Div>
+              src={display ?? NFT_IMAGE[type]}
+            />
             <Div>
               <Link
                 target="_blank"
