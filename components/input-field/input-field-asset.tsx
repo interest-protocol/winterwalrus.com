@@ -22,11 +22,6 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const type = useWatch({ control, name: `${name}.type` });
   const nftType = `nft:${type}`;
 
-  console.log({
-    metadata: metadata?.[type],
-    nftMetadata: metadata?.[nftType],
-  });
-
   if (isLoading || (!metadata?.[type] && !metadata?.[nftType]))
     return (
       <Motion

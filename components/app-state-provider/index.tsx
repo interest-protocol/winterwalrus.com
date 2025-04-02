@@ -10,6 +10,7 @@ const AppStateProvider: FC = () => {
   const currentAccount = useCurrentAccount();
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
+    balancesByLst,
     principalByType,
     stakingObjectIds,
     objectsActivation,
@@ -53,9 +54,9 @@ const AppStateProvider: FC = () => {
       stakingObjectIds,
       objectsActivation,
       principalsByType: principalByType,
-      balances: { ...balances, ...principalByType },
+      balances: { ...balances, ...principalByType, ...balancesByLst },
     }));
-  }, [principalByType, stakingObjectIds, objectsActivation]);
+  }, [principalByType, stakingObjectIds, objectsActivation, balancesByLst]);
 
   useEffect(() => {
     update({ loadingObjects });
