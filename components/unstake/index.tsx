@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -15,7 +16,7 @@ const Unstake: FC = () => {
   const form = useForm({
     defaultValues: {
       in: {
-        type: LST_TYPES_MAP[lst],
+        type: LST_TYPES_MAP[lst] ?? TYPES.WWAL,
         value: 0,
       },
       out: {
