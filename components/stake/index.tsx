@@ -6,7 +6,6 @@ import { COIN_TYPES, INTEREST_LABS } from '@/constants';
 
 import StakeDetails from './stake-details';
 import StakeForm from './stake-form';
-import StakeFormManager from './stake-form/stake-form-manager';
 
 const Stake: FC = () => {
   const form = useForm({
@@ -21,7 +20,6 @@ const Stake: FC = () => {
 
   return (
     <FormProvider {...form}>
-      <StakeFormManager />
       <Div gap="1rem" display="flex" flexDirection="column">
         <StakeForm />
         <StakeDetails />

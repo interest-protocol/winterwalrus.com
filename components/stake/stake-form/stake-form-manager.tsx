@@ -15,7 +15,7 @@ const StakeFormManager: FC = () => {
   const { fees } = useFees();
   const { nodes } = useAllowedNodes();
   const { data: quotes } = useQuotes();
-  const { data: epoch } = useEpochData();
+  const { data: epoch, isLoading } = useEpochData();
   const { control, setValue, getValues } = useFormContext();
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
@@ -30,6 +30,8 @@ const StakeFormManager: FC = () => {
   ).toFixed(2);
 
   useEffect(() => {
+    if (isLoading) return;
+
     const lstKey = (
       window.location.pathname.split('/')[1] ?? 'wwal'
     ).toUpperCase();
@@ -72,7 +74,7 @@ const StakeFormManager: FC = () => {
     }
 
     setValue('validator', nodes[0].id);
-  }, [nodes, coinOut]);
+  }, [nodes, coinOut, validator]);
 
   useEffect(() => {
     if (!quotes || !fees) return;
