@@ -1,14 +1,15 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { COIN_TYPES, VALIDATOR_STORAGE_KEY } from '@/constants';
+import { LST_TYPES_MAP, VALIDATOR_STORAGE_KEY } from '@/constants';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { nftTypeFromType, ZERO_BIG_NUMBER } from '@/utils';
 
 const StakeFormManager: FC = () => {
   const { fees } = useFees();
@@ -29,17 +30,22 @@ const StakeFormManager: FC = () => {
   ).toFixed(2);
 
   useEffect(() => {
-    console.log({ fn: StakeFormManager.name });
+    const lstKey = (
+      window.location.pathname.split('/')[1] ?? 'wwal'
+    ).toUpperCase();
 
-    const [inType, outType] = getValues(['in.type', 'out.type']);
+    const lst = LST_TYPES_MAP[lstKey] ?? TYPES.WWAL;
+    const lstType = percentage < 50 ? lst : nftTypeFromType(lst);
 
-    console.log({ inType, outType });
+    if (!coinOut) {
+      setValue('out', { type: lstType, value: '0' });
+      return;
+    }
 
-    if (COIN_TYPES[0] === inType) return;
+    if (coinOut === lstKey) return;
 
-    setValue('in', { type: outType, value: '0' });
-    setValue('out', { type: inType, value: '0' });
-  }, []);
+    setValue('out.type', lstType);
+  }, [epoch, coinOut]);
 
   useEffect(() => {
     if (nodes?.some(({ id }) => id === validator))
@@ -56,12 +62,17 @@ const StakeFormManager: FC = () => {
       return;
     }
 
-    const node = nodes.find(({ id }) => id === validator);
+    const favNode = nodes.find(({ id }) => id === validator);
 
-    if (node?.id === getValues('validator')) return;
+    if (favNode) {
+      if (favNode.id === getValues('validator')) return;
+
+      setValue('validator', favNode.id);
+      return;
+    }
 
     setValue('validator', nodes[0].id);
-  }, [nodes]);
+  }, [nodes, coinOut]);
 
   useEffect(() => {
     if (!quotes || !fees) return;
@@ -81,18 +92,6 @@ const StakeFormManager: FC = () => {
     setValue('out.valueBN', valueBN);
     setValue('out.value', FixedPointMath.toNumber(valueBN));
   }, [valueInBN, quotes, coinOut, fees]);
-
-  useEffect(() => {
-    if (coinOut?.startsWith('nft:')) {
-      if (percentage >= 50) return;
-      setValue('out.type', coinOut.split('nft:')[1]);
-      return;
-    } else {
-      if (percentage < 50) return;
-      setValue('out.type', `nft:${coinOut}`);
-      return;
-    }
-  }, [epoch, coinOut]);
 
   return null;
 };

@@ -141,8 +141,6 @@ export const useStakeAction = () => {
         coinValue: BigInt(form.in.valueBN.toFixed(0)),
       });
     } catch (e) {
-      console.log({ e });
-
       onFailure(id)((e as Error).message);
     } finally {
       setLoading(false);
