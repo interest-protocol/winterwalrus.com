@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { path } from 'ramda';
 import useSWR from 'swr';
 
-import { INTEREST_LABS, LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
+import { LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
 import { Node } from '@/interface';
 
 import useBlizzardSdk from '../use-blizzard-sdk';
@@ -28,23 +28,15 @@ export const useAllowedNodes = () => {
         options: { showContent: true },
       });
 
-      return nodeObjects
-        .map((nodeObject) => ({
-          id: path(['data', 'objectId'], nodeObject) as string,
-          name: String(
-            path(
-              ['data', 'content', 'fields', 'node_info', 'fields', 'name'],
-              nodeObject
-            )
-          ),
-        }))
-        .toSorted((a, b) =>
-          a.id === INTEREST_LABS && b.id !== INTEREST_LABS
-            ? -1
-            : b.id === INTEREST_LABS && a.id !== INTEREST_LABS
-              ? 1
-              : 0
-        );
+      return nodeObjects.map((nodeObject) => ({
+        id: path(['data', 'objectId'], nodeObject) as string,
+        name: String(
+          path(
+            ['data', 'content', 'fields', 'node_info', 'fields', 'name'],
+            nodeObject
+          )
+        ),
+      }));
     }
   );
 

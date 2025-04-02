@@ -24,6 +24,7 @@ const NFT: FC = () => {
       position="sticky"
       borderRadius="1rem"
       flexDirection="column"
+      maxHeight="calc(100vh - 2rem)"
       border="1px solid #FFFFFF1A"
     >
       <Div

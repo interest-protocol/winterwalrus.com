@@ -2,16 +2,13 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
-import { path, pathEq, pathOr } from 'ramda';
+import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
-
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 interface Response {
   stakingObjectIds: ReadonlyArray<string>;
   objectsActivation: Record<string, number>;
   principalByType: Record<string, BigNumber>;
-  balancesByLst: Record<string, BigNumber>;
 }
 
 export const useStakingObjects = () => {
@@ -23,15 +20,14 @@ export const useStakingObjects = () => {
     async () => {
       if (!currentAccount)
         return {
-          balancesByLst: {},
-          principalByType: {},
           stakingObjectIds: [],
+          principalByType: {},
           objectsActivation: {},
         };
 
       const objects = await suiClient.getOwnedObjects({
         owner: currentAccount.address,
-        options: { showContent: true, showType: true },
+        options: { showContent: true },
         filter: {
           MatchAny: [
             { StructType: TYPES.STAKED_WAL },
@@ -82,29 +78,6 @@ export const useStakingObjects = () => {
       );
 
       return {
-        balancesByLst: stakingObjects.reduce(
-          (acc, data) => {
-            if (!pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], data))
-              return acc;
-
-            const lstType = `nft:${normalizeStructTag(
-              String(
-                path(
-                  ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
-                  data
-                )
-              )
-            )}`;
-
-            return {
-              ...acc,
-              [lstType]: BigNumber(
-                String(path(['data', 'content', 'fields', 'value'], data))
-              ).plus(acc[lstType] ?? ZERO_BIG_NUMBER),
-            };
-          },
-          {} as Record<string, BigNumber>
-        ),
         objectsActivation: stakingObjects.reduce(
           (acc, item) => {
             const type = normalizeStructTag(

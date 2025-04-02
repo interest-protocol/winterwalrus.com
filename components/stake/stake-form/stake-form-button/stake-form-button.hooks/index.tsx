@@ -1,18 +1,20 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
+import { path } from 'ramda';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { ExplorerMode, NFT_TYPES } from '@/constants';
+import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
-import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
+import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
 
@@ -20,6 +22,7 @@ export const useStakeAction = () => {
   const stake = useStake();
   const { data } = useEpochData();
   const { update } = useAppState();
+  const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
   const { control, getValues, setValue } = useFormContext();
@@ -31,6 +34,7 @@ export const useStakeAction = () => {
     setValue('out.value', '0');
     setValue('in.valueBN', ZERO_BIG_NUMBER);
     setValue('out.valueBN', ZERO_BIG_NUMBER);
+    setValue('validator', INTEREST_LABS);
   };
 
   const onSuccess =
@@ -94,18 +98,18 @@ export const useStakeAction = () => {
               ...possiblyDeletedObjects,
               ...possiblyCreatedObjects.map(({ objectId }) => objectId),
             ],
-            balances: {
-              ...balances,
-              ...principalsByType,
-              ...({
-                [getValues('out.type')]: (
-                  balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
-                ).plus(getValues('out.valueBN')),
-                [getValues('in.type')]: (
-                  balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
-                ).plus(getValues('in.valueBN')),
-              } as Record<string, BigNumber>),
-            },
+            balances: dryTx.balanceChanges.reduce(
+              (acc, { coinType, amount, owner }) =>
+                path(['AddressOwner'], owner) === account?.address
+                  ? {
+                      ...acc,
+                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                        acc[coinType] ?? ZERO_BIG_NUMBER
+                      ),
+                    }
+                  : acc,
+              { ...balances, ...principalsByType }
+            ),
           };
         }
       );
@@ -132,17 +136,15 @@ export const useStakeAction = () => {
           : false;
 
       await stake({
+        coinOut,
         isAfterVote,
         coinIn: form.in.type,
         nodeId: form.validator,
         onSuccess: onSuccess(id),
         onFailure: onFailure(id),
-        coinOut: typeFromMaybeNftType(coinOut),
         coinValue: BigInt(form.in.valueBN.toFixed(0)),
       });
     } catch (e) {
-      console.log({ e });
-
       onFailure(id)((e as Error).message);
     } finally {
       setLoading(false);
