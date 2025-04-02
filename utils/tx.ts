@@ -46,6 +46,8 @@ export const signAndExecute = async ({
     transactionBlock: await tx.build({ client }),
   });
 
+  console.log({ txDryResult });
+
   const { signature, bytes: transactionBlock } =
     await signTransaction.mutateAsync({
       transaction: tx,

@@ -8,7 +8,7 @@ import { LST_TYPES, LST_TYPES_KEY, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { SearchSVG } from '../svg';
 import { InputFieldModalProps } from './input-field.types';
@@ -18,10 +18,10 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
   name: fieldName,
 }) => {
   const { push } = useRouter();
+  const { balances } = useAppState();
   const { handleClose } = useModal();
   const { setValue } = useFormContext();
   const [search, setSearch] = useState('');
-  const { balances, principalsByType } = useAppState();
 
   return (
     <Div
@@ -85,7 +85,11 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               symbol.toLowerCase().includes(search)
           )
           .sort((a, b) =>
-            a.type === TYPES.WWAL ? -1 : b.type === TYPES.WWAL ? 1 : 0
+            typeFromMaybeNftType(a.type) === TYPES.WWAL
+              ? -1
+              : typeFromMaybeNftType(b.type) === TYPES.WWAL
+                ? 1
+                : 0
           )
           .map(({ symbol, type, decimals, name, iconUrl }) => (
             <Div
@@ -101,7 +105,9 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               onClick={() => {
                 push(
                   `/${LST_TYPES_KEY[
-                    LST_TYPES.findIndex((item) => item === type)
+                    LST_TYPES.findIndex(
+                      (item) => item === typeFromMaybeNftType(type)
+                    )
                   ].toLowerCase()}`
                 );
                 setValue(`${fieldName}.type`, type);
@@ -130,11 +136,13 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                   borderRadius="1.5rem"
                   textTransform="uppercase"
                 >
-                  {LST_TYPES.includes(type)
-                    ? 'lst'
-                    : NFT_TYPES.includes(type)
-                      ? 'nft'
-                      : 'coin'}
+                  {symbol.endsWith('NFT')
+                    ? 'nft'
+                    : LST_TYPES.includes(type)
+                      ? 'lst'
+                      : NFT_TYPES.includes(type)
+                        ? 'nft'
+                        : 'coin'}
                 </Span>
               </Div>
               <Div
@@ -147,9 +155,7 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                 <P fontSize="0.875rem" fontFamily="JetBrains Mono">
                   {
                     +FixedPointMath.toNumber(
-                      principalsByType[type] ??
-                        balances[type] ??
-                        ZERO_BIG_NUMBER,
+                      balances[type] ?? ZERO_BIG_NUMBER,
                       decimals
                     ).toFixed(4)
                   }

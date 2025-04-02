@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { VALIDATOR_STORAGE_KEY } from '@/constants';
+import { COIN_TYPES, VALIDATOR_STORAGE_KEY } from '@/constants';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
@@ -21,6 +21,22 @@ const StakeFormManager: FC = () => {
   const coinOut = useWatch({ control, name: 'out.type' });
   const valueInBN = useWatch({ control, name: 'in.valueBN' });
 
+  const percentage = +(
+    epoch && epoch.currentEpoch
+      ? ((epoch.epochDurationMs - epoch.msUntilNextEpoch) * 100) /
+        epoch.epochDurationMs
+      : 0
+  ).toFixed(2);
+
+  useEffect(() => {
+    const [inType, outType] = getValues(['in.type', 'out.type']);
+
+    if (COIN_TYPES[0] === inType) return;
+
+    setValue('in', { type: outType, value: '0' });
+    setValue('out', { type: inType, value: '0' });
+  }, []);
+
   useEffect(() => {
     if (nodes?.some(({ id }) => id === validator))
       setValue('validator', validator);
@@ -38,13 +54,13 @@ const StakeFormManager: FC = () => {
 
     const node = nodes.find(({ id }) => id === validator);
 
-    if (node) return;
+    if (node?.id === getValues('validator')) return;
 
     setValue('validator', nodes[0].id);
   }, [nodes]);
 
   useEffect(() => {
-    if (!epoch || !quotes || !fees) return;
+    if (!quotes || !fees) return;
 
     if (!valueInBN || valueInBN.isZero()) {
       setValue('out.value', 0);
@@ -60,7 +76,19 @@ const StakeFormManager: FC = () => {
 
     setValue('out.valueBN', valueBN);
     setValue('out.value', FixedPointMath.toNumber(valueBN));
-  }, [valueInBN, epoch, quotes, coinOut, fees]);
+  }, [valueInBN, quotes, coinOut, fees]);
+
+  useEffect(() => {
+    if (coinOut?.startsWith('nft:')) {
+      if (percentage >= 50) return;
+      setValue('out.type', coinOut.split('nft:')[1]);
+      return;
+    } else {
+      if (percentage < 50) return;
+      setValue('out.type', `nft:${coinOut}`);
+      return;
+    }
+  }, [epoch, coinOut]);
 
   return null;
 };

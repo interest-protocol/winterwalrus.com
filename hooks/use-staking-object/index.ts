@@ -22,6 +22,9 @@ export const useStakingObject = (id?: string) => {
       });
 
       return {
+        symbol: path(['data', 'content', 'fields', 'symbol'], item)
+          ? `${path(['data', 'content', 'fields', 'symbol'], item)}NFT`
+          : 'StakedWAL',
         type: path(['data', 'type'], item) as string,
         objectId: path(['data', 'objectId'], item) as string,
         display: pathOr(null, ['data', 'display', 'data', 'image_url'], item),
