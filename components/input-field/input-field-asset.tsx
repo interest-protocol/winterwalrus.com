@@ -7,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 import Motion from '@/components/motion';
 import useMetadata from '@/hooks/use-metadata';
 import { useModal } from '@/hooks/use-modal';
+import { nftTypeFromType } from '@/utils';
 
 import { ChevronDownSVG } from '../svg';
 import { InputFieldAssetProps } from './input-field.types';
@@ -20,7 +21,8 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const { control } = form;
 
   const type = useWatch({ control, name: `${name}.type` });
-  const nftType = `nft:${type}`;
+
+  const nftType = nftTypeFromType(type);
 
   if (isLoading || (!metadata?.[type] && !metadata?.[nftType]))
     return (

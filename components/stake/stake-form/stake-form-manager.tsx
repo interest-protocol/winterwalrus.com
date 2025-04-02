@@ -29,7 +29,11 @@ const StakeFormManager: FC = () => {
   ).toFixed(2);
 
   useEffect(() => {
+    console.log({ fn: StakeFormManager.name });
+
     const [inType, outType] = getValues(['in.type', 'out.type']);
+
+    console.log({ inType, outType });
 
     if (COIN_TYPES[0] === inType) return;
 
