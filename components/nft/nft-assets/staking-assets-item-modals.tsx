@@ -1,9 +1,9 @@
 import { Button, Div, P, Span } from '@stylin.js/elements';
 import Link from 'next/link';
 import { FC } from 'react';
+import { useState } from 'react';
 
 import { useModal } from '@/hooks/use-modal';
-import { useState } from 'react';
 
 export const StakingAssetsItemWithdrawModal: FC = () => {
   const { handleClose } = useModal();
@@ -134,7 +134,6 @@ export const StakingAssetsItemUnstakeModal: FC = () => {
   );
 };
 
-
 type Props = {
   onProceed: () => void;
 };
@@ -144,12 +143,11 @@ export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
   const [neverShow, setNeverShow] = useState(false);
 
   const handleProceed = () => {
-   
     if (neverShow) {
       localStorage.setItem('hideStakeModal', 'true');
     }
     handleClose();
-    onProceed(); 
+    onProceed();
   };
   return (
     <Div
@@ -169,9 +167,8 @@ export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <P fontSize="1.25rem" fontWeight="600">
-        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-         consectetur, adipisci velit..."
-        
+          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+          consectetur, adipisci veli
         </P>
         <Span
           py="0.25rem"
@@ -186,18 +183,22 @@ export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
           ESC
         </Span>
       </Div>
-      <P>
-        You are minting an NFT.
-      </P>
-      <Div display="flex" alignItems="center" gap="0.5rem" justifyContent="center">
+      <P>You are minting an NFT.</P>
+      <Div
+        display="flex"
+        alignItems="center"
+        gap="0.5rem"
+        justifyContent="center"
+      >
         <input
           type="checkbox"
           checked={neverShow}
           onChange={(e) => setNeverShow(e.target.checked)}
         />
-        <P m="0" fontSize="0.875rem">Never show again</P>
+        <P m="0" fontSize="0.875rem">
+          Never show again
+        </P>
       </Div>
-     
 
       <Button
         all="unset"

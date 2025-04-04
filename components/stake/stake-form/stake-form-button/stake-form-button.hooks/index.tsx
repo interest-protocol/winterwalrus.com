@@ -10,20 +10,20 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
-import { useModal } from '@/hooks/use-modal';
-import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 
 export const useStakeAction = () => {
-  const {setContent} = useModal();
+  const { setContent } = useModal();
   const stake = useStake();
-  
+
   const { data } = useEpochData();
   const { update } = useAppState();
   const account = useCurrentAccount();
@@ -32,7 +32,6 @@ export const useStakeAction = () => {
   const { control, getValues, setValue } = useFormContext();
 
   const coinOut = useWatch({ control, name: 'out.type' });
-
 
   const reset = () => {
     setValue('in.value', '0');
@@ -127,7 +126,7 @@ export const useStakeAction = () => {
     toast.error(error ?? 'Error executing transaction');
   };
 
-  const handleComfirmedStake = async()=>{
+  const handleComfirmedStake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
@@ -155,7 +154,6 @@ export const useStakeAction = () => {
       setLoading(false);
     }
   };
-
 
   const onStake = async () => {
     const hideModal = localStorage.getItem('hideStakeModal') === 'true';
