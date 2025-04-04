@@ -9,7 +9,8 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { nftTypeFromType, ZERO_BIG_NUMBER } from '@/utils';
+import { ZERO_BIG_NUMBER } from '@/utils';
+import { nftTypeFromType } from '@/utils/string';
 
 const StakeFormManager: FC = () => {
   const { fees } = useFees();
