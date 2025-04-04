@@ -16,7 +16,7 @@ export const useStakingObjects = () => {
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Response>(
-    [useStakingObjects.name],
+    [useStakingObjects.name, currentAccount],
     async () => {
       if (!currentAccount)
         return {
@@ -126,9 +126,13 @@ export const useStakingObjects = () => {
             const type = normalizeStructTag(
               path(['data', 'content', 'type'], item) as string
             );
+
             const value = BigNumber(
               pathOr(
-                path(['data', 'content', 'fields', 'value'], item),
+                path(
+                  ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
+                  item
+                ),
                 ['data', 'content', 'fields', 'principal'],
                 item
               ) as string

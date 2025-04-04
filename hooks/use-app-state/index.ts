@@ -28,6 +28,6 @@ export const useAppState = create<AppState>((set) => ({
   loadingCoins: true,
   principalsByType: {},
   stakingObjectIds: [],
-  loadingObjects: false,
+  loadingObjects: true,
   objectsActivation: {},
 }));

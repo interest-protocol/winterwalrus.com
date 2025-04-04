@@ -13,8 +13,10 @@ const UnstakeFormManager: FC = () => {
   const { data: epoch } = useEpochData();
   const { control, setValue } = useFormContext();
 
-  const coinOut = useWatch({ control, name: 'out.type' });
-  const valueInBN = useWatch({ control, name: 'in.valueBN' });
+  const [coinOut, valueInBN] = useWatch({
+    control,
+    name: ['out.type', 'in.valueBN'],
+  });
 
   useEffect(() => {
     if (!epoch || !quotes || !fees) return;

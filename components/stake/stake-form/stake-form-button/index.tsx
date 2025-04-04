@@ -20,7 +20,10 @@ const StakeFormButton: FC = () => {
   const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
-  const amountIn = useWatch({ control, name: 'in.value' });
+  const [amountIn, validator] = useWatch({
+    control,
+    name: ['in.value', 'validator'],
+  });
 
   const minAmountIn =
     1 + (1 * (fees?.staking ?? 0)) / 100 + (1 * (fees?.unstaking ?? 0)) / 100;
@@ -39,8 +42,6 @@ const StakeFormButton: FC = () => {
     Number(amountIn) < minAmountIn;
 
   const insufficientAmount = insufficientAmountIn || insufficientBalance;
-
-  const validator = getValues('validator');
 
   const disabled =
     !validator || insufficientAmount || loading || isLoading || !nodes?.length;
@@ -61,17 +62,15 @@ const StakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {!nodes && isLoading
+      {!nodes || isLoading || !validator
         ? 'Checking validators...'
-        : nodes?.length && !validator
-          ? 'Select a validator'
-          : insufficientAmountIn
-            ? `You must stake at least ${maxMinAmount}`
-            : insufficientBalance
-              ? 'Insufficient Balance'
-              : loading
-                ? 'Staking...'
-                : 'Stake'}
+        : insufficientAmountIn
+          ? `You must stake at least ${maxMinAmount}`
+          : insufficientBalance
+            ? 'Insufficient Balance'
+            : loading
+              ? 'Staking...'
+              : 'Stake'}
     </Button>
   );
 };

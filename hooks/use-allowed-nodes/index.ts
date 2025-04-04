@@ -17,7 +17,7 @@ export const useAllowedNodes = () => {
   const lst = LST_TYPES_MAP[String(query.lst).toUpperCase()] ?? TYPES.WWAL;
 
   const { data: nodes, ...rest } = useSWR<ReadonlyArray<Node>>(
-    [useAllowedNodes.name, lst],
+    [useAllowedNodes.name, lst, blizzardSdk],
     async () => {
       if (!lst || !blizzardSdk) return [];
 
