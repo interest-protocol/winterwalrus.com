@@ -1,5 +1,6 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useSuiClient } from '@mysten/dapp-kit';
-import { path, pathOr } from 'ramda';
+import { path, pathEq, pathOr } from 'ramda';
 import useSWR from 'swr';
 
 import { StakingObject } from '@/interface';
@@ -65,24 +66,26 @@ export const useStakingObject = (id?: string) => {
           ['data', 'content', 'fields', 'state', 'fields', 'withdraw_epoch'],
           item
         ),
-        activationEpoch: Number(
-          pathOr(
-            path(
-              [
-                'data',
-                'content',
-                'fields',
-                'inner',
-                'fields',
-                'inner',
-                'activation_epoch',
-              ],
+        activationEpoch:
+          Number(
+            pathOr(
+              path(
+                [
+                  'data',
+                  'content',
+                  'fields',
+                  'inner',
+                  'fields',
+                  'inner',
+                  'activation_epoch',
+                ],
+                item
+              ),
+              ['data', 'content', 'fields', 'activation_epoch'],
               item
-            ),
-            ['data', 'content', 'fields', 'activation_epoch'],
-            item
-          )
-        ),
+            )
+          ) -
+          (pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], item) ? 1 : 0),
       };
     },
     { refreshInterval: 5000 }

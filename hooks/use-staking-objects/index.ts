@@ -5,6 +5,7 @@ import { BigNumber } from 'bignumber.js';
 import { path, pathEq, pathOr } from 'ramda';
 import useSWR from 'swr';
 
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 interface Response {
@@ -153,13 +154,19 @@ export const useStakingObjects = () => {
             const type = normalizeStructTag(
               path(['data', 'content', 'type'], item) as string
             );
+
             const value = BigNumber(
               pathOr(
-                path(['data', 'content', 'fields', 'value'], item),
+                path(
+                  ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
+                  item
+                ),
                 ['data', 'content', 'fields', 'principal'],
                 item
               ) as string
             );
+
+            console.log({ type, value: FixedPointMath.toNumber(value) });
 
             return {
               ...acc,

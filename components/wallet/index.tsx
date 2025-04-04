@@ -14,9 +14,9 @@ import Skeleton from 'react-loading-skeleton';
 import { ChevronDownSVG, WalletSVG } from '../svg';
 
 const Wallet: FC = () => {
-  const { connectionStatus } = useCurrentWallet();
   const disconnect = useDisconnectWallet();
   const currentAccount = useCurrentAccount();
+  const { connectionStatus } = useCurrentWallet();
 
   if (connectionStatus === 'connecting')
     return (

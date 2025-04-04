@@ -189,7 +189,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
               border="1px solid #FFFFFF1A"
             >
               <P fontFamily="JetBrains Mono">
-                {FixedPointMath.toNumber(BigNumber(principal), 9, 2)} WAL
+                {FixedPointMath.toNumber(BigNumber(principal), 9)} WAL
               </P>
               <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
                 Principal
