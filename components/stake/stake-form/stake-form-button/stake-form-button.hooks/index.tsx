@@ -17,9 +17,13 @@ import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
+import { useModal } from '@/hooks/use-modal';
+import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 
 export const useStakeAction = () => {
+  const {setContent} = useModal();
   const stake = useStake();
+  
   const { data } = useEpochData();
   const { update } = useAppState();
   const account = useCurrentAccount();
@@ -28,6 +32,7 @@ export const useStakeAction = () => {
   const { control, getValues, setValue } = useFormContext();
 
   const coinOut = useWatch({ control, name: 'out.type' });
+
 
   const reset = () => {
     setValue('in.value', '0');
@@ -122,7 +127,7 @@ export const useStakeAction = () => {
     toast.error(error ?? 'Error executing transaction');
   };
 
-  const onStake = async () => {
+  const handleComfirmedStake = async()=>{
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
@@ -148,6 +153,18 @@ export const useStakeAction = () => {
       onFailure(id)((e as Error).message);
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  const onStake = async () => {
+    const hideModal = localStorage.getItem('hideStakeModal') === 'true';
+    if (hideModal) {
+      await handleComfirmedStake();
+    } else {
+      setContent(
+        <StakingAssetsItemStakeModal onProceed={handleComfirmedStake} />
+      );
     }
   };
 
