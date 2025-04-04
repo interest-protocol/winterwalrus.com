@@ -5,7 +5,6 @@ import { BigNumber } from 'bignumber.js';
 import { path, pathEq, pathOr } from 'ramda';
 import useSWR from 'swr';
 
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 interface Response {
@@ -165,8 +164,6 @@ export const useStakingObjects = () => {
                 item
               ) as string
             );
-
-            console.log({ type, value: FixedPointMath.toNumber(value) });
 
             return {
               ...acc,
