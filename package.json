@@ -14,7 +14,7 @@
     "@interest-protocol/blizzard-sdk": "^1.6.0",
     "@mysten/dapp-kit": "^0.14.50",
     "@mysten/sui": "^1.21.2",
-    "@stylin.js/elements": "^1.0.2",
+    "@stylin.js/elements": "^1.1.0",
     "@tanstack/react-query": "^5.66.0",
     "bignumber.js": "^9.1.2",
     "decimal.js-light": "^2.5.1",

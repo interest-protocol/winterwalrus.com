@@ -21,8 +21,8 @@ importers:
         specifier: ^1.21.2
         version: 1.21.2(typescript@5.3.2)
       '@stylin.js/elements':
-        specifier: ^1.0.2
-        version: 1.0.2(@types/react@18.2.38)(react@18.2.0)
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@18.2.38)(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.66.0
         version: 5.66.0(react@18.2.0)
@@ -851,8 +851,8 @@ packages:
     peerDependencies:
       '@emotion/react': ^11.x.x
 
-  '@stylin.js/elements@1.0.2':
-    resolution: {integrity: sha512-oDfzZMnzlmD7YQIxiUmC5i+tc/8N154E7lKdeQCAip+201qWwqLibd/tYHWKJgwqH+0fKqW8kgZgEYiiMUDYcg==}
+  '@stylin.js/elements@1.1.0':
+    resolution: {integrity: sha512-wjNWCD11au/DbEtyU5Ge2May4RfBenvrj1TUJ8HTd5QMFIaP+XqrrDGyQRdjD5wxdSJ7WyLl8xMedANzcMyd0w==}
 
   '@stylin.js/react@1.1.1':
     resolution: {integrity: sha512-Kh2mcMQiM43dluhlqFDeLmvmLqPRSSJUf6k8jKXFcca90ZY2wvOSp2mFFiXnf20pCqQR+60MD4NwZJEIY+KZ1Q==}
@@ -3821,7 +3821,7 @@ snapshots:
     dependencies:
       '@emotion/react': 11.14.0(@types/react@18.2.38)(react@18.2.0)
 
-  '@stylin.js/elements@1.0.2(@types/react@18.2.38)(react@18.2.0)':
+  '@stylin.js/elements@1.1.0(@types/react@18.2.38)(react@18.2.0)':
     dependencies:
       '@stylin.js/react': 1.1.1(@types/react@18.2.38)(react@18.2.0)
     transitivePeerDependencies:
