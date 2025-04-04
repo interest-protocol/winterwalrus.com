@@ -5,10 +5,10 @@ import unikey from 'unikey';
 
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
+import { useTabState } from '@/hooks/use-tab-manager';
 
-import { TabsProps } from './content.types';
-
-const Tabs: FC<TabsProps> = ({ tab, setTab }) => {
+const Tabs: FC = () => {
+  const { tab, setTab } = useTabState();
   const { data: epochData } = useEpochData();
   const { objectsActivation } = useAppState();
 

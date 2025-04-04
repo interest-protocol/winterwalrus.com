@@ -1,14 +1,15 @@
 import { Div } from '@stylin.js/elements';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import unikey from 'unikey';
 
 import { NFT, Stake } from '@/components';
 import Unstake from '@/components/unstake';
+import { useTabState } from '@/hooks/use-tab-manager';
 
 import Tabs from './tabs';
 
 const Content: FC = () => {
-  const [tab, setTab] = useState(0);
+  const { tab } = useTabState();
 
   return (
     <Div
@@ -22,7 +23,7 @@ const Content: FC = () => {
       px={['0.5rem', '2rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <Tabs tab={tab} setTab={setTab} />
+      <Tabs />
       {
         [
           <Stake key={unikey()} />,
