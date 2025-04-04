@@ -18,17 +18,20 @@ const AppStateProvider: FC = () => {
     mutate: mutateStakingObjects,
   } = useStakingObjects();
 
+  const mutate = () => {
+    mutateCoins();
+    mutateStakingObjects();
+  };
+
   useEffect(() => {
-    update({
-      mutate: () => {
-        mutateCoins();
-        mutateStakingObjects();
-      },
-    });
+    update({ mutate });
   }, []);
 
   useEffect(() => {
-    if (currentAccount) return;
+    if (currentAccount) {
+      mutate();
+      return;
+    }
 
     update({
       balances: {},
@@ -36,8 +39,8 @@ const AppStateProvider: FC = () => {
       loadingCoins: false,
       principalsByType: {},
       stakingObjectIds: [],
-      loadingObjects: false,
       objectsActivation: {},
+      loadingObjects: false,
     });
   }, [currentAccount]);
 
