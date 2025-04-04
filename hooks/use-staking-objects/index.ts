@@ -19,7 +19,7 @@ export const useStakingObjects = () => {
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Response>(
-    [useStakingObjects.name],
+    [useStakingObjects.name, currentAccount],
     async () => {
       if (!currentAccount)
         return {
