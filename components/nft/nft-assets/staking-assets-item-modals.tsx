@@ -144,12 +144,12 @@ export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
   const [neverShow, setNeverShow] = useState(false);
 
   const handleProceed = () => {
-    // If the checkbox is ticked, save the flag so the modal won't show next time.
+   
     if (neverShow) {
       localStorage.setItem('hideStakeModal', 'true');
     }
     handleClose();
-    onProceed(); // Call the actual staking function
+    onProceed(); 
   };
   return (
     <Div
@@ -169,7 +169,9 @@ export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <P fontSize="1.25rem" fontWeight="600">
-          You Are Minting an Nft
+        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+         consectetur, adipisci velit..."
+        
         </P>
         <Span
           py="0.25rem"
