@@ -27,6 +27,7 @@ const Tabs: FC = () => {
         'Stake',
         'Unstake',
         `NFT ${objectsToActivate ? `(${objectsToActivate})` : ''}`,
+        'Stats',
       ].map((text, index) => (
         <Button
           all="unset"
