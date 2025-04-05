@@ -1,10 +1,11 @@
-import { Main } from '@stylin.js/elements';
+import { Div, Main } from '@stylin.js/elements';
 import { FC, MouseEventHandler, PropsWithChildren } from 'react';
 
 import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
 import { useBackgroundTranslate } from '@/hooks/use-background-position';
 
 import Header from '../header';
+import MiniStats from '../stats/mini-stats';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { x, y } = useBackgroundMotionTranslate();
@@ -29,6 +30,16 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       onMouseLeave={handleMouseLeave}
       onMouseMoveCapture={handleMouseMove}
     >
+      <Div
+        mx="auto"
+        py="0.5rem"
+        bg="#C484F6"
+        textAlign="center"
+        justifyContent="center"
+        display={['flex', 'none']}
+      >
+        <MiniStats />
+      </Div>
       <Header />
       {children}
     </Main>

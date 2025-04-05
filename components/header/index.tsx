@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import Settings from '../settings';
+import MiniStats from '../stats/mini-stats';
 import { ExternalLinkSVG, LogoSVG } from '../svg';
 import Wallet from '../wallet';
 
@@ -54,6 +55,9 @@ const Header: FC = () => (
       </Link>
     </Div>
     <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
+      <Div display={['none', 'block']}>
+        <MiniStats />
+      </Div>
       <Wallet />
       <Settings />
     </Div>
