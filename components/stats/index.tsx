@@ -24,7 +24,7 @@ const Stats: FC = () => {
 
   return (
     <Div display="flex" gap="1rem" flexDirection="column">
-      <Div display="flex" justifyContent="space-between">
+      <Div display="flex" justifyContent="space-between" alignItems="center">
         <H2 color="#ffffff" fontSize="1rem" fontWeight="500">
           Statistics
         </H2>
