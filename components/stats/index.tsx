@@ -72,7 +72,7 @@ const Stats: FC = () => {
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {!data && isLoading ? (
-              <Skeleton width="5rem" />
+              <Skeleton width="4rem" />
             ) : (
               `${statsInUSD ? '$' : ''}${formatMoney(
                 data
@@ -98,7 +98,11 @@ const Stats: FC = () => {
           borderColor="#FFFFFF1A"
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            {formatMoney(data ? Number(data.totalUsers) : 0).split('.')[0]}
+            {!data && isLoading ? (
+              <Skeleton width="4rem" />
+            ) : (
+              formatMoney(data ? Number(data.totalUsers) : 0).split('.')[0]
+            )}
           </P>
           <P color="#FFFFFF80">Total Users</P>
         </Div>
