@@ -1,8 +1,15 @@
-import { Div, H1, Header as HTMLHeader, Strong } from '@stylin.js/elements';
+import {
+  Div,
+  H1,
+  Header as HTMLHeader,
+  Span,
+  Strong,
+} from '@stylin.js/elements';
+import Link from 'next/link';
 import { FC } from 'react';
 
 import Settings from '../settings';
-import { LogoSVG } from '../svg';
+import { ExternalLinkSVG, LogoSVG } from '../svg';
 import Wallet from '../wallet';
 
 const Header: FC = () => (
@@ -15,24 +22,38 @@ const Header: FC = () => (
     alignItems="center"
     justifyContent="space-between"
   >
-    <Div display="flex" alignItems="center" gap="1rem">
-      <LogoSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
-      <H1
-        mx="auto"
-        color="#FFFFFF"
-        maxWidth="20rem"
-        fontSize="2.25rem"
-        textAlign="center"
-        fontFamily="PPNeueBit"
-        display={['none', 'none', 'block']}
-      >
-        <Strong color="#99EFE4" fontFamily="PPNeueBit">
-          Winter{' '}
-        </Strong>
-        Walrus
-      </H1>
+    <Div display="flex" alignItems="center" gap={['1rem', '1rem', '2rem']}>
+      <Div display="flex" alignItems="center" gap="1rem">
+        <LogoSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
+        <H1
+          mx="auto"
+          color="#FFFFFF"
+          maxWidth="20rem"
+          fontSize="2.25rem"
+          textAlign="center"
+          fontFamily="PPNeueBit"
+          display={['none', 'none', 'block']}
+        >
+          <Strong color="#99EFE4" fontFamily="PPNeueBit">
+            Winter{' '}
+          </Strong>
+          Walrus
+        </H1>
+      </Div>
+      <Link target="_blank" href="https://t.co/1XNRy4vOZ0">
+        <Div
+          gap="0.5rem"
+          display="flex"
+          color="#FFFFFF80"
+          alignItems="center"
+          nHover={{ color: '#99EFE4' }}
+        >
+          <Span>Docs</Span>
+          <ExternalLinkSVG maxWidth="1rem" width="100%" />
+        </Div>
+      </Link>
     </Div>
-    <Div display="flex" gap="1rem" alignItems="center">
+    <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
       <Wallet />
       <Settings />
     </Div>
