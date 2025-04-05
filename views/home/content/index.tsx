@@ -3,6 +3,7 @@ import { FC } from 'react';
 import unikey from 'unikey';
 
 import { NFT, Stake } from '@/components';
+import Stats from '@/components/stats';
 import Unstake from '@/components/unstake';
 import { useTabState } from '@/hooks/use-tab-manager';
 
@@ -29,6 +30,7 @@ const Content: FC = () => {
           <Stake key={unikey()} />,
           <Unstake key={unikey()} />,
           <NFT key={unikey()} />,
+          <Stats key={unikey()} />,
         ][tab]
       }
     </Div>
