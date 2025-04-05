@@ -14,8 +14,8 @@ const MiniStats: FC = () => {
 
   return (
     <Div gap="0.25rem" display="flex" fontSize="0.875rem">
-      <P color={['#00000080', '#FFFFFF80']}>TVL: </P>
-      <P color={['#000000', '#FFFFFF']} fontFamily="JetBrains Mono">
+      <P color="#FFFFFF80">TVL: </P>
+      <P color="#FFFFFF" fontFamily="JetBrains Mono">
         {!data && isLoading ? (
           <Skeleton width="4rem" />
         ) : (
