@@ -13,7 +13,7 @@ const handler: NextApiHandler = async (_, response) => {
       }
     ).then((res) => res.json());
 
-    if (!data.syncSqlResponse.result.rows) throw data;
+    if (data.code) throw new Error(data.message, data);
 
     const result = data.syncSqlResponse.result.rows.reduce(
       (acc: Record<string, unknown>, row: Record<string, string | number>) => ({

@@ -77,9 +77,9 @@ const Stats: FC = () => {
               `${statsInUSD ? '$' : ''}${formatMoney(
                 data
                   ? values(data).reduce(
-                      (acc, { tvl }) => acc + Number(tvl),
+                      (acc, { tvl }) => (!isNaN(tvl) ? acc + Number(tvl) : acc),
                       0
-                    ) * (statsInUSD ? price ?? 1 : 1)
+                    ) * (statsInUSD && price ? price : 1)
                   : 0
               )}${!statsInUSD ? ' WAL' : ''}`
             )}
@@ -169,7 +169,8 @@ const Stats: FC = () => {
                 ) : (
                   `${statsInUSD ? '$' : ''}${formatMoney(
                     data
-                      ? Number(data[type].tvl) * (statsInUSD ? price ?? 1 : 1)
+                      ? Number(data[type].tvl) *
+                          (statsInUSD && price ? price : 1)
                       : 0
                   )}${!statsInUSD ? ' WAL' : ''}`
                 )}

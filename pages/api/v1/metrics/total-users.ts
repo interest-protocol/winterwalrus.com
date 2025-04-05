@@ -6,11 +6,12 @@ const handler: NextApiHandler = async (_, response) => {
       'https://endpoint.sentio.xyz/interest-labs/winter-walrus-mainnet-metrics/total-users',
       {
         method: 'POST',
+        body: JSON.stringify({}),
         headers: { 'api-key': process.env.SENTIO_API_KEY ?? '' },
       }
     ).then((res) => res.json());
 
-    if (!data.syncSqlResponse.result.rows) throw data;
+    if (data.code) throw new Error(data.message, data);
 
     const result = data.syncSqlResponse.result.rows[0].total_users;
 
