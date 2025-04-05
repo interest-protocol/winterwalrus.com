@@ -21,6 +21,7 @@ const Stats: FC = () => {
     STATS_PRICE_STORAGE_KEY,
     false
   );
+
   return (
     <Div display="flex" gap="1rem" flexDirection="column">
       <Div display="flex" justifyContent="space-between">
@@ -97,16 +98,7 @@ const Stats: FC = () => {
           borderColor="#FFFFFF1A"
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            {
-              formatMoney(
-                data
-                  ? values(data).reduce(
-                      (acc, { total_users }) => acc + Number(total_users),
-                      0
-                    )
-                  : 0
-              ).split('.')[0]
-            }
+            {formatMoney(data ? Number(data.totalUsers) : 0).split('.')[0]}
           </P>
           <P color="#FFFFFF80">Total Users</P>
         </Div>
