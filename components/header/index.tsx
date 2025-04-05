@@ -1,21 +1,16 @@
-import {
-  Div,
-  H1,
-  Header as HTMLHeader,
-  Span,
-  Strong,
-} from '@stylin.js/elements';
-import Link from 'next/link';
+import { Div, H1, Header as HTMLHeader, Strong } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import Settings from '../settings';
-import { ExternalLinkSVG, LogoSVG } from '../svg';
+import MiniStats from '../stats/mini-stats';
+import { LogoSVG } from '../svg';
 import Wallet from '../wallet';
 
 const Header: FC = () => (
   <HTMLHeader
     p="1rem"
     mx="auto"
+    width="100%"
     display="flex"
     maxWidth="1440px"
     position="relative"
@@ -40,18 +35,7 @@ const Header: FC = () => (
           Walrus
         </H1>
       </Div>
-      <Link target="_blank" href="https://t.co/1XNRy4vOZ0">
-        <Div
-          gap="0.5rem"
-          display="flex"
-          color="#FFFFFF80"
-          alignItems="center"
-          nHover={{ color: '#99EFE4' }}
-        >
-          <Span>Docs</Span>
-          <ExternalLinkSVG maxWidth="1rem" width="100%" />
-        </Div>
-      </Link>
+      <MiniStats />
     </Div>
     <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
       <Wallet />
