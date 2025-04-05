@@ -41,6 +41,11 @@ const Header: FC = () => (
           Walrus
         </H1>
       </Div>
+      <Div display={['none', 'block']}>
+        <MiniStats />
+      </Div>
+    </Div>
+    <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
       <Link target="_blank" href="https://t.co/1XNRy4vOZ0">
         <Div
           gap="0.5rem"
@@ -53,11 +58,6 @@ const Header: FC = () => (
           <ExternalLinkSVG maxWidth="1rem" width="100%" />
         </Div>
       </Link>
-    </Div>
-    <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
-      <Div display={['none', 'block']}>
-        <MiniStats />
-      </Div>
       <Wallet />
       <Settings />
     </Div>
