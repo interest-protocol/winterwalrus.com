@@ -22,15 +22,15 @@ const Wallet: FC = () => {
     return (
       <Button
         all="unset"
-        py="1rem"
-        gap="1rem"
-        px="1.5rem"
         display="flex"
         bg="#99EFE41A"
         color="#F1F1F1"
         cursor="pointer"
         alignItems="center"
         borderRadius="0.75rem"
+        gap={['0.5rem', '1rem']}
+        py={['0.75rem', '1rem']}
+        px={['0.75rem', '1.5rem']}
       >
         <Skeleton width="7rem" />
         <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
@@ -41,15 +41,15 @@ const Wallet: FC = () => {
     return (
       <Button
         all="unset"
-        py="1rem"
-        gap="1rem"
-        px="1.5rem"
         display="flex"
         bg="#99EFE41A"
         color="#F1F1F1"
         cursor="pointer"
         alignItems="center"
         borderRadius="0.75rem"
+        gap={['0.5rem', '1rem']}
+        py={['0.75rem', '1rem']}
+        px={['0.75rem', '1.5rem']}
         onClick={() => disconnect.mutate()}
       >
         {formatAddress(currentAccount.address)}
@@ -62,9 +62,6 @@ const Wallet: FC = () => {
       trigger={
         <Button
           all="unset"
-          py="1rem"
-          gap="1rem"
-          px="1.5rem"
           bg="#99EFE4"
           display="flex"
           color="#000000"
@@ -72,6 +69,9 @@ const Wallet: FC = () => {
           position="relative"
           alignItems="center"
           borderRadius="0.75rem"
+          gap={['0.5rem', '1rem']}
+          py={['0.75rem', '1rem']}
+          px={['0.75rem', '1.5rem']}
           backdropFilter="blur(16px)"
         >
           <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
