@@ -2,7 +2,7 @@ import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
-import { NFT, Stake } from '@/components';
+import { Epoch, NFT, Stake } from '@/components';
 import Stats from '@/components/stats';
 import Unstake from '@/components/unstake';
 import { useTabState } from '@/hooks/use-tab-manager';
@@ -14,11 +14,11 @@ const Content: FC = () => {
 
   return (
     <Div
+      flex="1"
       mx="auto"
       gap="1rem"
       display="flex"
       maxWidth="34rem"
-      position="relative"
       borderRadius="1rem"
       flexDirection="column"
       px={['0.5rem', '2rem']}
@@ -33,6 +33,7 @@ const Content: FC = () => {
           <Stats key={unikey()} />,
         ][tab]
       }
+      <Epoch />
     </Div>
   );
 };
