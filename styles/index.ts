@@ -70,4 +70,9 @@ export const GlobalStyles = css`
   ::-webkit-scrollbar-thumb:hover {
     background: #99efe4cc;
   }
+
+  /* React hot toast */
+  #_rht_toaster [role='status'] {
+    justify-content: unset;
+  }
 `;

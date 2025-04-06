@@ -2,14 +2,12 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import Link from 'next/link';
 import { path } from 'ramda';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
+import { toasting } from '@/components/toast';
 import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
@@ -35,22 +33,16 @@ export const useUnstakeAction = () => {
   };
 
   const onSuccess =
-    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
-      toast.dismiss(toastId);
-      toast.success(
-        <Link
-          target="_blank"
-          href={getExplorerUrl(
-            dryTx.effects.transactionDigest,
-            ExplorerMode.Transaction
-          )}
-        >
-          <P>Unstaked successfully!</P>
-          <P fontSize="0.875" opacity="0.75">
-            See on explorer
-          </P>
-        </Link>
-      );
+    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
+      stopLoading();
+      toasting.success({
+        action: 'Unstake',
+        message: 'See on explorer',
+        link: getExplorerUrl(
+          dryTx.effects.transactionDigest,
+          ExplorerMode.Transaction
+        ),
+      });
 
       update(
         ({
@@ -114,9 +106,12 @@ export const useUnstakeAction = () => {
       reset();
     };
 
-  const onFailure = (toastId: string) => (error?: string) => {
-    toast.dismiss(toastId);
-    toast.error(error ?? 'Error executing transaction');
+  const onFailure = (stopLoading: () => void) => (error?: string) => {
+    stopLoading();
+    toasting.error({
+      action: 'Unstake',
+      message: error ?? 'Error executing transaction',
+    });
   };
 
   const onUnstake = async () => {
@@ -130,18 +125,18 @@ export const useUnstakeAction = () => {
     )
       return;
     setLoading(true);
-    const id = toast.loading('Unstaking...');
+    const dismiss = toasting.loading({ message: 'Unstaking...' });
 
     try {
       await unstake({
         coinIn: form.in.type,
-        onSuccess: onSuccess(id),
-        onFailure: onFailure(id),
+        onSuccess: onSuccess(dismiss),
+        onFailure: onFailure(dismiss),
         coinInValue: BigInt(form.in.valueBN.toFixed(0)),
         coinOutValue: BigInt(form.out.valueBN.toFixed(0)),
       });
     } catch (e) {
-      onFailure(id)((e as Error).message);
+      onFailure(dismiss)((e as Error).message);
     } finally {
       setLoading(false);
     }
