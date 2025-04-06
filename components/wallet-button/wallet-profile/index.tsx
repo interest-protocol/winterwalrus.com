@@ -7,10 +7,13 @@ import { FC, useState } from 'react';
 
 import { ChevronDownSVG } from '@/components/svg';
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
+import { useModal } from '@/hooks/use-modal';
 
 import WalletProfileDropdown from './wallet-profile-dropdown';
+import WalletProfileModal from './wallet-profile-modal';
 
 const WalletProfile: FC = () => {
+  const { setContent } = useModal();
   const currentWallet = useCurrentWallet();
   const [isOpen, setOpen] = useState(false);
   const currentAccount = useCurrentAccount();
@@ -20,18 +23,65 @@ const WalletProfile: FC = () => {
   );
 
   const handleOpenProfileDropdown = () => setOpen(not);
+  const handleOpenProfileModal = () =>
+    setContent(<WalletProfileModal />, {
+      overlayProps: {
+        alignItems: 'flex-end',
+        display: ['flex', 'flex', 'none'],
+      },
+      containerProps: {
+        display: 'flex',
+        maxHeight: '90vh',
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        maxWidth: ['100vw', '100vw', '95vw'],
+      },
+    });
 
   return (
-    <Div
-      ref={menuRef}
-      display="flex"
-      alignItems="flex-end"
-      flexDirection="column"
-    >
+    <>
+      <Div
+        ref={menuRef}
+        alignItems="flex-end"
+        flexDirection="column"
+        display={['none', 'none', 'flex']}
+      >
+        <Button
+          all="unset"
+          gap="0.5rem"
+          display="flex"
+          bg="#99EFE41A"
+          color="#F1F1F1"
+          cursor="pointer"
+          alignItems="center"
+          borderRadius="0.75rem"
+          py={['0.75rem', '1rem']}
+          px={['0.75rem', '1.5rem']}
+          onClick={handleOpenProfileDropdown}
+        >
+          <Img
+            alt="Wallet"
+            width="1.5rem"
+            height="1.5rem"
+            borderRadius="50%"
+            src={currentWallet.currentWallet?.icon}
+          />
+          {formatAddress(currentAccount!.address)}
+          <Span display={['none', 'inline']}>
+            <ChevronDownSVG
+              width="100%"
+              maxWidth="0.65rem"
+              maxHeight="0.65rem"
+            />
+          </Span>
+        </Button>
+        <AnimatePresence>
+          {isOpen && <WalletProfileDropdown close={close} />}
+        </AnimatePresence>
+      </Div>
       <Button
         all="unset"
         gap="0.5rem"
-        display="flex"
         bg="#99EFE41A"
         color="#F1F1F1"
         cursor="pointer"
@@ -39,7 +89,8 @@ const WalletProfile: FC = () => {
         borderRadius="0.75rem"
         py={['0.75rem', '1rem']}
         px={['0.75rem', '1.5rem']}
-        onClick={handleOpenProfileDropdown}
+        onClick={handleOpenProfileModal}
+        display={['flex', 'flex', 'none']}
       >
         <Img
           alt="Wallet"
@@ -53,8 +104,7 @@ const WalletProfile: FC = () => {
           <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
         </Span>
       </Button>
-      <AnimatePresence>{isOpen && <WalletProfileDropdown />}</AnimatePresence>
-    </Div>
+    </>
   );
 };
 

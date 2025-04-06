@@ -53,6 +53,7 @@ const StakeFormField: FC<InputFieldProps> = ({
           placeholder="0"
           minWidth="100%"
           fontSize="1.5rem"
+          autoComplete="off"
           disabled={disabled}
           {...register(`${name}.value`, {
             onChange: (event) => {

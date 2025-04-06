@@ -1,12 +1,15 @@
+export { default as CheckSVG } from './check';
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronRightSVG } from './chevron-right';
 export { default as CogSVG } from './cog';
 export { default as CopySVG } from './copy';
 export { default as DotSVG } from './dot';
+export { default as ErrorSVG } from './error';
 export { default as ExternalLinkSVG } from './external-link';
 export { default as GoldenLogoSVG } from './golden-logo';
 export { default as GridSVG } from './grid';
 export { default as InfoSVG } from './info';
+export { default as LoaderSVG } from './loader';
 export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
 export { default as PizzaPart25PercentSVG } from './pizza-part-25';
