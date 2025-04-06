@@ -15,9 +15,9 @@ import { Div, Img, P, Span, Strong } from '@stylin.js/elements';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { FC } from 'react';
-import toast from 'react-hot-toast';
 
 import { ChevronDownSVG, CopySVG, LogoutSVG } from '@/components/svg';
+import { toasting } from '@/components/toast';
 import { ExplorerMode } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
@@ -38,7 +38,10 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
   const { mutate: disconnectWallet } = useDisconnectWallet();
 
   const copyAddress = () => {
-    toast.success('Copied!');
+    toasting.success({
+      action: 'Copy',
+      message: 'Address copied on clipboard',
+    });
     window.navigator.clipboard.writeText(account.address);
   };
 

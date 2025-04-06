@@ -2,13 +2,11 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import Link from 'next/link';
 import { path } from 'ramda';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 
+import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
@@ -43,22 +41,16 @@ export const useStakingAction = (
     stakingObject;
 
   const onSuccess =
-    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
-      toast.dismiss(toastId);
-      toast.success(
-        <Link
-          target="_blank"
-          href={getExplorerUrl(
-            dryTx.effects.transactionDigest,
-            ExplorerMode.Transaction
-          )}
-        >
-          <P>You got SNOW</P>
-          <P fontSize="0.875" opacity="0.75">
-            See on explorer
-          </P>
-        </Link>
-      );
+    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
+      stopLoading();
+      toasting.success({
+        action: 'Withdraw',
+        message: 'See on explorer',
+        link: getExplorerUrl(
+          dryTx.effects.transactionDigest,
+          ExplorerMode.Transaction
+        ),
+      });
 
       update(
         ({
@@ -120,9 +112,12 @@ export const useStakingAction = (
       );
     };
 
-  const onFailure = (toastId: string) => (error?: string) => {
-    toast.dismiss(toastId);
-    toast.error(error ?? 'Error executing transaction');
+  const onFailure = (stopLoading: () => void) => (error?: string) => {
+    stopLoading();
+    toasting.error({
+      action: 'Withdraw',
+      message: error ?? 'Error executing transaction',
+    });
   };
 
   const onBurn = async () => {
@@ -134,16 +129,18 @@ export const useStakingAction = (
       return;
     }
     setLoading(true);
-    const id = toast.loading('Getting SNOW...');
+    const dismiss = toasting.loading({
+      message: 'Withdrawing LST...',
+    });
 
     try {
       await burn({
         objectId,
-        onSuccess: onSuccess(id),
-        onFailure: onFailure(id),
+        onSuccess: onSuccess(dismiss),
+        onFailure: onFailure(dismiss),
       });
     } catch (e) {
-      onFailure(id)((e as Error).message);
+      onFailure(dismiss)((e as Error).message);
     } finally {
       setLoading(false);
     }
