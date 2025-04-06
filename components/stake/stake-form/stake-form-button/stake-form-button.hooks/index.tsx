@@ -1,14 +1,13 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
-import { path } from 'ramda';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useReadLocalStorage } from 'usehooks-ts';
 
 import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
@@ -26,7 +25,6 @@ export const useStakeAction = () => {
 
   const { data } = useEpochData();
   const { update } = useAppState();
-  const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
   const { control, getValues, setValue } = useFormContext();
@@ -102,18 +100,18 @@ export const useStakeAction = () => {
               ...possiblyDeletedObjects,
               ...possiblyCreatedObjects.map(({ objectId }) => objectId),
             ],
-            balances: dryTx.balanceChanges.reduce(
-              (acc, { coinType, amount, owner }) =>
-                path(['AddressOwner'], owner) === account?.address
-                  ? {
-                      ...acc,
-                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
-                        acc[coinType] ?? ZERO_BIG_NUMBER
-                      ),
-                    }
-                  : acc,
-              { ...balances, ...principalsByType }
-            ),
+            balances: {
+              ...balances,
+              ...principalsByType,
+              ...({
+                [getValues('out.type')]: (
+                  balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
+                ).plus(getValues('out.valueBN')),
+                [getValues('in.type')]: (
+                  balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
+                ).plus(getValues('in.valueBN')),
+              } as Record<string, BigNumber>),
+            },
           };
         }
       );
@@ -154,9 +152,9 @@ export const useStakeAction = () => {
       setLoading(false);
     }
   };
+  const hideModal = useReadLocalStorage<boolean>('hideStakeModal');
 
   const onStake = async () => {
-    const hideModal = localStorage.getItem('hideStakeModal') === 'true';
     if (hideModal) {
       await handleComfirmedStake();
     } else {

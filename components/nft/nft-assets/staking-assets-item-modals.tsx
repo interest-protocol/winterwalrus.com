@@ -2,8 +2,11 @@ import { Button, Div, P, Span } from '@stylin.js/elements';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { useModal } from '@/hooks/use-modal';
+
+import { StakingAssetsItemStakeModalProps } from './staking-assets-item.hooks/nft-assets.types';
 
 export const StakingAssetsItemWithdrawModal: FC = () => {
   const { handleClose } = useModal();
@@ -134,18 +137,17 @@ export const StakingAssetsItemUnstakeModal: FC = () => {
   );
 };
 
-type Props = {
-  onProceed: () => void;
-};
-
-export const StakingAssetsItemStakeModal: FC<Props> = ({ onProceed }) => {
+export const StakingAssetsItemStakeModal: FC<
+  StakingAssetsItemStakeModalProps
+> = ({ onProceed }) => {
   const { handleClose } = useModal();
+
   const [neverShow, setNeverShow] = useState(false);
+  const [, setHideModal] = useLocalStorage('hideStakeModal', false);
 
   const handleProceed = () => {
-    // If the checkbox is ticked, save the flag so the modal won't show next time.
     if (neverShow) {
-      localStorage.setItem('hideStakeModal', 'true');
+      setHideModal(true);
     }
     handleClose();
     onProceed(); // Call the actual staking function
