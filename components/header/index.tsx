@@ -17,7 +17,7 @@ const Header: FC = () => (
     alignItems="center"
     justifyContent="space-between"
   >
-    <Div display="flex" alignItems="center" gap={['1rem', '1rem', '2rem']}>
+    <Div display="flex" alignItems="center" gap={['0.5rem', '1rem', '2rem']}>
       <Div display="flex" alignItems="center" gap="1rem">
         <LogoSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         <H1
