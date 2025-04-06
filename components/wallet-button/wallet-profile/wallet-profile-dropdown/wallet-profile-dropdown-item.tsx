@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
   useCurrentWallet,
@@ -6,10 +7,11 @@ import {
 } from '@mysten/dapp-kit';
 import {
   formatAddress,
+  normalizeStructTag,
   normalizeSuiAddress,
   SUI_TYPE_ARG,
 } from '@mysten/sui/utils';
-import { Div, Img, Span, Strong } from '@stylin.js/elements';
+import { Div, Img, P, Span, Strong } from '@stylin.js/elements';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -17,7 +19,7 @@ import toast from 'react-hot-toast';
 
 import { ChevronDownSVG, CopySVG, LogoutSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
-import { useCoinBalance } from '@/hooks/use-coin-balance';
+import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
@@ -28,13 +30,12 @@ const Motion = motion.create(Div);
 const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
   account,
 }) => {
+  const { balances } = useAppState();
   const currentWallet = useCurrentWallet();
   const currentAccount = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const { mutate: switchAccount } = useSwitchAccount();
   const { mutate: disconnectWallet } = useDisconnectWallet();
-
-  const { balance } = useCoinBalance(SUI_TYPE_ARG, account.address);
 
   const copyAddress = () => {
     toast.success('Copied!');
@@ -131,19 +132,44 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
                 animate={{ height: [0, 'auto'], scaleY: [0, 1] }}
               >
                 <Span>My Balance</Span>
-                <Span
-                  gap="0.25rem"
-                  display="flex"
-                  color="#99EFE4"
-                  alignItems="center"
-                >
-                  <Strong fontSize="1.5rem" fontWeight="600">
-                    {balance
-                      ? Number(FixedPointMath.toNumber(balance).toFixed(2))
-                      : '--'}
-                  </Strong>
-                  <Span>Sui</Span>
-                </Span>
+                <P>
+                  <Span
+                    gap="0.25rem"
+                    display="flex"
+                    color="#99EFE4"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    <Strong fontWeight="600" fontFamily="JetBrains Mono">
+                      {balances[normalizeStructTag(SUI_TYPE_ARG)]
+                        ? Number(
+                            FixedPointMath.toNumber(
+                              balances[normalizeStructTag(SUI_TYPE_ARG)]
+                            ).toFixed(2)
+                          )
+                        : '0'}
+                    </Strong>
+                    <Span>SUI</Span>
+                  </Span>
+                  <Span
+                    gap="0.25rem"
+                    display="flex"
+                    color="#C484F6"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    <Strong fontWeight="600" fontFamily="JetBrains Mono">
+                      {balances[normalizeStructTag(TYPES.WAL)]
+                        ? Number(
+                            FixedPointMath.toNumber(
+                              balances[normalizeStructTag(TYPES.WAL)]
+                            ).toFixed(2)
+                          )
+                        : '0'}
+                    </Strong>
+                    <Span>WAL</Span>
+                  </Span>
+                </P>
               </Motion>
             )}
           </AnimatePresence>
