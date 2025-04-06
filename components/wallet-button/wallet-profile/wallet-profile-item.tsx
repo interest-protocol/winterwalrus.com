@@ -11,10 +11,11 @@ import {
   normalizeSuiAddress,
   SUI_TYPE_ARG,
 } from '@mysten/sui/utils';
-import { Div, Img, P, Span, Strong } from '@stylin.js/elements';
+import { Div, Img, Span } from '@stylin.js/elements';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { FC } from 'react';
+import unikey from 'unikey';
 
 import { ChevronDownSVG, CopySVG, LogoutSVG } from '@/components/svg';
 import { toasting } from '@/components/toast';
@@ -22,14 +23,13 @@ import { ExplorerMode } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { formatMoney } from '@/utils';
 
-import { WalletProfileDropdownItemProps } from './wallet-profile-dropdown.types';
+import { WalletProfileItemProps } from './wallet-profile.types';
 
 const Motion = motion.create(Div);
 
-const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
-  account,
-}) => {
+const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
   const { balances } = useAppState();
   const currentWallet = useCurrentWallet();
   const currentAccount = useCurrentAccount();
@@ -54,14 +54,13 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
     <AnimatePresence>
       <Motion
         layout
-        mx="1rem"
         gap="0.75rem"
-        width="18rem"
         display="flex"
         overflow="hidden"
         borderRadius="0.5rem"
         flexDirection="column"
         border="1px solid #FFFFFF33"
+        mx={['unset', 'unset', '1rem']}
         transition={{ ease: 'linear' }}
         onClick={(e) => {
           e.stopPropagation();
@@ -78,33 +77,41 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
           flexDirection="column"
           transition={{ ease: 'linear' }}
         >
-          <Div gap="1rem" py="0.5rem" display="flex" alignItems="center">
-            <Img
-              width="1rem"
-              height="1rem"
-              borderRadius="50%"
-              src={currentWallet.currentWallet?.icon}
-              alt={`${currentWallet.currentWallet?.name} Wallet`}
-            />
-            <Span
-              flex="1"
-              cursor="pointer"
-              color={isCurrentAccount ? '#99EFE4' : '#ffffff'}
-              nHover={{
-                textDecoration: isCurrentAccount ? 'underline' : 'none',
-              }}
-            >
-              {isCurrentAccount ? (
-                <Link
-                  target="_blank"
-                  href={getExplorerUrl(account.address, ExplorerMode.Account)}
-                >
-                  {formatAddress(account.address)}
-                </Link>
-              ) : (
-                formatAddress(account.address)
-              )}
-            </Span>
+          <Div
+            gap="1rem"
+            py="0.5rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Div gap="1rem" display="flex">
+              <Img
+                borderRadius="50%"
+                width={['1.5rem', '1.5rem', '1rem']}
+                height={['1.5rem', '1.5rem', '1rem']}
+                src={currentWallet.currentWallet?.icon}
+                alt={`${currentWallet.currentWallet?.name} Wallet`}
+              />
+              <Span
+                flex="1"
+                cursor="pointer"
+                color={isCurrentAccount ? '#99EFE4' : '#ffffff'}
+                nHover={{
+                  textDecoration: isCurrentAccount ? 'underline' : 'none',
+                }}
+              >
+                {isCurrentAccount ? (
+                  <Link
+                    target="_blank"
+                    href={getExplorerUrl(account.address, ExplorerMode.Account)}
+                  >
+                    {formatAddress(account.address)}
+                  </Link>
+                ) : (
+                  formatAddress(account.address)
+                )}
+              </Span>
+            </Div>
             {isCurrentAccount ? (
               <Span
                 cursor="pointer"
@@ -122,53 +129,56 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
           <AnimatePresence>
             {isCurrentAccount && (
               <Motion
-                display="flex"
-                alignItems="center"
+                gap="0.25rem"
+                display="grid"
                 style={{ originY: 0 }}
-                justifyContent="space-between"
                 exit={{ height: 0, scaleY: 0 }}
                 transition={{ ease: 'linear' }}
+                gridTemplateColumns="1fr 1fr 1fr"
                 animate={{ height: [0, 'auto'], scaleY: [0, 1] }}
               >
-                <Span>My Balance</Span>
-                <P>
+                {[
+                  {
+                    symbol: 'SUI',
+                    type: SUI_TYPE_ARG,
+                  },
+                  {
+                    symbol: 'WAL',
+                    type: TYPES.WAL,
+                  },
+                  {
+                    symbol: 'wWAL',
+                    type: TYPES.WWAL,
+                  },
+                ].map(({ symbol, type }) => (
                   <Span
+                    py="0.5rem"
                     gap="0.25rem"
                     display="flex"
-                    color="#99EFE4"
+                    key={unikey()}
+                    fontSize="0.825rem"
                     alignItems="center"
+                    flexDirection="column"
+                    borderRadius="0.325rem"
                     justifyContent="flex-end"
+                    border="1px solid #FFFFFF33"
                   >
-                    <Strong fontWeight="600" fontFamily="JetBrains Mono">
-                      {balances[normalizeStructTag(SUI_TYPE_ARG)]
-                        ? Number(
-                            FixedPointMath.toNumber(
-                              balances[normalizeStructTag(SUI_TYPE_ARG)]
-                            ).toFixed(2)
+                    <Span color="#C484F6" fontFamily="JetBrains Mono">
+                      {balances[normalizeStructTag(type)]
+                        ? formatMoney(
+                            Number(
+                              FixedPointMath.toNumber(
+                                balances[normalizeStructTag(type)]
+                              ).toFixed(2)
+                            ),
+                            20,
+                            true
                           )
                         : '0'}
-                    </Strong>
-                    <Span>SUI</Span>
+                    </Span>
+                    <Span>{symbol}</Span>
                   </Span>
-                  <Span
-                    gap="0.25rem"
-                    display="flex"
-                    color="#C484F6"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                  >
-                    <Strong fontWeight="600" fontFamily="JetBrains Mono">
-                      {balances[normalizeStructTag(TYPES.WAL)]
-                        ? Number(
-                            FixedPointMath.toNumber(
-                              balances[normalizeStructTag(TYPES.WAL)]
-                            ).toFixed(2)
-                          )
-                        : '0'}
-                    </Strong>
-                    <Span>WAL</Span>
-                  </Span>
-                </P>
+                ))}
               </Motion>
             )}
           </AnimatePresence>
@@ -186,7 +196,10 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
               exit={{ height: 0, scaleY: 0 }}
               transition={{ ease: 'linear' }}
               borderTop="1px solid #FFFFFF33"
-              onClick={() => disconnectWallet()}
+              onClick={() => {
+                disconnectWallet();
+                close();
+              }}
               animate={{ height: [0, 'auto'], scaleY: [0, 1] }}
             >
               <Span>Disconnect</Span>
@@ -199,4 +212,4 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
   );
 };
 
-export default WalletProfileDropdownItem;
+export default WalletProfileItem;
