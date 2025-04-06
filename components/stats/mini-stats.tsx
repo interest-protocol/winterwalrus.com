@@ -16,7 +16,7 @@ const MiniStats: FC = () => {
     <Div gap="0.25rem" display="flex" fontSize="0.875rem">
       <P color="#FFFFFF80">TVL: </P>
       <P color="#FFFFFF" fontFamily="JetBrains Mono">
-        {!data && (isLoading || priceLoading) ? (
+        {(!data || !price) && (isLoading || priceLoading) ? (
           <Skeleton width="4rem" />
         ) : (
           formatDollars(
