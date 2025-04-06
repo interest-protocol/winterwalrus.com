@@ -1,7 +1,6 @@
 import '@mysten/dapp-kit/dist/index.css';
 
 import {
-  ConnectModal,
   useCurrentAccount,
   useCurrentWallet,
   useDisconnectWallet,
@@ -11,12 +10,28 @@ import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
+import { useModal } from '@/hooks/use-modal';
+
 import { ChevronDownSVG, WalletSVG } from '../svg';
+import ConnectWalletModal from './connect-wallet-modal';
 
 const Wallet: FC = () => {
+  const { setContent } = useModal();
   const disconnect = useDisconnectWallet();
   const currentAccount = useCurrentAccount();
   const { connectionStatus } = useCurrentWallet();
+
+  const handleOpenConnectModal = () =>
+    setContent(<ConnectWalletModal />, {
+      overlayProps: {
+        alignItems: ['flex-end', 'center'],
+      },
+      containerProps: {
+        display: 'flex',
+        maxHeight: '90vh',
+        maxWidth: ['100vw', '95vw'],
+      },
+    });
 
   if (connectionStatus === 'connecting')
     return (
@@ -58,27 +73,24 @@ const Wallet: FC = () => {
     );
 
   return (
-    <ConnectModal
-      trigger={
-        <Button
-          all="unset"
-          bg="#99EFE4"
-          display="flex"
-          color="#000000"
-          cursor="pointer"
-          position="relative"
-          alignItems="center"
-          borderRadius="0.75rem"
-          gap={['0.5rem', '1rem']}
-          py={['0.75rem', '1rem']}
-          px={['0.75rem', '1.5rem']}
-          backdropFilter="blur(16px)"
-        >
-          <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
-          Connect Wallet
-        </Button>
-      }
-    />
+    <Button
+      all="unset"
+      bg="#99EFE4"
+      display="flex"
+      color="#000000"
+      cursor="pointer"
+      position="relative"
+      alignItems="center"
+      borderRadius="0.75rem"
+      gap={['0.5rem', '1rem']}
+      py={['0.75rem', '1rem']}
+      px={['0.75rem', '1.5rem']}
+      backdropFilter="blur(16px)"
+      onClick={handleOpenConnectModal}
+    >
+      <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+      Connect Wallet
+    </Button>
   );
 };
 

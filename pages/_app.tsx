@@ -30,8 +30,8 @@ const App = ({ Component, pageProps }: AppProps) => (
         },
       }}
     />
+    <ModalProvider />
     <SkeletonTheme baseColor="#FFFFFF0D" highlightColor="#FFFFFF1A">
-      <ModalProvider />
       <AppStateProvider />
       <BackgroundProvider />
       <Component {...pageProps} />

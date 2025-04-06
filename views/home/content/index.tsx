@@ -18,10 +18,10 @@ const Content: FC = () => {
       mx="auto"
       gap="1rem"
       display="flex"
-      maxWidth="34rem"
       borderRadius="1rem"
       flexDirection="column"
       px={['0.5rem', '2rem']}
+      width={['100%', '34rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
       <Tabs />
