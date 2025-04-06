@@ -4,7 +4,7 @@ import { FC } from 'react';
 import Settings from '../settings';
 import MiniStats from '../stats/mini-stats';
 import { LogoSVG } from '../svg';
-import Wallet from '../wallet';
+import WalletButton from '../wallet-button';
 
 const Header: FC = () => (
   <HTMLHeader
@@ -17,7 +17,7 @@ const Header: FC = () => (
     alignItems="center"
     justifyContent="space-between"
   >
-    <Div display="flex" alignItems="center" gap={['1rem', '1rem', '2rem']}>
+    <Div display="flex" alignItems="center" gap={['0.5rem', '1rem', '2rem']}>
       <Div display="flex" alignItems="center" gap="1rem">
         <LogoSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
         <H1
@@ -38,7 +38,7 @@ const Header: FC = () => (
       <MiniStats />
     </Div>
     <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
-      <Wallet />
+      <WalletButton />
       <Settings />
     </Div>
   </HTMLHeader>

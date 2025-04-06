@@ -28,8 +28,6 @@ const AppStateProvider: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (currentAccount) return;
-
     update({
       balances: {},
       mutate: () => {},
