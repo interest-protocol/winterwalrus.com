@@ -111,11 +111,7 @@ const WalletProfileDropdownItem: FC<WalletProfileDropdownItemProps> = ({
                 <CopySVG width="100%" maxWidth="1rem" maxHeight="1rem" />
               </Span>
             ) : (
-              <Span
-                cursor="pointer"
-                onClick={copyAddress}
-                nHover={{ color: '#99EFE4' }}
-              >
+              <Span cursor="pointer" nHover={{ color: '#99EFE4' }}>
                 <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
               </Span>
             )}
