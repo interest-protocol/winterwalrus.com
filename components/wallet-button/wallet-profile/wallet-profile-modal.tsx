@@ -27,7 +27,7 @@ const WalletProfileModal: FC = () => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <P fontSize="1.25rem" fontWeight="600">
-          Connect Wallet
+          Wallet
         </P>
         <Span
           py="0.25rem"
