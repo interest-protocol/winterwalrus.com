@@ -2,24 +2,11 @@ import { Button, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import { WalletSVG } from '@/components/svg';
-import { useModal } from '@/hooks/use-modal';
 
-import ConnectWalletModal from './connect-wallet-modal';
+import { useConnectWalletModal } from './connect-wallet.hook';
 
 const ConnectWallet: FC = () => {
-  const { setContent } = useModal();
-
-  const handleOpenConnectModal = () =>
-    setContent(<ConnectWalletModal />, {
-      overlayProps: {
-        alignItems: ['flex-end', 'center'],
-      },
-      containerProps: {
-        display: 'flex',
-        maxHeight: '90vh',
-        maxWidth: ['100vw', '95vw'],
-      },
-    });
+  const connectWalletModal = useConnectWalletModal();
 
   return (
     <Button
@@ -35,7 +22,7 @@ const ConnectWallet: FC = () => {
       py={['0.75rem', '1rem']}
       px={['0.75rem', '1.5rem']}
       backdropFilter="blur(16px)"
-      onClick={handleOpenConnectModal}
+      onClick={connectWalletModal}
     >
       <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
       <Span>

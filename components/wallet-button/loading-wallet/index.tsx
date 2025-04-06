@@ -18,7 +18,7 @@ const LoadingWallet: FC = () => (
     px={['0.75rem', '1.5rem']}
   >
     <Skeleton width="1.5rem" height="1.5rem" borderRadius="50%" />
-    <Skeleton width="7rem" />
+    <Skeleton width="5rem" />
     <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
   </Button>
 );

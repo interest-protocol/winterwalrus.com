@@ -7,7 +7,7 @@ import ConnectWallet from './connect-wallet';
 import LoadingWallet from './loading-wallet';
 import WalletProfile from './wallet-profile';
 
-const Wallet: FC = () => {
+const WalletButton: FC = () => {
   const currentAccount = useCurrentAccount();
   const { connectionStatus } = useCurrentWallet();
 
@@ -18,4 +18,4 @@ const Wallet: FC = () => {
   return <ConnectWallet />;
 };
 
-export default Wallet;
+export default WalletButton;

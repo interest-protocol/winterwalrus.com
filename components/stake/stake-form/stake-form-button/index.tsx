@@ -1,9 +1,9 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import WalletGuardButton from '@/components/wallet-button/wallet-guard-button';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import { useCoins } from '@/hooks/use-coins';
 import { useFees } from '@/hooks/use-fees';
@@ -47,7 +47,7 @@ const StakeFormButton: FC = () => {
     !validator || insufficientAmount || loading || isLoading || !nodes?.length;
 
   return (
-    <Button
+    <WalletGuardButton
       all="unset"
       py="1rem"
       px="1.5rem"
@@ -71,7 +71,7 @@ const StakeFormButton: FC = () => {
             : loading
               ? 'Staking...'
               : 'Stake'}
-    </Button>
+    </WalletGuardButton>
   );
 };
 
