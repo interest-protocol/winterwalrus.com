@@ -9,14 +9,14 @@ import { formatDollars } from '@/utils';
 import useStats from './stats.hooks';
 
 const MiniStats: FC = () => {
-  const { data: price } = useWalPrice();
   const { data, isLoading } = useStats();
+  const { data: price, isLoading: priceLoading } = useWalPrice();
 
   return (
     <Div gap="0.25rem" display="flex" fontSize="0.875rem">
       <P color="#FFFFFF80">TVL: </P>
       <P color="#FFFFFF" fontFamily="JetBrains Mono">
-        {!data && isLoading ? (
+        {!data && (isLoading || priceLoading) ? (
           <Skeleton width="4rem" />
         ) : (
           formatDollars(
