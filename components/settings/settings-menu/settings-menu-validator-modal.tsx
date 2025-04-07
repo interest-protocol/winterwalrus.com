@@ -21,10 +21,10 @@ const SettingsMenuValidatorModal: FC = () => {
     <Div
       p="1rem"
       gap="1.5rem"
-      height="70vh"
       width="27rem"
       display="flex"
       color="#ffffff"
+      maxHeight="100%"
       borderRadius="1rem"
       flexDirection="column"
       backdropFilter="blur(50px)"

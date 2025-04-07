@@ -124,28 +124,8 @@ export const useStakingAction = (
     if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
 
     if (type === TYPES.STAKED_WAL) {
-      if (state === 'Staked')
-        setContent(<StakingAssetsItemUnstakeModal />, {
-          overlayProps: {
-            alignItems: ['flex-end', 'center'],
-          },
-          containerProps: {
-            display: 'flex',
-            maxHeight: '90vh',
-            maxWidth: ['100vw', '95vw'],
-          },
-        });
-      else
-        setContent(<StakingAssetsItemWithdrawModal />, {
-          overlayProps: {
-            alignItems: ['flex-end', 'center'],
-          },
-          containerProps: {
-            display: 'flex',
-            maxHeight: '90vh',
-            maxWidth: ['100vw', '95vw'],
-          },
-        });
+      if (state === 'Staked') setContent(<StakingAssetsItemUnstakeModal />);
+      else setContent(<StakingAssetsItemWithdrawModal />);
       return;
     }
     setLoading(true);

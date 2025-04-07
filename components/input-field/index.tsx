@@ -1,4 +1,4 @@
-import { Div, Input, Label, Span } from '@stylin.js/elements';
+import { Div, Input, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -40,7 +40,7 @@ const StakeFormField: FC<InputFieldProps> = ({
           topContent
         )}
       </Div>
-      <Label
+      <Div
         display="grid"
         maxWidth="100%"
         alignItems="center"
@@ -67,7 +67,7 @@ const StakeFormField: FC<InputFieldProps> = ({
           })}
         />
         <InputFieldAsset name={name} types={types} />
-      </Label>
+      </Div>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />
         <InputFieldBalance name={name} />

@@ -117,7 +117,7 @@ export const useStakeAction = () => {
     });
   };
 
-  const handleComfirmedStake = async () => {
+  const handleConfirmedStake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
@@ -149,13 +149,16 @@ export const useStakeAction = () => {
   const hideModal = useReadLocalStorage<boolean>('hideStakeModal');
 
   const onStake = async () => {
-    if (hideModal) {
-      await handleComfirmedStake();
-    } else {
-      setContent(
-        <StakingAssetsItemStakeModal onProceed={handleComfirmedStake} />
-      );
-    }
+    const isAfterVote =
+      data && data.currentEpoch
+        ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
+        : false;
+
+    if (!isAfterVote || hideModal) return handleConfirmedStake();
+
+    setContent(
+      <StakingAssetsItemStakeModal onProceed={handleConfirmedStake} />
+    );
   };
 
   return { onStake, loading };

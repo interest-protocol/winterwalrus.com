@@ -56,17 +56,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
         isActivated={isActivated}
         activationTime={activationTime}
         {...stakingObject}
-      />,
-      {
-        overlayProps: {
-          alignItems: ['flex-end', 'center'],
-        },
-        containerProps: {
-          display: 'flex',
-          maxHeight: '90vh',
-          maxWidth: ['100vw', '95vw'],
-        },
-      }
+      />
     );
 
   return (

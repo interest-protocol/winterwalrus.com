@@ -1,4 +1,4 @@
-import { Button, Div, P, Span } from '@stylin.js/elements';
+import { Button, Div, Input, P, Span } from '@stylin.js/elements';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useState } from 'react';
@@ -141,17 +141,16 @@ export const StakingAssetsItemStakeModal: FC<
   StakingAssetsItemStakeModalProps
 > = ({ onProceed }) => {
   const { handleClose } = useModal();
-
   const [neverShow, setNeverShow] = useState(false);
   const [, setHideModal] = useLocalStorage('hideStakeModal', false);
 
   const handleProceed = () => {
-    if (neverShow) {
-      setHideModal(true);
-    }
+    if (neverShow) setHideModal(true);
+
     handleClose();
-    onProceed(); // Call the actual staking function
+    onProceed();
   };
+
   return (
     <Div
       p="1.5rem"
@@ -170,7 +169,7 @@ export const StakingAssetsItemStakeModal: FC<
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <P fontSize="1.25rem" fontWeight="600">
-          You Are Minting An Nft
+          Minting NFT
         </P>
         <Span
           py="0.25rem"
@@ -186,16 +185,16 @@ export const StakingAssetsItemStakeModal: FC<
         </Span>
       </Div>
       <P>
-        You’re minting an NFT that represents your LST. In the next epoch, you
-        can burn the NFT to claim your LST
+        {'You’re'} minting an NFT that represents your LST. In the next epoch,
+        you can burn the NFT to claim your LST
       </P>
       <Div
+        gap="0.5rem"
         display="flex"
         alignItems="center"
-        gap="0.5rem"
         justifyContent="center"
       >
-        <input
+        <Input
           type="checkbox"
           checked={neverShow}
           onChange={(e) => setNeverShow(e.target.checked)}
@@ -204,7 +203,6 @@ export const StakingAssetsItemStakeModal: FC<
           Never show again
         </P>
       </Div>
-
       <Button
         all="unset"
         py="1rem"

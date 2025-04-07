@@ -15,17 +15,7 @@ const SettingsMenuValidator: FC = () => {
     setContent(
       <FormProvider {...form}>
         <SettingsMenuValidatorModal />
-      </FormProvider>,
-      {
-        overlayProps: {
-          alignItems: ['flex-end', 'center'],
-        },
-        containerProps: {
-          display: 'flex',
-          maxHeight: '90vh',
-          maxWidth: ['100vw', '95vw'],
-        },
-      }
+      </FormProvider>
     );
 
   return (

@@ -28,9 +28,9 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
       p="1.5rem"
       gap="1.5rem"
       width="27rem"
-      height="90vh"
       display="flex"
       color="#ffffff"
+      maxHeight="100%"
       borderRadius="1rem"
       flexDirection="column"
       backdropFilter="blur(50px)"
@@ -160,9 +160,6 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                     ).toFixed(4)
                   }
                 </P>
-                {/* <P fontSize="0.75rem" opacity="0.6" fontFamily="JetBrains Mono">
-                  {formatDollars(1000)}
-                </P> */}
               </Div>
             </Div>
           ))}

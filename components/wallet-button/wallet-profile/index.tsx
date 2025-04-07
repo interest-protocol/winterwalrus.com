@@ -23,20 +23,7 @@ const WalletProfile: FC = () => {
   );
 
   const handleOpenProfileDropdown = () => setOpen(not);
-  const handleOpenProfileModal = () =>
-    setContent(<WalletProfileModal />, {
-      overlayProps: {
-        alignItems: 'flex-end',
-        display: ['flex', 'flex', 'none'],
-      },
-      containerProps: {
-        display: 'flex',
-        maxHeight: '90vh',
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        maxWidth: ['100vw', '100vw', '95vw'],
-      },
-    });
+  const handleOpenProfileModal = () => setContent(<WalletProfileModal />);
 
   return (
     <>
