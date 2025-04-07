@@ -8,7 +8,6 @@ import Countdown from 'react-countdown';
 
 import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
-import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -19,6 +18,7 @@ import { NFTAssetsItemModalProps } from './nft-assets-item.types';
 const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
   nodeName,
   isActivated,
+  activationTime,
   ...stakingObject
 }) => {
   const {
@@ -32,7 +32,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
     withdrawEpoch,
     activationEpoch,
   } = stakingObject;
-  const { data } = useEpochData();
+
   const { handleClose } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
 
@@ -198,7 +198,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
               'Get LST'
             )
           ) : (
-            <Countdown date={Date.now() + (data?.msUntilNextEpoch ?? 1000)} />
+            <Countdown date={Date.now() + activationTime} />
           )}
         </Button>
       </Div>

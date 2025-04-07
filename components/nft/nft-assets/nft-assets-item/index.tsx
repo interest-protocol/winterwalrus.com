@@ -42,11 +42,19 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const { type, state, display, objectId, withdrawEpoch, activationEpoch } =
     stakingObject;
 
+  const activation = withdrawEpoch ?? activationEpoch;
+
+  const activationTime = data
+    ? (activation - (data.currentEpoch + 1)) * data?.epochDurationMs +
+      data.msUntilNextEpoch
+    : 0;
+
   const openModal = () =>
     setContent(
       <NFTAssetsItemModal
         nodeName={nodeName}
         isActivated={isActivated}
+        activationTime={activationTime}
         {...stakingObject}
       />,
       {
@@ -155,17 +163,11 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             textAlign="center"
             borderRadius="0.5rem"
             bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
-            disabled={loading || !isActivated(withdrawEpoch ?? activationEpoch)}
-            opacity={
-              loading || isActivated(withdrawEpoch ?? activationEpoch) ? 1 : 0.5
-            }
-            cursor={
-              isActivated(withdrawEpoch ?? activationEpoch)
-                ? 'pointer'
-                : 'not-allowed'
-            }
+            disabled={loading || !isActivated(activation)}
+            opacity={loading || isActivated(activation) ? 1 : 0.5}
+            cursor={isActivated(activation) ? 'pointer' : 'not-allowed'}
           >
-            {isActivated(withdrawEpoch ?? activationEpoch) ? (
+            {isActivated(activation) ? (
               type === TYPES.STAKED_WAL ? (
                 state === 'Staked' ? (
                   'Unstake'
@@ -178,7 +180,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                 'Get LST'
               )
             ) : (
-              <Countdown date={Date.now() + (data?.msUntilNextEpoch ?? 0)} />
+              <Countdown date={Date.now() + activationTime} />
             )}
           </Button>
         </Div>
