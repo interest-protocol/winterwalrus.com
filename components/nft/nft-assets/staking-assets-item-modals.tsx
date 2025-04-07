@@ -6,7 +6,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { useModal } from '@/hooks/use-modal';
 
-import { StakingAssetsItemStakeModalProps } from './staking-assets-item.hooks/nft-assets.types';
+import { StakingAssetsItemStakeModalProps } from './nft-assets.types';
 
 export const StakingAssetsItemWithdrawModal: FC = () => {
   const { handleClose } = useModal();
