@@ -185,7 +185,10 @@ export const StakingAssetsItemStakeModal: FC<
           ESC
         </Span>
       </Div>
-      <P>You are minting an NFT.</P>
+      <P>
+        You’re minting an NFT that represents your LST. In the next epoch, you
+        can burn the NFT to claim your L
+      </P>
       <Div
         display="flex"
         alignItems="center"
