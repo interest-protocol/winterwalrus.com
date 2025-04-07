@@ -6,7 +6,7 @@ import { useModal } from '@/hooks/use-modal';
 
 import { StakingAssetsItemNFTModalProps } from '../stake-form-button.types';
 
-export const StakingAssetsItemNFTModal: FC<StakingAssetsItemNFTModalProps> = ({
+export const StakeFormAfterVoteNFTModal: FC<StakingAssetsItemNFTModalProps> = ({
   onProceed,
 }) => {
   const { handleClose } = useModal();
