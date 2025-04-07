@@ -155,8 +155,8 @@ export const StakingAssetsItemStakeModal: FC<
   return (
     <Div
       p="1.5rem"
-      width="100%"
       gap="1.5rem"
+      width="100%"
       color="#ffffff"
       display="flex"
       maxWidth="27rem"
@@ -168,43 +168,23 @@ export const StakingAssetsItemStakeModal: FC<
       backdropFilter="blur(20px)"
       bg="rgba(255, 255, 255, 0.10)"
     >
-      <Div
-        gap="1rem"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <Div
-          position="relative"
-          p="2rem"
-          borderRadius="1rem"
-          flexDirection="column"
-          width="100%"
+      <Div display="flex" justifyContent="space-between" alignItems="center">
+        <P fontSize="1.25rem" fontWeight="600">
+          You Are Minting An Nft
+        </P>
+        <Span
+          py="0.25rem"
+          px="0.75rem"
+          bg="#FFFFFF1A"
+          display="flex"
+          fontWeight="500"
+          cursor="pointer"
+          borderRadius="0.5rem"
+          onClick={handleClose}
         >
-          <Span
-            position="absolute"
-            top="0.2rem"
-            right="1rem"
-            py="0.25rem"
-            px="0.75rem"
-            bg="#FFFFFF1A"
-            display="flex"
-            fontWeight="500"
-            cursor="pointer"
-            borderRadius="0.5rem"
-            onClick={handleClose}
-          >
-            ESC
-          </Span>
-
-          <Div display="flex" justifyContent="center">
-            <P fontSize="1.25rem" fontWeight="600" mb="-2rem">
-              You Are Minting An Nft
-            </P>
-          </Div>
-        </Div>
+          ESC
+        </Span>
       </Div>
-
       <P>
         You’re minting an NFT that represents your LST. In the next epoch, you
         can burn the NFT to claim your LST
