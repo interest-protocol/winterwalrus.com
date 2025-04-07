@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 
-import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
@@ -15,6 +14,7 @@ import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
+import { StakeFormAfterVoteNFTModal } from './stake-form-button-modal';
 import { useStake } from './use-stake';
 
 export const useStakeAction = () => {
@@ -157,7 +157,10 @@ export const useStakeAction = () => {
     if (!isAfterVote || hideModal) return handleConfirmedStake();
 
     setContent(
-      <StakingAssetsItemStakeModal onProceed={handleConfirmedStake} />
+      <StakeFormAfterVoteNFTModal onProceed={handleConfirmedStake} />,
+      {
+        title: 'Minting Stake NFT',
+      }
     );
   };
 

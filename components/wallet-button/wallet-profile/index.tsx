@@ -23,7 +23,8 @@ const WalletProfile: FC = () => {
   );
 
   const handleOpenProfileDropdown = () => setOpen(not);
-  const handleOpenProfileModal = () => setContent(<WalletProfileModal />);
+  const handleOpenProfileModal = () =>
+    setContent(<WalletProfileModal />, { title: 'Wallet' });
 
   return (
     <>

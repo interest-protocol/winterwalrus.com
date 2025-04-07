@@ -46,7 +46,8 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
     setContent(
       <FormProvider {...form}>
         <InputFieldModal name={name} assetList={values(metadata)} />
-      </FormProvider>
+      </FormProvider>,
+      { title: 'Select Asset' }
     );
 
   return (

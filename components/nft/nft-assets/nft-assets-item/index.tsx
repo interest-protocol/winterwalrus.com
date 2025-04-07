@@ -56,7 +56,8 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
         isActivated={isActivated}
         activationTime={activationTime}
         {...stakingObject}
-      />
+      />,
+      { title: 'NFT Details' }
     );
 
   return (

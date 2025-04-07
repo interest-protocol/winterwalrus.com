@@ -1,5 +1,5 @@
 import { formatAddress } from '@mysten/sui/utils';
-import { Div, Input, Label, P, Span } from '@stylin.js/elements';
+import { Div, Input, Label, P } from '@stylin.js/elements';
 import { FC, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -18,40 +18,7 @@ const SettingsMenuValidatorModal: FC = () => {
   );
 
   return (
-    <Div
-      p="1rem"
-      gap="1.5rem"
-      width="27rem"
-      display="flex"
-      color="#ffffff"
-      maxHeight="100%"
-      borderRadius="1rem"
-      flexDirection="column"
-      backdropFilter="blur(50px)"
-      bg="linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.10))"
-    >
-      <Div
-        px="0.5rem"
-        pt="0.5rem"
-        display="flex"
-        justifyContent="space-between"
-      >
-        <P fontSize="1.25rem" fontWeight="600">
-          Select validator
-        </P>
-        <Span
-          py="0.25rem"
-          px="0.75rem"
-          bg="#FFFFFF1A"
-          display="flex"
-          fontWeight="500"
-          cursor="pointer"
-          borderRadius="0.5rem"
-          onClick={handleClose}
-        >
-          ESC
-        </Span>
-      </Div>
+    <>
       <Label
         px="1rem"
         mx="0.5rem"
@@ -133,7 +100,7 @@ const SettingsMenuValidatorModal: FC = () => {
             </Div>
           ))}
       </Div>
-    </Div>
+    </>
   );
 };
 

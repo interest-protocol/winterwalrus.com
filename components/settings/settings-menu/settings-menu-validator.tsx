@@ -15,7 +15,8 @@ const SettingsMenuValidator: FC = () => {
     setContent(
       <FormProvider {...form}>
         <SettingsMenuValidatorModal />
-      </FormProvider>
+      </FormProvider>,
+      { title: 'Select Validator' }
     );
 
   return (

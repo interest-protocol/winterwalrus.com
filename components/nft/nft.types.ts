@@ -9,3 +9,7 @@ export interface UnstakeArgs {
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }
+
+export interface StakingAssetItemModalProps {
+  mode: 'unstake' | 'withdraw';
+}
