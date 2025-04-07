@@ -26,6 +26,7 @@ const Tabs: FC = () => {
       {[
         'Stake',
         'Unstake',
+        'Swap',
         `NFT ${objectsToActivate ? `(${objectsToActivate})` : ''}`,
         'Stats',
       ].map((text, index) => (
