@@ -9,6 +9,7 @@ export const LST_TYPES_MAP: Record<string, string> = {
   NWAL: TYPES.NWAL,
   UPWAL: TYPES.UP_WAL,
   BREADWAL: TYPES.BREAD_WAL,
+  TRWAL: TYPES.TR_WAL,
 };
 export const LST_TYPES = Object.values(LST_TYPES_MAP);
 export const LST_TYPES_KEY = Object.keys(LST_TYPES_MAP);
@@ -81,6 +82,13 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
     type: `nft:${LST_TYPES_MAP.UPWAL}`,
     iconUrl: '/upWALNFT.png',
   },
+  [`nft:${LST_TYPES_MAP.TRWAL}`]: {
+    decimals: 9,
+    symbol: 'trWALNFT',
+    name: 'Blizzard trWAL',
+    type: `nft:${LST_TYPES_MAP.TRWAL}`,
+    iconUrl: '/upWALNFT.png',
+  },
 };
 
 export const COIN_TYPES: ReadonlyArray<string> = [TYPES.WAL];
@@ -92,6 +100,7 @@ export const LST_LIST: ReadonlyArray<AssetMetadata> = [
   ASSET_METADATA[LST_TYPES_MAP.NWAL],
   ASSET_METADATA[LST_TYPES_MAP.UPWAL],
   ASSET_METADATA[LST_TYPES_MAP.PWAL],
+  ASSET_METADATA[LST_TYPES_MAP.TRWAL],
 ];
 
 export const STAKING_OBJECT = {
@@ -111,6 +120,9 @@ export const STAKING_OBJECT = {
     mutable: true,
   }).objectId,
   [LST_TYPES_MAP.UPWAL]: SHARED_OBJECTS.UP_WAL_STAKING({
+    mutable: true,
+  }).objectId,
+  [LST_TYPES_MAP.TRWAL]: SHARED_OBJECTS.TR_WAL_STAKING({
     mutable: true,
   }).objectId,
 };
