@@ -7,7 +7,7 @@ import { EpochLoadingProps } from './epoch.types';
 
 const EpochLoading: FC<EpochLoadingProps> = ({ collapsed }) => (
   <Div
-    mx="auto"
+    left="0"
     bottom="0"
     width="100%"
     maxWidth={['34rem', '34rem', '34rem', '34rem', '22rem']}
