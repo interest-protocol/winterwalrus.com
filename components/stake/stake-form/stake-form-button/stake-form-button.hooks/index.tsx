@@ -4,17 +4,21 @@ import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useReadLocalStorage } from 'usehooks-ts';
 
+import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
 import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
 
 export const useStakeAction = () => {
+  const { setContent } = useModal();
   const stake = useStake();
   const { data } = useEpochData();
   const { update } = useAppState();
@@ -113,7 +117,7 @@ export const useStakeAction = () => {
     });
   };
 
-  const onStake = async () => {
+  const handleComfirmedStake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
@@ -139,6 +143,18 @@ export const useStakeAction = () => {
       onFailure(dismiss)((e as Error).message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const hideModal = useReadLocalStorage<boolean>('hideStakeModal');
+
+  const onStake = async () => {
+    if (hideModal) {
+      await handleComfirmedStake();
+    } else {
+      setContent(
+        <StakingAssetsItemStakeModal onProceed={handleComfirmedStake} />
+      );
     }
   };
 
