@@ -46,7 +46,17 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
     setContent(
       <FormProvider {...form}>
         <InputFieldModal name={name} assetList={values(metadata)} />
-      </FormProvider>
+      </FormProvider>,
+      {
+        overlayProps: {
+          alignItems: ['flex-end', 'center'],
+        },
+        containerProps: {
+          display: 'flex',
+          maxHeight: '90vh',
+          maxWidth: ['100vw', '95vw'],
+        },
+      }
     );
 
   return (
