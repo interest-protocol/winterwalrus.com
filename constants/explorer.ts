@@ -2,6 +2,7 @@ import { Network } from './network';
 
 export enum Explorer {
   SuiVision = 'sui-vision',
+  WalrusScan = 'walrus-scan',
   SuiScan = 'sui-scan',
   Polymedia = 'polymedia',
 }
@@ -35,6 +36,12 @@ export const EXPLORER_URL_GETTER = {
     [Network.MAINNET]: (path: string) => `https://suiscan.xyz/mainnet/${path}`,
     [Network.TESTNET]: (path: string) => `https://suiscan.xyz/testnet/${path}`,
   },
+  [Explorer.WalrusScan]: {
+    [Network.MAINNET]: (path: string) =>
+      `https://walruscan.xyz/mainnet/${path}`,
+    [Network.TESTNET]: (path: string) =>
+      `https://walruscan.xyz/testnet/${path}`,
+  },
   [Explorer.Polymedia]: {
     [Network.MAINNET]: (path: string) =>
       `https://explorer.polymedia.app/${path}`,
@@ -51,6 +58,12 @@ export const EXPLORER_PATH_GETTER = {
     [ExplorerMode.Coin]: (value: string) => `type/${value}`,
   },
   [Explorer.SuiScan]: {
+    [ExplorerMode.Object]: (value: string) => `object/${value}`,
+    [ExplorerMode.Account]: (value: string) => `account/${value}`,
+    [ExplorerMode.Transaction]: (value: string) => `tx/${value}`,
+    [ExplorerMode.Coin]: (value: string) => `type/${value}`,
+  },
+  [Explorer.WalrusScan]: {
     [ExplorerMode.Object]: (value: string) => `object/${value}`,
     [ExplorerMode.Account]: (value: string) => `account/${value}`,
     [ExplorerMode.Transaction]: (value: string) => `tx/${value}`,

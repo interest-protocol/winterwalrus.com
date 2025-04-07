@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { useAppState } from '@/hooks/use-app-state';
 
-import StakingAssetsItem from './staking-assets-item';
+import StakingAssetsItem from './nft-assets-item';
 import StakingAssetsItemLoading from './staking-assets-item-loading';
 
 const StakingAssets: FC = () => {
