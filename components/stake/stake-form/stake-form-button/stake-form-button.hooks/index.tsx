@@ -1,28 +1,25 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { StakingAssetsItemStakeModal } from '@/components/nft/nft-assets/staking-assets-item-modals';
-import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
+import { toasting } from '@/components/toast';
+import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { useStake } from './use-stake';
 
 export const useStakeAction = () => {
   const { setContent } = useModal();
   const stake = useStake();
-
   const { data } = useEpochData();
   const { update } = useAppState();
   const getExplorerUrl = useGetExplorerUrl();
@@ -36,26 +33,19 @@ export const useStakeAction = () => {
     setValue('out.value', '0');
     setValue('in.valueBN', ZERO_BIG_NUMBER);
     setValue('out.valueBN', ZERO_BIG_NUMBER);
-    setValue('validator', INTEREST_LABS);
   };
 
   const onSuccess =
-    (toastId: string) => (dryTx: DryRunTransactionBlockResponse) => {
-      toast.dismiss(toastId);
-      toast.success(
-        <Link
-          target="_blank"
-          href={getExplorerUrl(
-            dryTx.effects.transactionDigest,
-            ExplorerMode.Transaction
-          )}
-        >
-          <P>Staked successfully!</P>
-          <P fontSize="0.875" opacity="0.75">
-            See on explorer
-          </P>
-        </Link>
-      );
+    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
+      stopLoading();
+      toasting.success({
+        action: 'Staked',
+        message: 'See on explorer',
+        link: getExplorerUrl(
+          dryTx.effects.transactionDigest,
+          ExplorerMode.Transaction
+        ),
+      });
 
       update(
         ({
@@ -119,17 +109,20 @@ export const useStakeAction = () => {
       reset();
     };
 
-  const onFailure = (toastId: string) => (error?: string) => {
-    toast.dismiss(toastId);
-    toast.error(error ?? 'Error executing transaction');
+  const onFailure = (stopLoading: () => void) => (error?: string) => {
+    stopLoading();
+    toasting.error({
+      action: 'Stake',
+      message: error ?? 'Error executing transaction',
+    });
   };
-  //  stake function
+
   const handleComfirmedStake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
     setLoading(true);
-    const id = toast.loading('Staking...');
+    const dismiss = toasting.loading({ message: 'Staking...' });
 
     try {
       const isAfterVote =
@@ -138,20 +131,21 @@ export const useStakeAction = () => {
           : false;
 
       await stake({
-        coinOut,
         isAfterVote,
         coinIn: form.in.type,
         nodeId: form.validator,
-        onSuccess: onSuccess(id),
-        onFailure: onFailure(id),
+        onSuccess: onSuccess(dismiss),
+        onFailure: onFailure(dismiss),
+        coinOut: typeFromMaybeNftType(coinOut),
         coinValue: BigInt(form.in.valueBN.toFixed(0)),
       });
     } catch (e) {
-      onFailure(id)((e as Error).message);
+      onFailure(dismiss)((e as Error).message);
     } finally {
       setLoading(false);
     }
   };
+
   const hideModal = useReadLocalStorage<boolean>('hideStakeModal');
 
   const onStake = async () => {
