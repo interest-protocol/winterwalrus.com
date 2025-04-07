@@ -39,7 +39,6 @@ const Epoch: FC = () => {
     >
       <AnimatePresence>
         <Motion
-          m="1rem"
           p="1rem"
           gap="1rem"
           bg="#FFFFFF0D"
@@ -47,6 +46,7 @@ const Epoch: FC = () => {
           color="#ffffff"
           borderRadius="1rem"
           flexDirection="column"
+          m={['0rem', '0rem', '1rem']}
           border="1px solid #FFFFFF1A"
         >
           <Div

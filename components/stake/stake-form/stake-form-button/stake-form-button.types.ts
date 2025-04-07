@@ -9,3 +9,7 @@ export interface StakeArgs {
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }
+
+export interface StakingAssetsItemNFTModalProps {
+  onProceed: () => void;
+}

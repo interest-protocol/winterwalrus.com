@@ -1,33 +1,30 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
-import BigNumber from 'bignumber.js';
-import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
-import { not } from 'ramda';
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback } from 'react';
+import Countdown from 'react-countdown';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
-import Motion from '@/components/motion';
-import { ChevronDownSVG, ExternalLinkSVG } from '@/components/svg';
+import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode, NFT_IMAGE } from '@/constants';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
-import { StakingAssetsItemProps } from '../nft.types';
-import { useStakingAction } from './staking-assets-item.hooks';
-import StakingAssetsItemLoading from './staking-assets-item-loading';
+import { StakingAssetsItemProps } from '../../nft.types';
+import { useStakingAction } from '../staking-assets-item.hooks';
+import StakingAssetsItemLoading from '../staking-assets-item-loading';
+import NFTAssetsItemModal from './nft-assets-item-modal';
 
-const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
+const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const { data } = useEpochData();
+  const { setContent } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
-  const [isOpen, setIsOpen] = useState(false);
   const { stakingObject, isLoading } = useStakingObject(id);
-
   const { nodeName } = useNodeName(stakingObject?.nodeId);
 
   const isActivated = useCallback(
@@ -42,15 +39,26 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
 
   if (!stakingObject) return null;
 
-  const {
-    type,
-    state,
-    display,
-    objectId,
-    principal,
-    withdrawEpoch,
-    activationEpoch,
-  } = stakingObject;
+  const { type, state, display, objectId, withdrawEpoch, activationEpoch } =
+    stakingObject;
+
+  const activation = withdrawEpoch ?? activationEpoch;
+
+  const activationTime = data
+    ? (activation - (data.currentEpoch + 1)) * data?.epochDurationMs +
+      data.msUntilNextEpoch
+    : 0;
+
+  const openModal = () =>
+    setContent(
+      <NFTAssetsItemModal
+        nodeName={nodeName}
+        isActivated={isActivated}
+        activationTime={activationTime}
+        {...stakingObject}
+      />,
+      { title: 'NFT Details' }
+    );
 
   return (
     <Div
@@ -58,7 +66,9 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
       display="flex"
       key={unikey()}
       color="#ffffff"
+      cursor="pointer"
       border="1px solid"
+      onClick={openModal}
       flexDirection="column"
       p={['0.5rem', '1rem']}
       borderColor="#FFFFFF1A"
@@ -101,6 +111,7 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             <Div>
               <Link
                 target="_blank"
+                onClick={(e) => e.stopPropagation()}
                 href={getExplorerUrl(objectId, ExplorerMode.Object)}
               >
                 <Div
@@ -137,87 +148,38 @@ const StakingAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
           <Button
             all="unset"
             py="0.5rem"
-            width="5.5rem"
+            width="7rem"
             color="#000000"
             onClick={onBurn}
             textAlign="center"
             borderRadius="0.5rem"
             bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
-            disabled={loading || !isActivated(withdrawEpoch ?? activationEpoch)}
-            opacity={
-              loading || isActivated(withdrawEpoch ?? activationEpoch) ? 1 : 0.5
-            }
-            cursor={
-              isActivated(withdrawEpoch ?? activationEpoch)
-                ? 'pointer'
-                : 'not-allowed'
-            }
+            disabled={loading || !isActivated(activation)}
+            opacity={loading || isActivated(activation) ? 1 : 0.5}
+            cursor={isActivated(activation) ? 'pointer' : 'not-allowed'}
           >
-            {type === TYPES.STAKED_WAL
-              ? state === 'Staked'
-                ? 'Unstake'
-                : 'Withdraw'
-              : loading
-                ? 'Getting...'
-                : 'Get LST'}
+            {isActivated(activation) ? (
+              type === TYPES.STAKED_WAL ? (
+                state === 'Staked' ? (
+                  'Unstake'
+                ) : (
+                  'Withdraw'
+                )
+              ) : loading ? (
+                'Getting...'
+              ) : (
+                'Get LST'
+              )
+            ) : (
+              <Countdown date={Date.now() + activationTime} />
+            )}
           </Button>
-          <Motion
-            cursor="pointer"
-            onClick={() => setIsOpen(not)}
-            initial={{ rotate: isOpen ? '180deg' : '0deg' }}
-            animate={{ rotate: isOpen ? '180deg' : '0deg' }}
-          >
-            <ChevronDownSVG maxWidth="0.7rem" width="100%" />
-          </Motion>
         </Div>
       </Div>
-      <AnimatePresence>
-        {isOpen && (
-          <Div
-            gap="0.5rem"
-            display="grid"
-            fontSize="0.75rem"
-            gridTemplateColumns="1fr 1fr"
-          >
-            <Div
-              p="1rem"
-              gap="0.25rem"
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-              borderRadius="0.625rem"
-              border="1px solid #FFFFFF1A"
-            >
-              <P fontFamily="JetBrains Mono">
-                {FixedPointMath.toNumber(BigNumber(principal), 9)} WAL
-              </P>
-              <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-                Principal
-              </P>
-            </Div>
-            <Div
-              p="1rem"
-              gap="0.25rem"
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-              borderRadius="0.625rem"
-              border="1px solid #FFFFFF1A"
-            >
-              <P fontFamily="JetBrains Mono">
-                {withdrawEpoch ?? activationEpoch}
-              </P>
-              <P gap="0.25rem" display="flex" color="#727272" fontWeight="500">
-                {state === 'Staked' ? 'Activation' : 'Withdraw'} Epoch
-              </P>
-            </Div>
-          </Div>
-        )}
-      </AnimatePresence>
     </Div>
   );
 });
 
-StakingAssetsItem.displayName = StakingAssetsItem.name;
+NFTAssetsItem.displayName = NFTAssetsItem.name;
 
-export default StakingAssetsItem;
+export default NFTAssetsItem;

@@ -8,6 +8,7 @@ type MotionProps = Omit<
 >;
 
 interface UseModal {
+  title: string;
   content: ReactNode;
   onClose?: () => void;
   allowClose?: boolean;
@@ -16,7 +17,8 @@ interface UseModal {
   containerProps?: MotionProps;
   setContent: (
     content: ReactNode,
-    options?: {
+    options: {
+      title: string;
       onClose?: () => void;
       allowClose?: boolean;
       overlayProps?: DivProps;
@@ -26,6 +28,7 @@ interface UseModal {
 }
 
 const defaultValues = {
+  title: '',
   content: null,
   allowClose: true,
   onClose: undefined,

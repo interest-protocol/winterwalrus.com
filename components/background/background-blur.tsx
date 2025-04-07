@@ -2,10 +2,12 @@ import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import { useBackgroundMotionTranslate } from '@/hooks/use-background-motion-position';
+import { useSafeHeight } from '@/hooks/use-safe-height';
 
 import Motion from '../motion';
 
 const BackgroundBlur: FC = () => {
+  const safeHeight = useSafeHeight();
   const { x, y } = useBackgroundMotionTranslate();
 
   return (
@@ -20,7 +22,7 @@ const BackgroundBlur: FC = () => {
       backgroundPosition="top left"
       backgroundSize="cover"
     >
-      <Div width="100vw" height="100vh" backdropFilter="blur(100px)" />
+      <Div width="100vw" height={safeHeight} backdropFilter="blur(100px)" />
     </Motion>
   );
 };
