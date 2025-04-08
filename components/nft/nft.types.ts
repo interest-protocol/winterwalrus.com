@@ -4,8 +4,13 @@ export interface StakingAssetsItemProps {
   id?: string;
 }
 
-export interface UnstakeArgs {
+export interface BurnArgs {
+  lst: string;
   objectId: string;
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
+}
+
+export interface StakingAssetItemModalProps {
+  mode: 'unstake' | 'withdraw';
 }

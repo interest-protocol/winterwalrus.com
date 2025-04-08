@@ -24,37 +24,10 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
   const [search, setSearch] = useState('');
 
   return (
-    <Div
-      p="1.5rem"
-      gap="1.5rem"
-      width="27rem"
-      height="90vh"
-      display="flex"
-      color="#ffffff"
-      borderRadius="1rem"
-      flexDirection="column"
-      backdropFilter="blur(50px)"
-      bg="linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.10))"
-    >
-      <Div display="flex" justifyContent="space-between">
-        <P fontSize="1.25rem" fontWeight="600">
-          Select asset
-        </P>
-        <Span
-          py="0.25rem"
-          px="0.75rem"
-          bg="#FFFFFF1A"
-          display="flex"
-          fontWeight="500"
-          cursor="pointer"
-          borderRadius="0.5rem"
-          onClick={handleClose}
-        >
-          ESC
-        </Span>
-      </Div>
+    <>
       <Label
         px="1rem"
+        mx="0.5rem"
         gap="0.5rem"
         bg="#FFFFFF1A"
         display="flex"
@@ -75,7 +48,13 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
       </Label>
-      <Div display="flex" flexDirection="column" gap="1rem" overflow="auto">
+      <Div
+        gap="1rem"
+        px="0.5rem"
+        display="flex"
+        overflow="auto"
+        flexDirection="column"
+      >
         {assetList
           .filter(
             ({ symbol, type, name }) =>
@@ -160,14 +139,11 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                     ).toFixed(4)
                   }
                 </P>
-                {/* <P fontSize="0.75rem" opacity="0.6" fontFamily="JetBrains Mono">
-                  {formatDollars(1000)}
-                </P> */}
               </Div>
             </Div>
           ))}
       </Div>
-    </Div>
+    </>
   );
 };
 

@@ -4,17 +4,21 @@ import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useReadLocalStorage } from 'usehooks-ts';
 
 import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
+import { StakeFormAfterVoteNFTModal } from './stake-form-button-modal';
 import { useStake } from './use-stake';
 
 export const useStakeAction = () => {
+  const { setContent } = useModal();
   const stake = useStake();
   const { data } = useEpochData();
   const { update } = useAppState();
@@ -113,7 +117,7 @@ export const useStakeAction = () => {
     });
   };
 
-  const onStake = async () => {
+  const handleConfirmedStake = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
@@ -140,6 +144,24 @@ export const useStakeAction = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const hideModal = useReadLocalStorage<boolean>('hideStakeModal');
+
+  const onStake = async () => {
+    const isAfterVote =
+      data && data.currentEpoch
+        ? 0.5 < 1 - data.msUntilNextEpoch / data.epochDurationMs
+        : false;
+
+    if (!isAfterVote || hideModal) return handleConfirmedStake();
+
+    setContent(
+      <StakeFormAfterVoteNFTModal onProceed={handleConfirmedStake} />,
+      {
+        title: 'Minting Stake NFT',
+      }
+    );
   };
 
   return { onStake, loading };

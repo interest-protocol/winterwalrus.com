@@ -5,6 +5,10 @@ const SEO: FC = () => (
   <Head>
     <title>Winter Walrus</title>
     <link rel="icon" type="image/x-icon" href="/icon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
   </Head>
 );
 

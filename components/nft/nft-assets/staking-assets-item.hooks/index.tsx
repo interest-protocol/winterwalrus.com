@@ -14,10 +14,7 @@ import { useModal } from '@/hooks/use-modal';
 import { StakingObject } from '@/interface';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import {
-  StakingAssetsItemUnstakeModal,
-  StakingAssetsItemWithdrawModal,
-} from '../staking-assets-item-modals';
+import { StakingAssetsItemModal } from '../staking-assets-item-modals';
 import { useBurn } from './use-burn';
 
 export const useStakingAction = (
@@ -37,8 +34,15 @@ export const useStakingAction = (
       onBurn: () => {},
     };
 
-  const { type, state, objectId, principal, withdrawEpoch, activationEpoch } =
-    stakingObject;
+  const {
+    lst,
+    type,
+    state,
+    objectId,
+    principal,
+    withdrawEpoch,
+    activationEpoch,
+  } = stakingObject;
 
   const onSuccess =
     (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
@@ -124,29 +128,17 @@ export const useStakingAction = (
     if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
 
     if (type === TYPES.STAKED_WAL) {
-      if (state === 'Staked')
-        setContent(<StakingAssetsItemUnstakeModal />, {
-          overlayProps: {
-            alignItems: ['flex-end', 'center'],
-          },
-          containerProps: {
-            display: 'flex',
-            maxHeight: '90vh',
-            maxWidth: ['100vw', '95vw'],
-          },
-        });
-      else
-        setContent(<StakingAssetsItemWithdrawModal />, {
-          overlayProps: {
-            alignItems: ['flex-end', 'center'],
-          },
-          containerProps: {
-            display: 'flex',
-            maxHeight: '90vh',
-            maxWidth: ['100vw', '95vw'],
-          },
-        });
-      return;
+      return setContent(
+        <StakingAssetsItemModal
+          mode={state === 'Staked' ? 'unstake' : 'withdraw'}
+        />,
+        {
+          title:
+            state === 'Staked'
+              ? 'Unstake in Progress'
+              : 'Redirecting for Withdrawal',
+        }
+      );
     }
     setLoading(true);
     const dismiss = toasting.loading({
@@ -155,6 +147,7 @@ export const useStakingAction = (
 
     try {
       await burn({
+        lst,
         objectId,
         onSuccess: onSuccess(dismiss),
         onFailure: onFailure(dismiss),

@@ -1,5 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useSuiClient } from '@mysten/dapp-kit';
+import { normalizeStructTag } from '@mysten/sui/utils';
 import { path, pathEq, pathOr } from 'ramda';
 import useSWR from 'swr';
 
@@ -22,7 +23,14 @@ export const useStakingObject = (id?: string) => {
         },
       });
 
+      const lst = pathOr(
+        '',
+        ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
+        item
+      );
+
       return {
+        lst: lst ? normalizeStructTag(lst) : '',
         symbol: path(['data', 'content', 'fields', 'symbol'], item)
           ? `${path(['data', 'content', 'fields', 'symbol'], item)}`
           : 'StakedWAL',

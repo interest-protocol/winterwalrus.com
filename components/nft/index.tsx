@@ -47,8 +47,7 @@ const NFT: FC = () => {
               (acc, principal) => acc.plus(principal),
               ZERO_BIG_NUMBER
             ),
-            9,
-            3
+            9
           )}{' '}
           <Strong color="#99EFE4" fontFamily="inherit">
             WAL
