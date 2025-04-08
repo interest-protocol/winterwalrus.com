@@ -150,13 +150,16 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             py="0.5rem"
             width="7rem"
             color="#000000"
-            onClick={onBurn}
             textAlign="center"
             borderRadius="0.5rem"
             bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
             disabled={loading || !isActivated(activation)}
             opacity={loading || isActivated(activation) ? 1 : 0.5}
             cursor={isActivated(activation) ? 'pointer' : 'not-allowed'}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBurn();
+            }}
           >
             {isActivated(activation) ? (
               type === TYPES.STAKED_WAL ? (

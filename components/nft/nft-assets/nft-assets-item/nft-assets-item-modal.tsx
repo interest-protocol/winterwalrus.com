@@ -46,10 +46,10 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
       flexDirection="column"
     >
       <Img
+        width="100%"
+        height="100%"
         src={display ?? ''}
         borderRadius="1rem"
-        width={['100%', '21rem']}
-        height={['100%', '21rem']}
         alt={symbol ?? 'NFT Details'}
       />
       <Div
