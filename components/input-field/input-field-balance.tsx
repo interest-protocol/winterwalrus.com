@@ -40,7 +40,7 @@ const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
         {loadingCoins || loadingObjects ? (
           <Skeleton width="2rem" />
         ) : (
-          FixedPointMath.toNumber(balance ?? ZERO_BIG_NUMBER, 9, 4)
+          FixedPointMath.toNumber(balance ?? ZERO_BIG_NUMBER, 9)
         )}
       </Span>
     </Button>
