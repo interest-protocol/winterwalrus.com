@@ -1,13 +1,18 @@
 import useSWR from 'swr';
 
 const useStats = () =>
-  useSWR([useStats.name], async () => {
-    const [data, totalUsers] = await Promise.all(
-      ['/api/v1/metrics', '/api/v1/metrics/total-users'].map((url) =>
-        fetch(url).then((res) => res.json())
-      )
+  useSWR<{
+    data: ReadonlyArray<{ tvl: string; total_users: string; lst: string }>;
+    totalUsers: number;
+    totalTvl: string;
+  }>([useStats.name], async () => {
+    const data = await fetch('https://api.winterwalrus.com/v1/metrics').then(
+      (res) => res.json()
     );
-    return { ...data, totalUsers };
+
+    console.log({ data });
+
+    return data;
   });
 
 export default useStats;

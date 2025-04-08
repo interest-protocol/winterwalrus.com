@@ -1,6 +1,5 @@
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { Button, Div, H2, H3, Img, P } from '@stylin.js/elements';
-import { values } from 'ramda';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
@@ -21,6 +20,15 @@ const Stats: FC = () => {
     STATS_PRICE_STORAGE_KEY,
     false
   );
+
+  const lstMap: Record<
+    string,
+    { tvl: string; total_users: string; lst: string }
+  > =
+    data?.data.reduce(
+      (acc, curr) => ({ ...acc, [normalizeStructTag(curr.lst)]: curr }),
+      {}
+    ) ?? {};
 
   return (
     <Div display="flex" gap="1rem" flexDirection="column">
@@ -76,10 +84,7 @@ const Stats: FC = () => {
             ) : (
               `${statsInUSD ? '$' : ''}${formatMoney(
                 data
-                  ? values(data).reduce(
-                      (acc, { tvl }) => (!isNaN(tvl) ? acc + Number(tvl) : acc),
-                      0
-                    ) * (statsInUSD && price ? price : 1)
+                  ? Number(data.totalTvl) * (statsInUSD && price ? price : 1)
                   : 0
               )}${!statsInUSD ? ' WAL' : ''}`
             )}
@@ -173,7 +178,7 @@ const Stats: FC = () => {
                 ) : (
                   `${statsInUSD ? '$' : ''}${formatMoney(
                     data
-                      ? Number(data[type].tvl) *
+                      ? Number(lstMap[type]?.tvl ?? 0) *
                           (statsInUSD && price ? price : 1)
                       : 0
                   )}${!statsInUSD ? ' WAL' : ''}`
@@ -183,7 +188,9 @@ const Stats: FC = () => {
                 {!data && isLoading ? (
                   <Skeleton width="5rem" />
                 ) : data ? (
-                  formatMoney(Number(data[type].total_users)).split('.')[0]
+                  formatMoney(Number(lstMap[type]?.total_users ?? 0)).split(
+                    '.'
+                  )[0]
                 ) : (
                   0
                 )}
