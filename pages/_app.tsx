@@ -24,6 +24,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       toastOptions={{
         duration: TOAST_DURATION,
         style: {
+          zIndex: 1000000,
           maxWidth: '20rem',
           overflow: 'hidden',
           position: 'relative',
