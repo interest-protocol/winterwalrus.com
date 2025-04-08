@@ -87,7 +87,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
     symbol: 'trWALNFT',
     name: 'Blizzard trWAL',
     type: `nft:${LST_TYPES_MAP.TRWAL}`,
-    iconUrl: '/upWALNFT.png',
+    iconUrl: '/trWALNFT.png',
   },
 };
 
