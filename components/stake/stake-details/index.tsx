@@ -1,13 +1,17 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
-import useEpochAPR from '@/hooks/use-epoch-apr';
 import { useFees } from '@/hooks/use-fees';
+import useLstAPR from '@/hooks/use-lst-apr';
 
 const StakeDetails: FC = () => {
+  const { control } = useFormContext();
   const { fees, isLoading: feesLoading } = useFees();
-  const { data, isLoading: aprLoading } = useEpochAPR();
+
+  const lst = useWatch({ control, name: 'out.type' });
+  const { data, isLoading: aprLoading } = useLstAPR(lst);
 
   return (
     <Div color="#F8F8F880" display="flex" flexDirection="column" gap="0.5rem">
@@ -17,7 +21,7 @@ const StakeDetails: FC = () => {
           {aprLoading ? (
             <Skeleton width="4rem" />
           ) : (
-            `${((data ?? 0) * 100).toFixed(2)} %`
+            `${((data?.apr ?? 0) * 100).toFixed(2)} %`
           )}
         </P>
       </Div>
