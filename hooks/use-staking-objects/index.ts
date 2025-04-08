@@ -1,5 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { SuiObjectResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import { path, pathEq, pathOr } from 'ramda';
@@ -29,18 +30,27 @@ export const useStakingObjects = () => {
           objectsActivation: {},
         };
 
-      const objects = await suiClient.getOwnedObjects({
-        owner: currentAccount.address,
-        options: { showContent: true, showType: true },
-        filter: {
-          MatchAny: [
-            { StructType: TYPES.STAKED_WAL },
-            { StructType: TYPES.BLIZZARD_STAKE_NFT },
-          ],
-        },
-      });
+      let hasNextPage;
+      const objects: SuiObjectResponse[] = [];
 
-      const stakingObjects = objects.data.sort((a, b) =>
+      do {
+        const data = await suiClient.getOwnedObjects({
+          owner: currentAccount.address,
+          options: { showContent: true, showType: true },
+          filter: {
+            MatchAny: [
+              { StructType: TYPES.STAKED_WAL },
+              { StructType: TYPES.BLIZZARD_STAKE_NFT },
+            ],
+          },
+        });
+
+        hasNextPage = data.hasNextPage;
+
+        if (data.data) objects.push(...data.data);
+      } while (hasNextPage);
+
+      const stakingObjects = objects.sort((a, b) =>
         Number(
           pathOr(
             path(
