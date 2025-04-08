@@ -142,7 +142,7 @@ const Epoch: FC = () => {
                   borderRadius="0.625rem"
                   border="1px solid #FFFFFF1A"
                 >
-                  <P>
+                  <P whiteSpace="nowrap">
                     ~
                     {msToDate(
                       data && data.msUntilNextEpoch > 0
