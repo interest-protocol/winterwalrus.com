@@ -191,8 +191,6 @@ export const useStakingObjects = () => {
     }
   );
 
-  console.log({ error: props.error });
-
   return {
     ...props,
     ...data,
