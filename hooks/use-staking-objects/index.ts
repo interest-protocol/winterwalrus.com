@@ -80,101 +80,110 @@ export const useStakingObjects = () => {
           ? -1
           : 1
       );
+      const stakingObjectIds = stakingObjects.map(
+        (item) => path(['data', 'objectId'], item) as string
+      );
 
-      return {
-        balancesByLst: stakingObjects.reduce(
-          (acc, data) => {
-            if (!pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], data))
-              return acc;
+      const principalByType = stakingObjects.reduce(
+        (acc, item) => {
+          const type = normalizeStructTag(
+            path(['data', 'content', 'type'], item) as string
+          );
 
-            const lstType = `nft:${normalizeStructTag(
-              String(
-                path(
-                  ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
-                  data
-                )
-              )
-            )}`;
-
-            return {
-              ...acc,
-              [lstType]: BigNumber(
-                String(path(['data', 'content', 'fields', 'value'], data))
-              ).plus(acc[lstType] ?? ZERO_BIG_NUMBER),
-            };
-          },
-          {} as Record<string, BigNumber>
-        ),
-        objectsActivation: stakingObjects.reduce(
-          (acc, item) => {
-            const type = normalizeStructTag(
-              path(['data', 'content', 'type'], item) as string
-            );
-            const value = Number(
-              pathOr(
-                null,
-                [
-                  'data',
-                  'content',
-                  'fields',
-                  'state',
-                  'fields',
-                  'withdraw_epoch',
-                ],
+          const value = BigNumber(
+            pathOr(
+              path(
+                ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
                 item
-              ) ??
-                pathOr(
-                  path(
-                    [
-                      'data',
-                      'content',
-                      'fields',
-                      'inner',
-                      'fields',
-                      'inner',
-                      'activation_epoch',
-                    ],
-                    item
-                  ),
-                  ['data', 'content', 'fields', 'activation_epoch'],
-                  item
-                )
-            );
+              ),
+              ['data', 'content', 'fields', 'principal'],
+              item
+            ) as string
+          );
 
-            return {
-              ...acc,
-              [type]: value,
-            };
-          },
-          {} as Record<string, number>
-        ),
-        principalByType: stakingObjects.reduce(
-          (acc, item) => {
-            const type = normalizeStructTag(
-              path(['data', 'content', 'type'], item) as string
-            );
+          return {
+            ...acc,
+            [type]: acc[type] ? acc[type].plus(value) : value,
+          };
+        },
+        {} as Record<string, BigNumber>
+      );
 
-            const value = BigNumber(
+      const balancesByLst = stakingObjects.reduce(
+        (acc, data) => {
+          if (!pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], data))
+            return acc;
+
+          const lstType = `nft:${normalizeStructTag(
+            String(
+              path(
+                ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
+                data
+              )
+            )
+          )}`;
+
+          return {
+            ...acc,
+            [lstType]: BigNumber(
+              String(path(['data', 'content', 'fields', 'value'], data))
+            ).plus(acc[lstType] ?? ZERO_BIG_NUMBER),
+          };
+        },
+        {} as Record<string, BigNumber>
+      );
+      const objectsActivation = stakingObjects.reduce(
+        (acc, item) => {
+          const id = path(['data', 'objectId'], item) as string;
+
+          const type = normalizeStructTag(
+            path(['data', 'content', 'type'], item) as string
+          );
+
+          const value = Number(
+            pathOr(
+              null,
+              [
+                'data',
+                'content',
+                'fields',
+                'state',
+                'fields',
+                'withdraw_epoch',
+              ],
+              item
+            ) ??
               pathOr(
                 path(
-                  ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
+                  [
+                    'data',
+                    'content',
+                    'fields',
+                    'inner',
+                    'fields',
+                    'inner',
+                    'activation_epoch',
+                  ],
                   item
                 ),
-                ['data', 'content', 'fields', 'principal'],
+                ['data', 'content', 'fields', 'activation_epoch'],
                 item
-              ) as string
-            );
+              )
+          );
 
-            return {
-              ...acc,
-              [type]: acc[type] ? acc[type].plus(value) : value,
-            };
-          },
-          {} as Record<string, BigNumber>
-        ),
-        stakingObjectIds: stakingObjects.map(
-          (item) => path(['data', 'objectId'], item) as string
-        ),
+          return {
+            ...acc,
+            [id]: value - (type === TYPES.BLIZZARD_STAKE_NFT ? 1 : 0),
+          };
+        },
+        {} as Record<string, number>
+      );
+
+      return {
+        balancesByLst,
+        principalByType,
+        stakingObjectIds,
+        objectsActivation,
       };
     },
     {

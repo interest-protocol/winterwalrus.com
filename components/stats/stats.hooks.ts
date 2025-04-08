@@ -10,8 +10,6 @@ const useStats = () =>
       (res) => res.json()
     );
 
-    console.log({ data });
-
     return data;
   });
 

@@ -9,6 +9,7 @@ import Countdown from 'react-countdown';
 import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import { useStakingAction } from '../staking-assets-item.hooks';
@@ -31,7 +32,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
     withdrawEpoch,
     activationEpoch,
   } = stakingObject;
-
+  const { handleClose } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
 
   const { onBurn, loading } = useStakingAction(stakingObject, isActivated);
@@ -46,10 +47,10 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
       flexDirection="column"
     >
       <Img
+        width="100%"
+        height="100%"
         src={display ?? ''}
         borderRadius="1rem"
-        width={['100%', '21rem']}
-        height={['100%', '21rem']}
         alt={symbol ?? 'NFT Details'}
       />
       <Div
@@ -126,7 +127,10 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
         all="unset"
         py="1rem"
         color="#000000"
-        onClick={onBurn}
+        onClick={() => {
+          handleClose();
+          onBurn();
+        }}
         textAlign="center"
         borderRadius="0.5rem"
         bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}

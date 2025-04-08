@@ -34,8 +34,15 @@ export const useStakingAction = (
       onBurn: () => {},
     };
 
-  const { type, state, objectId, principal, withdrawEpoch, activationEpoch } =
-    stakingObject;
+  const {
+    lst,
+    type,
+    state,
+    objectId,
+    principal,
+    withdrawEpoch,
+    activationEpoch,
+  } = stakingObject;
 
   const onSuccess =
     (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
@@ -140,6 +147,7 @@ export const useStakingAction = (
 
     try {
       await burn({
+        lst,
         objectId,
         onSuccess: onSuccess(dismiss),
         onFailure: onFailure(dismiss),

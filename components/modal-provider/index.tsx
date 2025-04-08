@@ -1,7 +1,6 @@
 import { Div, P, Span } from '@stylin.js/elements';
 import { AnimatePresence, motion } from 'motion/react';
 import { FC } from 'react';
-import { Toaster } from 'react-hot-toast';
 
 import useEventListener from '@/hooks/use-event-listener';
 import { useModal } from '@/hooks/use-modal';
@@ -59,7 +58,6 @@ const ModalProvider: FC = () => {
           alignItems={['flex-end', 'flex-end', 'center']}
           {...overlayProps}
         >
-          <Toaster />
           <Motion
             display="flex"
             maxWidth={['100vw', '100vw', '95vw']}
