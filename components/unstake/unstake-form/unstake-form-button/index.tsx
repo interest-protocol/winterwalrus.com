@@ -1,19 +1,24 @@
 import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useCoins } from '@/hooks/use-coins';
 import { useFees } from '@/hooks/use-fees';
+import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { useUnstakeAction } from './unstake-form-button.hooks';
+import UnstakeFormButtonPreview from './unstake-form-button-preview';
 
 const UnstakeFormButton: FC = () => {
   const { fees } = useFees();
   const { coins } = useCoins();
-  const { control, getValues } = useFormContext();
+  const { setContent } = useModal();
+  const form = useFormContext();
   const { onUnstake, loading } = useUnstakeAction();
+
+  const { control, getValues } = form;
 
   const coinIn = getValues('in.type');
   const amountIn = useWatch({ control, name: 'in.value' });
@@ -34,6 +39,16 @@ const UnstakeFormButton: FC = () => {
 
   const disabled = insufficientAmount || loading;
 
+  const handleUnstake = () =>
+    setContent(
+      <FormProvider {...form}>
+        <UnstakeFormButtonPreview onProceed={onUnstake} />
+      </FormProvider>,
+      {
+        title: 'Preview Unstake',
+      }
+    );
+
   return (
     <Button
       all="unset"
@@ -46,8 +61,8 @@ const UnstakeFormButton: FC = () => {
       disabled={disabled}
       borderRadius="0.625rem"
       opacity={disabled ? 0.7 : 1}
-      onClick={disabled ? undefined : onUnstake}
       cursor={disabled ? 'not-allowed' : 'pointer'}
+      onClick={disabled ? undefined : handleUnstake}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
       {insufficientAmountIn
