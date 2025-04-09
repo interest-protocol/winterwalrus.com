@@ -12,8 +12,8 @@ importers:
         specifier: ^11.11.1
         version: 11.11.1(@types/react@18.2.38)(react@18.2.0)
       '@interest-protocol/blizzard-sdk':
-        specifier: ^1.6.0
-        version: 1.6.0(typescript@5.3.2)
+        specifier: ^1.8.0
+        version: 1.8.0(typescript@5.3.2)
       '@mysten/dapp-kit':
         specifier: ^0.14.50
         version: 0.14.50(@tanstack/react-query@5.66.0(react@18.2.0))(@types/react-dom@18.2.17)(@types/react@18.2.38)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.3.2)
@@ -453,8 +453,8 @@ packages:
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
 
-  '@interest-protocol/blizzard-sdk@1.6.0':
-    resolution: {integrity: sha512-TsmTAULO/ywy23ll1Dp3lMIySBnQrO20rFG+LwhogAv4l6aTkkroP3eEOlTYLwKIozZ9VkPqjAemcvIOxY4MKQ==}
+  '@interest-protocol/blizzard-sdk@1.8.0':
+    resolution: {integrity: sha512-6Fpch5d0IdK0KxiVp043ynA+1wjWUgAqYkF4efruMpj8q4X0B2YhmSmvlKJSp4azE3xnRPSaXhBgdDPtXsfFzg==}
 
   '@mysten/bcs@1.4.0':
     resolution: {integrity: sha512-YwDYspceLt8b7v6ohPvy8flQEi+smtfSG5d2A98CbUA48XBmOqTSPNmpw9wsZVVnrH2avr+BS5uVhDZT+EquYA==}
@@ -3403,7 +3403,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.1': {}
 
-  '@interest-protocol/blizzard-sdk@1.6.0(typescript@5.3.2)':
+  '@interest-protocol/blizzard-sdk@1.8.0(typescript@5.3.2)':
     dependencies:
       '@mysten/sui': 1.21.2(typescript@5.3.2)
       '@polymedia/suitcase-core': 0.0.36(@mysten/sui@1.21.2(typescript@5.3.2))

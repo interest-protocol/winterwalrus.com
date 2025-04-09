@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
-    "@interest-protocol/blizzard-sdk": "^1.6.0",
+    "@interest-protocol/blizzard-sdk": "^1.8.0",
     "@mysten/dapp-kit": "^0.14.50",
     "@mysten/sui": "^1.21.2",
     "@stylin.js/elements": "^1.0.2",
