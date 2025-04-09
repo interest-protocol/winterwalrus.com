@@ -5,6 +5,8 @@ import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
+import { InfoSVG } from '@/components/svg';
+import TooltipIcon from '@/components/svg/tipicon';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';
@@ -82,7 +84,13 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
             borderRadius="1rem"
             src="https://www.walrus.xyz/walrus-stakedwal"
           />
-          <P>StakedWAL</P>
+          <Div display="flex" alignItems="center" gap="0.25rem">
+            <P>StakedWAL</P>
+            <TooltipIcon
+              icon={InfoSVG}
+              text="StakedWal refers to natively staked $WAL, which can be unstaked through the Walrus Protocol Staking website"
+            />
+          </Div>
           <P fontFamily="JetBrains Mono" fontWeight="700">
             {isLoading ? (
               <Skeleton width="4rem" />
