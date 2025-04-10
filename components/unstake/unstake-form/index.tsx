@@ -1,6 +1,5 @@
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
-import unikey from 'unikey';
 
 import { LST_TYPES } from '@/constants';
 
@@ -15,7 +14,7 @@ const UnstakeForm: FC = () => (
       <InputField
         name="in"
         label="In"
-        key={unikey()}
+        redirecting
         types={LST_TYPES}
         topContent="balance"
       />

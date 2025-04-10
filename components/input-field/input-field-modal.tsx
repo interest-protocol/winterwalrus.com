@@ -2,7 +2,7 @@ import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div, Img, Input, Label, P, Span } from '@stylin.js/elements';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { LST_TYPES, LST_TYPES_KEY, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
@@ -15,13 +15,20 @@ import { InputFieldModalProps } from './input-field.types';
 
 const InputFieldModal: FC<InputFieldModalProps> = ({
   assetList,
+  redirecting,
+  oppositeName,
   name: fieldName,
 }) => {
   const { push } = useRouter();
   const { balances } = useAppState();
   const { handleClose } = useModal();
-  const { setValue } = useFormContext();
+  const { control, setValue } = useFormContext();
   const [search, setSearch] = useState('');
+
+  const selectedTypes = useWatch({
+    control,
+    name: [fieldName, oppositeName].map((name) => `${name}.type`),
+  });
 
   return (
     <Div
@@ -79,10 +86,11 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
         {assetList
           .filter(
             ({ symbol, type, name }) =>
-              !search ||
-              type.toLowerCase() === search ||
-              name.toLowerCase().includes(search) ||
-              symbol.toLowerCase().includes(search)
+              !selectedTypes.includes(type) &&
+              (!search ||
+                type.toLowerCase() === search ||
+                name.toLowerCase().includes(search) ||
+                symbol.toLowerCase().includes(search))
           )
           .sort((a, b) =>
             typeFromMaybeNftType(a.type) === TYPES.WWAL
@@ -103,13 +111,14 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               gridTemplateColumns="2fr 1fr 1fr"
               nHover={{ borderColor: '#99EFE44D' }}
               onClick={() => {
-                push(
-                  `/${LST_TYPES_KEY[
-                    LST_TYPES.findIndex(
-                      (item) => item === typeFromMaybeNftType(type)
-                    )
-                  ].toLowerCase()}`
-                );
+                redirecting &&
+                  push(
+                    `/${LST_TYPES_KEY[
+                      LST_TYPES.findIndex(
+                        (item) => item === typeFromMaybeNftType(type)
+                      )
+                    ].toLowerCase()}`
+                  );
                 setValue(`${fieldName}.type`, type);
                 handleClose();
               }}
@@ -160,9 +169,6 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
                     ).toFixed(4)
                   }
                 </P>
-                {/* <P fontSize="0.75rem" opacity="0.6" fontFamily="JetBrains Mono">
-                  {formatDollars(1000)}
-                </P> */}
               </Div>
             </Div>
           ))}

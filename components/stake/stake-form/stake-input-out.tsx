@@ -19,6 +19,7 @@ const StakeInputOut: FC = () => {
       disabled
       name="out"
       label="Out"
+      redirecting
       types={LST_TYPES.map((type) => (percentage > 50 ? `nft:${type}` : type))}
       topContent={
         <P

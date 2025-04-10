@@ -6,8 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { COIN_TYPES, LST_TYPES_MAP } from '@/constants';
 
-import StakeDetails from './swap-details';
-import StakeForm from './swap-form';
+import SwapDetails from './swap-details';
+import SwapForm from './swap-form';
 
 const Swap: FC = () => {
   const { query } = useRouter();
@@ -29,8 +29,8 @@ const Swap: FC = () => {
   return (
     <FormProvider {...form}>
       <Div gap="1rem" display="flex" flexDirection="column">
-        <StakeForm />
-        <StakeDetails />
+        <SwapForm />
+        <SwapDetails />
       </Div>
     </FormProvider>
   );
