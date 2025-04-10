@@ -4,6 +4,7 @@ import unikey from 'unikey';
 
 import { Epoch, NFT, Stake } from '@/components';
 import Stats from '@/components/stats';
+import Swap from '@/components/swap';
 import Unstake from '@/components/unstake';
 import { useTabState } from '@/hooks/use-tab-manager';
 
@@ -29,6 +30,7 @@ const Content: FC = () => {
         [
           <Stake key={unikey()} />,
           <Unstake key={unikey()} />,
+          <Swap key={unikey()} />,
           <NFT key={unikey()} />,
           <Stats key={unikey()} />,
         ][tab]
