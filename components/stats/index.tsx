@@ -1,6 +1,6 @@
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { Button, Div, H2, H3, Img, P } from '@stylin.js/elements';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 import { useLocalStorage } from 'usehooks-ts';
@@ -10,11 +10,14 @@ import useMetadata from '@/hooks/use-metadata';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatMoney } from '@/utils';
 
+import { CaretDownSVG, CaretUpSVG } from '../svg';
+import { StatsSorting, StatsSortingProps } from './stas.types';
 import useStats from './stats.hooks';
 
 const Stats: FC = () => {
   const { data: price } = useWalPrice();
   const { data, isLoading } = useStats();
+  const [sorting, setSorting] = useState<StatsSorting | null>(null);
   const { data: metadata, isLoading: loadingMetadata } = useMetadata(LST_TYPES);
   const [statsInUSD, setStatsInUSD] = useLocalStorage(
     STATS_PRICE_STORAGE_KEY,
@@ -29,6 +32,30 @@ const Stats: FC = () => {
       (acc, curr) => ({ ...acc, [normalizeStructTag(curr.lst)]: curr }),
       {}
     ) ?? {};
+
+  const onSort = (prop: StatsSortingProps) => () => {
+    if (!sorting) return setSorting({ prop, desc: true });
+
+    if (sorting.prop === prop) {
+      if (!sorting.desc) return setSorting(null);
+      return setSorting({ prop, desc: !sorting.desc });
+    }
+
+    return setSorting({ prop, desc: true });
+  };
+
+  const list = LST_TYPES.map((type) => ({
+    type: normalizeStructTag(type),
+    tvl: lstMap[type] ? Number(lstMap[type].tvl) : 0,
+    users: lstMap[type] ? Number(lstMap[type]?.total_users) : 0,
+    icon: metadata ? metadata[normalizeStructTag(type)].iconUrl : '',
+    symbol: metadata ? metadata[normalizeStructTag(type)].symbol : '',
+  })).toSorted((a, b) =>
+    sorting
+      ? (sorting.desc ? b : a)[sorting.prop] -
+        (sorting.desc ? a : b)[sorting.prop]
+      : 0
+  );
 
   return (
     <Div display="flex" gap="1rem" flexDirection="column">
@@ -133,15 +160,67 @@ const Stats: FC = () => {
             fontSize="0.875rem"
             gridTemplateColumns="4fr 5fr 3fr"
           >
-            <P fontFamily="JetBrains Mono">LST</P>
-            <P textAlign="center" fontFamily="JetBrains Mono">
-              Total Staked
-            </P>
-            <P textAlign="center" fontFamily="JetBrains Mono">
-              Total Users
-            </P>
+            <Div
+              gap="0.25rem"
+              display="flex"
+              cursor="pointer"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <P fontFamily="JetBrains Mono">LST</P>
+            </Div>
+            <Div
+              gap="0.25rem"
+              display="flex"
+              cursor="pointer"
+              alignItems="center"
+              justifyContent="center"
+              onClick={onSort('tvl')}
+              nHover={{ color: '#99EFE4' }}
+            >
+              <P textAlign="center" fontFamily="JetBrains Mono">
+                Total Staked
+              </P>
+              <Div display="flex" flexDirection="column" gap="0.125rem">
+                {!sorting ||
+                sorting.prop !== 'tvl' ||
+                sorting?.desc == false ? (
+                  <CaretUpSVG maxHeight="0.25rem" width="100%" />
+                ) : null}
+                {!sorting || sorting.prop !== 'tvl' || sorting?.desc == true ? (
+                  <CaretDownSVG maxHeight="0.25rem" width="100%" />
+                ) : null}
+              </Div>
+            </Div>
+            <Div
+              gap="0.25rem"
+              display="flex"
+              cursor="pointer"
+              alignItems="center"
+              justifyContent="center"
+              onClick={onSort('users')}
+              nHover={{ color: '#99EFE4' }}
+            >
+              <P textAlign="center" fontFamily="JetBrains Mono">
+                Total Users
+              </P>
+              <Div display="flex" flexDirection="column" gap="0.125rem">
+                <Div display="flex" flexDirection="column" gap="0.125rem">
+                  {!sorting ||
+                  sorting.prop !== 'users' ||
+                  sorting?.desc == false ? (
+                    <CaretUpSVG maxHeight="0.25rem" width="100%" />
+                  ) : null}
+                  {!sorting ||
+                  sorting.prop !== 'users' ||
+                  sorting?.desc == true ? (
+                    <CaretDownSVG maxHeight="0.25rem" width="100%" />
+                  ) : null}
+                </Div>
+              </Div>
+            </Div>
           </Div>
-          {LST_TYPES.map((type) => (
+          {list.map(({ type, tvl, icon, symbol, users }) => (
             <Div
               p="1rem"
               key={type}
@@ -162,13 +241,13 @@ const Stats: FC = () => {
                 ) : (
                   <>
                     <Img
+                      src={icon}
+                      alt={symbol}
                       width="1.5rem"
                       height="1.5rem"
                       borderRadius="0.25rem"
-                      alt={metadata?.[normalizeStructTag(type)].symbol}
-                      src={metadata?.[normalizeStructTag(type)].iconUrl}
                     />
-                    <P>{metadata?.[normalizeStructTag(type)].symbol}</P>
+                    <P>{symbol}</P>
                   </>
                 )}
               </Div>
@@ -177,10 +256,7 @@ const Stats: FC = () => {
                   <Skeleton width="5rem" />
                 ) : (
                   `${statsInUSD ? '$' : ''}${formatMoney(
-                    data
-                      ? Number(lstMap[type]?.tvl ?? 0) *
-                          (statsInUSD && price ? price : 1)
-                      : 0
+                    data ? tvl * (statsInUSD && price ? price : 1) : 0
                   )}${!statsInUSD ? ' WAL' : ''}`
                 )}
               </P>
@@ -188,9 +264,7 @@ const Stats: FC = () => {
                 {!data && isLoading ? (
                   <Skeleton width="5rem" />
                 ) : data ? (
-                  formatMoney(Number(lstMap[type]?.total_users ?? 0)).split(
-                    '.'
-                  )[0]
+                  formatMoney(users).split('.')[0]
                 ) : (
                   0
                 )}
