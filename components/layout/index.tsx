@@ -35,8 +35,11 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
     >
       <Header />
       {children}
-      <Footer display="flex" justifyContent="center" py="1.5rem">
-        <Link target="_blank" href="https://t.co/1XNRy4vOZ0">
+      <Footer display="flex" justifyContent="center" py="1.5rem" gap="1rem">
+        <Link
+          target="_blank"
+          href="https://interest-protocol.gitbook.io/winter-walrus"
+        >
           <Div
             gap="0.5rem"
             display="flex"
@@ -45,6 +48,21 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
             nHover={{ color: '#99EFE4' }}
           >
             <Span>Documentation</Span>
+            <ExternalLinkSVG maxWidth="1rem" width="100%" />
+          </Div>
+        </Link>
+        <Link
+          target="_blank"
+          href="https://app.sentio.xyz/share/zc5tzoh0e45tx1a2"
+        >
+          <Div
+            gap="0.5rem"
+            display="flex"
+            color="#FFFFFF80"
+            alignItems="center"
+            nHover={{ color: '#99EFE4' }}
+          >
+            <Span>Metrics</Span>
             <ExternalLinkSVG maxWidth="1rem" width="100%" />
           </Div>
         </Link>

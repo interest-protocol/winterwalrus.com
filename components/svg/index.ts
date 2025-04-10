@@ -1,3 +1,5 @@
+export { default as CaretDownSVG } from './caret-down';
+export { default as CaretUpSVG } from './caret-up';
 export { default as CheckSVG } from './check';
 export { default as ChevronDownSVG } from './chevron-down';
 export { default as ChevronRightSVG } from './chevron-right';
