@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
 import { InfoSVG } from '@/components/svg';
-import TooltipIcon from '@/components/svg/tipicon';
+import TooltipIcon from '@/components/tooltip';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';
@@ -88,7 +88,8 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
             <P>StakedWAL</P>
             <TooltipIcon
               icon={InfoSVG}
-              text="StakedWal refers to natively staked $WAL, which can be unstaked through the Walrus Protocol Staking website"
+              text="StakedWal refers to natively staked $WAL,
+               which can be unstaked through the Walrus Protocol Staking website"
             />
           </Div>
           <P fontFamily="JetBrains Mono" fontWeight="700">
