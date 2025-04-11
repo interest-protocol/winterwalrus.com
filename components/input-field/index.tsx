@@ -17,6 +17,8 @@ const StakeFormField: FC<InputFieldProps> = ({
   types,
   disabled,
   topContent,
+  redirecting,
+  oppositeName,
 }) => {
   const { register, setValue } = useFormContext();
 
@@ -66,7 +68,12 @@ const StakeFormField: FC<InputFieldProps> = ({
             },
           })}
         />
-        <InputFieldAsset name={name} types={types} />
+        <InputFieldAsset
+          name={name}
+          types={types}
+          redirecting={redirecting}
+          oppositeName={oppositeName}
+        />
       </Div>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />
