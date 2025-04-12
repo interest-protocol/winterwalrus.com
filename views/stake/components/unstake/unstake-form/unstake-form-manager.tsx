@@ -8,10 +8,10 @@ import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 const UnstakeFormManager: FC = () => {
-  const { fees } = useFees();
   const { data: quotes } = useQuotes();
   const { data: epoch } = useEpochData();
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
+  const { fees } = useFees(getValues('in.type'));
 
   const [coinOut, valueInBN] = useWatch({
     control,
