@@ -7,8 +7,8 @@ import { WalSVG } from '@/components/svg';
 import { useFees } from '@/hooks/use-fees';
 
 const UnstakeDetails: FC = () => {
-  const { control } = useFormContext();
-  const { fees, isLoading: feesLoading } = useFees();
+  const { control, getValues } = useFormContext();
+  const { fees, isLoading: feesLoading } = useFees(getValues('in.type'));
 
   const outValue = useWatch({ control, name: 'out.value' });
 
