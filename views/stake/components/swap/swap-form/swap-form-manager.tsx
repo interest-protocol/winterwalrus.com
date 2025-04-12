@@ -1,69 +1,84 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
+import BigNumber from 'bignumber.js';
+import { values } from 'ramda';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useReadLocalStorage } from 'usehooks-ts';
 
-import { VALIDATOR_STORAGE_KEY } from '@/constants';
-import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
+import { STAKING_OBJECT } from '@/constants';
+import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
+import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
-import { useQuotes } from '@/hooks/use-quotes';
+import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { ZERO_BIG_NUMBER } from '@/utils';
 
 const SwapFormManager: FC = () => {
-  const { fees } = useFees();
-  const { nodes } = useAllowedNodes();
-  const { data: quotes } = useQuotes();
-  const { control, setValue, getValues } = useFormContext();
-  const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
+  const blizzardSdk = useBlizzardSdk();
+  const { data: epoch } = useEpochData();
+  const interestStableSdk = useInterestStableSdk();
+  const { control, getValues, setValue } = useFormContext();
 
-  const coinOut = useWatch({ control, name: 'out.type' });
-  const valueInBN = useWatch({ control, name: 'in.valueBN' });
-
-  useEffect(() => {
-    if (nodes?.some(({ id }) => id === validator))
-      setValue('validator', validator);
-  }, [validator]);
+  const { fees } = useFees(getValues('in.type'));
+  const coinInValue = useWatch({ control, name: 'in.valueBN' });
 
   useEffect(() => {
-    if (!nodes) return;
+    if (!interestStableSdk || !blizzardSdk || !coinInValue) return;
 
-    if (!nodes.length) {
-      if (!getValues('validator')) return;
+    const coins = getValues(['in.type', 'out.type']);
 
-      setValue('validator', undefined);
+    const isSwap = coins.includes(TYPES.WAL);
+
+    if (isSwap) {
+      const pool = values(POOLS).find(({ coinTypes }) =>
+        coinTypes.every((type) => coins.includes(type))
+      );
+
+      if (!pool) return;
+
+      interestStableSdk
+        .quoteSwap({
+          pool: pool.objectId,
+          coinInType: getValues('in.type'),
+          coinOutType: getValues('out.type'),
+          amountIn: BigInt(coinInValue.toFixed(0)),
+        })
+        .then(({ amountOut }) => {
+          setValue('out.valueBN', BigNumber(String(amountOut)));
+          setValue(
+            'out.value',
+            FixedPointMath.toNumber(BigNumber(String(amountOut)))
+          );
+        });
+
       return;
     }
 
-    const favNode = nodes.find(({ id }) => id === validator);
+    if (!epoch || !fees) return;
 
-    if (favNode) {
-      if (favNode.id === getValues('validator')) return;
+    blizzardSdk
+      .toWalAtEpoch({
+        epoch: epoch.currentEpoch,
+        blizzardStaking: STAKING_OBJECT[getValues('in.type')],
+        value: coinInValue.times(1 - fees.transmute / 100).toFixed(0),
+      })
+      .then((walAmount) => {
+        if (!walAmount) return;
 
-      setValue('validator', favNode.id);
-      return;
-    }
-
-    setValue('validator', nodes[0].id);
-  }, [nodes, coinOut, validator]);
-
-  useEffect(() => {
-    if (!quotes || !fees) return;
-
-    if (!valueInBN || valueInBN.isZero()) {
-      setValue('out.value', 0);
-      setValue('out.valueBN', ZERO_BIG_NUMBER);
-      return;
-    }
-
-    const rate = quotes.quoteLst;
-
-    if (!rate) return;
-
-    const valueBN = valueInBN.times(1 - fees.staking / 100).times(rate);
-
-    setValue('out.valueBN', valueBN);
-    setValue('out.value', FixedPointMath.toNumber(valueBN));
-  }, [valueInBN, quotes, coinOut, fees]);
+        blizzardSdk
+          .toLstAtEpoch({
+            value: walAmount,
+            epoch: epoch.currentEpoch,
+            blizzardStaking: STAKING_OBJECT[getValues('out.type')],
+          })
+          .then((amountOut) => {
+            setValue('out.valueBN', BigNumber(String(amountOut)));
+            setValue(
+              'out.value',
+              FixedPointMath.toNumber(BigNumber(String(amountOut)))
+            );
+          });
+      });
+  }, [coinInValue]);
 
   return null;
 };

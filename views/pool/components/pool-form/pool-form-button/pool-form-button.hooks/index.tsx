@@ -20,7 +20,7 @@ export const useLiquidity = () => {
   const getExplorerUrl = useGetExplorerUrl();
   const removeLiquidity = useRemoveLiquidity();
   const { getValues, setValue } = useFormContext<IPoolForm>();
-  const { data: pool, mutate } = usePoolData(getValues('pool.id'));
+  const { mutate } = usePoolData(getValues('pool.id'));
 
   const reset = () => {
     setValue('pool.value', '0');
@@ -141,8 +141,6 @@ export const useLiquidity = () => {
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!pool) return;
-
     const dismiss = toasting.loading({ message: 'Adding Liquidity...' });
 
     const selectedCoinIndex = getValues('selectedCoinIndex');
@@ -152,8 +150,9 @@ export const useLiquidity = () => {
 
     try {
       await removeLiquidity({
-        pool,
+        pool: getValues('pool.id'),
         coinType: selectedCoinType,
+        lpType: getValues('pool.type'),
         onSuccess: onRemoveSuccess(dismiss),
         onFailure: onRemoveFailure(dismiss),
         lpAmount: BigInt(getValues('pool.valueBN').toFixed(0)),

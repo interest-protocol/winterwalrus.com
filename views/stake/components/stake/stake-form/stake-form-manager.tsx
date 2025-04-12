@@ -12,13 +12,13 @@ import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { nftTypeFromType, ZERO_BIG_NUMBER } from '@/utils';
 
 const StakeFormManager: FC = () => {
-  const { fees } = useFees();
   const { nodes } = useAllowedNodes();
   const { data: quotes } = useQuotes();
   const { data: epoch, isLoading } = useEpochData();
   const { control, setValue, getValues } = useFormContext();
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
+  const { fees } = useFees(getValues('in.type'));
   const coinOut = useWatch({ control, name: 'out.type' });
   const valueInBN = useWatch({ control, name: 'in.valueBN' });
 

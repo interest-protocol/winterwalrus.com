@@ -35,7 +35,7 @@ export const useSwapAction = () => {
     (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
       stopLoading();
       toasting.success({
-        action: 'Staked',
+        action: 'Swapped',
         message: 'See on explorer',
         link: getExplorerUrl(
           dryTx.effects.transactionDigest,
@@ -108,7 +108,7 @@ export const useSwapAction = () => {
   const onFailure = (stopLoading: () => void) => (error?: string) => {
     stopLoading();
     toasting.error({
-      action: 'Stake',
+      action: 'Swap',
       message: error ?? 'Error executing transaction',
     });
   };

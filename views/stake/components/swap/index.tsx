@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { COIN_TYPES, LST_TYPES_MAP } from '@/constants';
 
-import SwapDetails from './swap-details';
 import SwapForm from './swap-form';
 
 const Swap: FC = () => {
@@ -30,7 +29,6 @@ const Swap: FC = () => {
     <FormProvider {...form}>
       <Div gap="1rem" display="flex" flexDirection="column">
         <SwapForm />
-        <SwapDetails />
       </Div>
     </FormProvider>
   );

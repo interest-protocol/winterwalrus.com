@@ -13,13 +13,14 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 import { useStakeAction } from './stake-form-button.hooks';
 
 const StakeFormButton: FC = () => {
-  const { fees } = useFees();
   const { coins } = useCoins();
   const { onStake, loading } = useStakeAction();
   const { nodes, isLoading } = useAllowedNodes();
   const { control, getValues } = useFormContext();
 
   const coinIn = getValues('in.type');
+  const { fees } = useFees(coinIn);
+
   const [amountIn, validator] = useWatch({
     control,
     name: ['in.value', 'validator'],

@@ -8,9 +8,8 @@ import useLstAPR from '@/hooks/use-lst-apr';
 
 const StakeDetails: FC = () => {
   const { control } = useFormContext();
-  const { fees, isLoading: feesLoading } = useFees();
-
   const lst = useWatch({ control, name: 'out.type' });
+  const { fees, isLoading: feesLoading } = useFees(lst);
   const { data, isLoading: aprLoading } = useLstAPR(lst);
 
   return (

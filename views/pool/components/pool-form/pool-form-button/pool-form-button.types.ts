@@ -1,4 +1,3 @@
-import { InterestStablePool } from '@interest-protocol/interest-stable-swap-sdk';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 
 export interface UseAddLiquidityArgs {
@@ -12,9 +11,10 @@ export interface UseAddLiquidityArgs {
 }
 
 export interface UseRemoveLiquidityArgs {
+  pool: string;
+  lpType: string;
   lpAmount: bigint;
   coinType: string | null;
-  pool: InterestStablePool;
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }

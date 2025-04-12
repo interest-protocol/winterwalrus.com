@@ -19,6 +19,7 @@ export const useRemoveLiquidity = () => {
 
   return async ({
     pool,
+    lpType,
     coinType,
     lpAmount,
     onFailure,
@@ -28,7 +29,7 @@ export const useRemoveLiquidity = () => {
     invariant(interestStableSdk, 'Failed to load sdk');
 
     const lpCoin = coinWithBalance({
-      type: pool.lpCoinType,
+      type: lpType,
       balance: lpAmount,
     });
 
@@ -37,8 +38,8 @@ export const useRemoveLiquidity = () => {
 
     if (coinType) {
       const response = await interestStableSdk.removeLiquidityOneCoin({
+        pool,
         lpCoin,
-        pool: pool.objectId,
         coinOutType: coinType,
       });
 
@@ -51,7 +52,7 @@ export const useRemoveLiquidity = () => {
       });
 
       tx = response.tx;
-      assetsToTransfer = pool.coins.map((_, i) => response.returnValues[i]);
+      assetsToTransfer = response.returnValues;
     }
 
     tx.transferObjects(assetsToTransfer, currentAccount.address);

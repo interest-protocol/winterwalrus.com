@@ -2,8 +2,9 @@ import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 import { isNil } from 'ramda';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import useSWR from 'swr';
 
 import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import { useTabState } from '@/hooks/use-tab-manager';
@@ -28,7 +29,7 @@ const PoolFormManager: FC = () => {
     [query.pool]
   );
 
-  useEffect(() => {
+  useSWR([pool], () => {
     if (!pool) return;
 
     setValue(
@@ -45,10 +46,10 @@ const PoolFormManager: FC = () => {
       value: '0',
       valueBN: ZERO_BIG_NUMBER,
     });
-  }, [pool]);
+  });
 
-  useEffect(() => {
-    if (!pool || !interestStableSdk || !tab || coins.length) return;
+  useSWR([coins], () => {
+    if (!pool || !interestStableSdk || tab || !coins.length) return;
 
     if (!coins?.some((coin) => Number(coin?.value))) {
       setValue('pool.valueBN', ZERO_BIG_NUMBER);
@@ -59,7 +60,7 @@ const PoolFormManager: FC = () => {
     setValue('quoting', true);
 
     interestStableSdk
-      ?.quoteAddLiquidity({
+      .quoteAddLiquidity({
         pool: pool.objectId,
         amountsIn: coins.map(({ valueBN }: { valueBN: BigNumber }) =>
           BigInt(valueBN.toFixed(0))
@@ -75,22 +76,26 @@ const PoolFormManager: FC = () => {
       .finally(() => {
         setValue('quoting', false);
       });
-  }, [coins]);
+  });
 
-  useEffect(() => {
+  useSWR([lpCoinValue, selectedCoinIndex], () => {
     if (!pool || !interestStableSdk || !tab) return;
 
     if (!lpCoinValue || lpCoinValue?.isZero()) {
       setValue(
         'coins',
-        coins.map((coin) => ({ ...coin, value: '0', valueBN: ZERO_BIG_NUMBER }))
+        coins.map((coin) => ({
+          ...coin,
+          value: '0',
+          valueBN: ZERO_BIG_NUMBER,
+        }))
       );
       return;
     }
 
     setValue('quoting', true);
 
-    if (isNil(selectedCoinIndex))
+    if (isNil(selectedCoinIndex)) {
       interestStableSdk
         ?.quoteRemoveLiquidity({
           pool: pool.objectId,
@@ -111,7 +116,7 @@ const PoolFormManager: FC = () => {
         .finally(() => {
           setValue('quoting', false);
         });
-    else
+    } else
       interestStableSdk
         ?.quoteRemoveLiquidityOneCoin({
           pool: pool.objectId,
@@ -131,7 +136,7 @@ const PoolFormManager: FC = () => {
         .finally(() => {
           setValue('quoting', false);
         });
-  }, [lpCoinValue, selectedCoinIndex]);
+  });
 
   return null;
 };

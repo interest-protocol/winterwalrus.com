@@ -12,11 +12,11 @@ import { useUnstakeAction } from './unstake-form-button.hooks';
 import UnstakeFormButtonPreview from './unstake-form-button-preview';
 
 const UnstakeFormButton: FC = () => {
-  const { fees } = useFees();
   const { coins } = useCoins();
   const { setContent } = useModal();
   const form = useFormContext();
   const { onUnstake, loading } = useUnstakeAction();
+  const { fees } = useFees(form.getValues('in.type'));
 
   const { control, getValues } = form;
 
@@ -27,13 +27,13 @@ const UnstakeFormButton: FC = () => {
 
   const minMaxAmountIn = fees?.unstaking ? 1.1 : 1;
 
+  const insufficientAmountIn =
+    coinIn && Number(amountIn) && Number(amountIn) < minAmountIn;
+
   const insufficientBalance =
     Number(amountIn) &&
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[coinIn] ?? ZERO_BIG_NUMBER);
-
-  const insufficientAmountIn =
-    coinIn && Number(amountIn) && Number(amountIn) < minAmountIn;
 
   const insufficientAmount = insufficientAmountIn || insufficientBalance;
 
