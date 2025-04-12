@@ -48,13 +48,12 @@ const SettingsMenu: FC = () => {
                   alignItems="center"
                   textTransform="capitalize"
                   color={
-                    route === RoutesEnum.Stake
-                      ? pathname === Routes[RoutesEnum.Stake]
-                        ? '#99EFE4'
-                        : '#FFFFFF80'
-                      : pathname.includes(Routes[route])
-                        ? '#99EFE4'
-                        : '#FFFFFF80'
+                    (route === RoutesEnum.Stake &&
+                      pathname === Routes[RoutesEnum.Stake]) ||
+                    (route !== RoutesEnum.Stake &&
+                      pathname.includes(Routes[route]))
+                      ? '#99EFE4'
+                      : '#FFFFFF80'
                   }
                 >
                   {route}
