@@ -21,7 +21,9 @@ const PoolStats: FC = () => {
     ...(pool?.coinTypes ?? []),
   ]);
 
-  const { data: poolData, isLoading: poolLoading } = usePoolData(pool.objectId);
+  const { data: poolData, isLoading: poolLoading } = usePoolData(
+    pool?.objectId
+  );
 
   return (
     <Div
@@ -50,9 +52,7 @@ const PoolStats: FC = () => {
           {isLoading ? (
             <Skeleton width="5rem" />
           ) : (
-            <Span fontFamily="JetBrains Mono">
-              {metadata?.[type]?.symbol.replace('s-', '')}
-            </Span>
+            <Span fontFamily="JetBrains Mono">{metadata?.[type]?.symbol}</Span>
           )}
         </Div>
         <Span

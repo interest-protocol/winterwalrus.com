@@ -11,7 +11,7 @@ const Navbar: FC = () => {
   const { pathname } = useRouter();
 
   return (
-    <Nav display="flex" gap="2.5rem">
+    <Nav display={['none', 'none', 'none', 'flex']} gap="2.5rem">
       <Link href={Routes[RoutesEnum.Stake]} shallow>
         <Span
           nHover={{ color: '#99EFE480' }}

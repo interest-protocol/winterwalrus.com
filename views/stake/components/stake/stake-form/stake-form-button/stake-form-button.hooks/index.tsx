@@ -99,7 +99,7 @@ export const useStakeAction = () => {
                 ).plus(getValues('out.valueBN')),
                 [getValues('in.type')]: (
                   balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
-                ).plus(getValues('in.valueBN')),
+                ).minus(getValues('in.valueBN')),
               } as Record<string, BigNumber>),
             },
           };

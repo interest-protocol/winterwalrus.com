@@ -14,11 +14,11 @@ const Tabs: FC<TabsProps> = ({ setTab, tab, tabs }) => (
         key={unikey()}
         cursor="pointer"
         border="1px solid"
-        borderColor="#99EFE4"
         borderRadius="0.75rem"
         onClick={() => setTab(index)}
         color={tab === index ? '#292929' : 'white'}
         bg={tab === index ? '#99EFE4' : 'transparent'}
+        borderColor={tab === index ? '#99EFE4' : '#99EFE44D'}
       >
         {text}
       </Button>

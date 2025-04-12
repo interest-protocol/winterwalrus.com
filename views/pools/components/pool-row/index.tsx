@@ -24,7 +24,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id }) => {
         borderColor="#FFFFFF1A"
         borderRadius="0.625rem"
         nHover={{ borderColor: '#99EFE44D' }}
-        gridTemplateColumns="2fr repeat(5, 1fr)"
+        gridTemplateColumns="2fr repeat(4, 1fr)"
       >
         <Div display="flex" alignItems="center" gap="0.5rem">
           {metadataLoading ? (
@@ -41,14 +41,21 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id }) => {
           {metadataLoading ? (
             <Skeleton width="6rem" />
           ) : (
-            <Span>{metadata?.[lpCoinType]?.symbol.replace('s-', '')}</Span>
+            <Span whiteSpace="nowrap">{metadata?.[lpCoinType]?.symbol}</Span>
           )}
         </Div>
-        <Span textAlign="center">--</Span>
-        <Span textAlign="center">--</Span>
-        <Span textAlign="center">--</Span>
-        <Span textAlign="center">--</Span>
-        <Span textAlign="center">--</Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          --
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          --
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          --
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          --
+        </Span>
       </Div>
     </Link>
   );

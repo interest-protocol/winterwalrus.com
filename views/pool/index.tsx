@@ -6,7 +6,7 @@ import { Layout } from '@/components';
 import { ChevronLeftSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
 
-import { PoolStats, PoolTabs } from './components';
+import { PoolForm, PoolStats, PoolTabs } from './components';
 
 const Pool: FC = () => (
   <Layout>
@@ -22,24 +22,28 @@ const Pool: FC = () => (
       maxWidth={['100%', '53.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <Div display="flex" gap="1rem" alignItems="center" color="#ffffff">
-        <Link href={Routes[RoutesEnum.Pools]}>
-          <Button all="unset" nHover={{ color: '#99EFE4' }}>
-            <ChevronLeftSVG maxWidth="1.25rem" width="100%" />
-          </Button>
-        </Link>
-        <H2 fontSize="1.25rem" fontWeight="600">
-          Add Liquidity
-        </H2>
+      <Div display="flex" justifyContent="space-between" alignItems="center">
+        <Div display="flex" gap="1rem" color="#ffffff">
+          <Link href={Routes[RoutesEnum.Pools]}>
+            <Button all="unset" nHover={{ color: '#99EFE4' }}>
+              <ChevronLeftSVG maxWidth="1.25rem" width="100%" />
+            </Button>
+          </Link>
+          <H2 fontSize="1rem" fontWeight="600">
+            Add Liquidity
+          </H2>
+        </Div>
+        <PoolTabs />
       </Div>
-      <PoolTabs />
       <Div
-        gap="1.32rem"
-        display="grid"
-        gridTemplateColumns={['1fr', '1fr', '1fr', '3fr 2fr']}
+        gridTemplateColumns="2fr 3fr"
+        flexDirection="column-reverse"
+        gap={['3rem', '3rem', '3rem', '1.32rem']}
+        display={['flex', 'flex', 'flex', 'grid']}
+        alignItems={['stretch', 'stretch', 'stretch', 'start']}
       >
-        <Div border="1px solid red" p="1rem"></Div>
         <PoolStats />
+        <PoolForm />
       </Div>
     </Div>
   </Layout>

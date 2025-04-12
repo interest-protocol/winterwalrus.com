@@ -11,7 +11,7 @@ import InputFieldBalance from './input-field-balance';
 import InputFieldBalances from './input-field-balances';
 import InputFieldPrice from './input-field-price';
 
-const StakeFormField: FC<InputFieldProps> = ({
+const InputField: FC<InputFieldProps> = ({
   name,
   label,
   types,
@@ -83,4 +83,4 @@ const StakeFormField: FC<InputFieldProps> = ({
   );
 };
 
-export default StakeFormField;
+export default InputField;

@@ -29,20 +29,26 @@ const Pools: FC = () => (
         p="1rem"
         gap="1rem"
         bg="#FFFFFF0D"
-        display="grid"
+        display="flex"
+        overflowX="auto"
         border="1px solid"
         borderRadius="1rem"
+        alignItems="stretch"
+        flexDirection="column"
         borderColor="#FFFFFF1A"
       >
         <Div
           px="1rem"
           display="grid"
+          minWidth="30rem"
           color="#FFFFFF80"
           fontSize="0.875rem"
-          gridTemplateColumns="2fr repeat(5, 1fr)"
+          gridTemplateColumns="2fr repeat(4, 1fr)"
         >
           <Div gap="0.25rem" display="flex" alignItems="center">
-            <P fontFamily="JetBrains Mono">Pool</P>
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              Pool
+            </P>
           </Div>
           <Div
             gap="0.25rem"
@@ -50,7 +56,9 @@ const Pools: FC = () => (
             alignItems="center"
             justifyContent="center"
           >
-            <P fontFamily="JetBrains Mono">TVL</P>
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              TVL
+            </P>
           </Div>
           <Div
             gap="0.25rem"
@@ -58,7 +66,9 @@ const Pools: FC = () => (
             alignItems="center"
             justifyContent="center"
           >
-            <P fontFamily="JetBrains Mono">APR</P>
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              APR
+            </P>
           </Div>
           <Div
             gap="0.25rem"
@@ -66,7 +76,9 @@ const Pools: FC = () => (
             alignItems="center"
             justifyContent="center"
           >
-            <P fontFamily="JetBrains Mono">1D Vol</P>
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              1D Vol
+            </P>
           </Div>
           <Div
             gap="0.25rem"
@@ -74,18 +86,12 @@ const Pools: FC = () => (
             alignItems="center"
             justifyContent="center"
           >
-            <P fontFamily="JetBrains Mono">30D Vol</P>
-          </Div>
-          <Div
-            gap="0.25rem"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <P fontFamily="JetBrains Mono">1D Vol/TVL</P>
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              30D Vol
+            </P>
           </Div>
         </Div>
-        <Div>
+        <Div minWidth="30rem">
           {toPairs(POOLS).map(([key, pool]) => (
             <PoolRow {...pool} key={unikey()} id={key} />
           ))}
