@@ -2,9 +2,10 @@ import { Div, H1, Header as HTMLHeader, Strong } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import Settings from '../settings';
-import MiniStats from '../stats/mini-stats';
 import { LogoSVG } from '../svg';
 import WalletButton from '../wallet-button';
+import HeaderTVL from './header-tvl';
+import Navbar from './navbar';
 
 const Header: FC = () => (
   <HTMLHeader
@@ -35,9 +36,10 @@ const Header: FC = () => (
           Walrus
         </H1>
       </Div>
-      <MiniStats />
+      <Navbar />
     </Div>
     <Div display="flex" gap={['0.5rem', '1rem']} alignItems="center">
+      <HeaderTVL />
       <WalletButton />
       <Settings />
     </Div>

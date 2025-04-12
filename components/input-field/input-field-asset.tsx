@@ -13,7 +13,11 @@ import { ChevronDownSVG } from '../svg';
 import { InputFieldAssetProps } from './input-field.types';
 import InputFieldModal from './input-field-modal';
 
-const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
+const InputFieldAsset: FC<InputFieldAssetProps> = ({
+  name,
+  types,
+  oppositeName,
+}) => {
   const form = useFormContext();
   const { setContent } = useModal();
   const { data: metadata, isLoading } = useMetadata(types);
@@ -45,7 +49,11 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const openAssetModal = () =>
     setContent(
       <FormProvider {...form}>
-        <InputFieldModal name={name} assetList={values(metadata)} />
+        <InputFieldModal
+          name={name}
+          oppositeName={oppositeName}
+          assetList={values(metadata)}
+        />
       </FormProvider>,
       { title: 'Select Asset' }
     );
