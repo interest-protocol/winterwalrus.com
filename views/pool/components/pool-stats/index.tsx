@@ -2,7 +2,7 @@ import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { Div, Img, P, Span } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import useMetadata from '@/hooks/use-metadata';
@@ -14,8 +14,12 @@ import { usePoolData } from './pool-stats.hook';
 
 const PoolStats: FC = () => {
   const { query } = useRouter();
-  const pool = (POOLS as Record<string, SdkPool>)[String(query.pool)];
+  const pool = useMemo(
+    () => (POOLS as Record<string, SdkPool>)[String(query.pool)],
+    [query]
+  );
   const type = pool?.lpCoinType;
+
   const { data: metadata, isLoading } = useMetadata([
     type,
     ...(pool?.coinTypes ?? []),
