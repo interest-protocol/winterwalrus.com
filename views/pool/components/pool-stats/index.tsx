@@ -166,15 +166,17 @@ const PoolStats: FC = () => {
             <P color="#FFFFFF" fontFamily="JetBrains Mono">
               {poolLoading ? (
                 <Skeleton width="3rem" />
-              ) : (
+              ) : poolData ? (
                 formatMoney(
                   Number(
                     FixedPointMath.toNumber(
-                      BigNumber(String(poolData?.balances[index]) ?? 0),
+                      BigNumber(String(poolData.balances[index] ?? 0)),
                       18
                     ).toFixed(5)
                   )
                 )
+              ) : (
+                '--'
               )}
             </P>
             <P color="#FFFFFF80">
