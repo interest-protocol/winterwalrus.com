@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 
 import useClickOutsideListenerRef from '@/hooks/use-click-outside-listener-ref';
 
-import { CogSVG } from '../svg';
+import { BarsSVG, CogSVG } from '../svg';
 import SettingsMenu from './settings-menu';
 
 const Settings: FC = () => {
@@ -33,10 +33,17 @@ const Settings: FC = () => {
         border="1px solid #99EFE44D"
       >
         <Span
-          display="inline-block"
+          p="0.75rem"
+          transition="all 300ms linear"
+          display={['inline-block', 'inline-block', 'inline-block', 'none']}
+        >
+          <BarsSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+        </Span>
+        <Span
           p={['0.5rem', '0.75rem']}
           transition="all 300ms linear"
           nHover={{ rotate: '90deg', color: '#99EFE4' }}
+          display={['none', 'none', 'none', 'inline-block']}
         >
           <CogSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
         </Span>

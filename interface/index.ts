@@ -27,3 +27,10 @@ export interface Node {
   id: string;
   name: string;
 }
+
+export interface SdkPool {
+  lpCoinType: string;
+  coinTypes: string[];
+  objectId: string;
+  state: string;
+}

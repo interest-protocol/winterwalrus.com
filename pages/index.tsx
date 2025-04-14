@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { SEO } from '@/components';
-import Home from '@/views/home';
+import Home from '@/views/stake';
 
 const HomePage: NextPage = () => (
   <>
