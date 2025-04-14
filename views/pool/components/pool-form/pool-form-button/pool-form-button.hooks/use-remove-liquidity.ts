@@ -24,6 +24,7 @@ export const useRemoveLiquidity = () => {
     lpAmount,
     onFailure,
     onSuccess,
+    coinsLength,
   }: UseRemoveLiquidityArgs) => {
     invariant(currentAccount, 'You must be connected');
     invariant(interestStableSdk, 'Failed to load sdk');
@@ -52,7 +53,9 @@ export const useRemoveLiquidity = () => {
       });
 
       tx = response.tx;
-      assetsToTransfer = response.returnValues;
+      assetsToTransfer = Array.from({ length: coinsLength }).map(
+        (_, index) => response.returnValues[index]
+      );
     }
 
     tx.transferObjects(assetsToTransfer, currentAccount.address);

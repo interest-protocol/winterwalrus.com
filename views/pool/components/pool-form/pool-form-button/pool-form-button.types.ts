@@ -14,6 +14,7 @@ export interface UseRemoveLiquidityArgs {
   pool: string;
   lpType: string;
   lpAmount: bigint;
+  coinsLength: number;
   coinType: string | null;
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;

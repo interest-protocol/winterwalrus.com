@@ -81,6 +81,7 @@ export const useLiquidity = () => {
 
   const onRemoveFailure = (stopLoading: () => void) => (error?: string) => {
     stopLoading();
+    reset();
     toasting.error({
       action: 'Remove Liquidity',
       message: error ?? 'Error executing transaction',
@@ -141,7 +142,7 @@ export const useLiquidity = () => {
   };
 
   const handleRemoveLiquidity = async () => {
-    const dismiss = toasting.loading({ message: 'Adding Liquidity...' });
+    const dismiss = toasting.loading({ message: 'Removing Liquidity...' });
 
     const selectedCoinIndex = getValues('selectedCoinIndex');
     const selectedCoinType = !isNil(selectedCoinIndex)
@@ -155,6 +156,7 @@ export const useLiquidity = () => {
         lpType: getValues('pool.type'),
         onSuccess: onRemoveSuccess(dismiss),
         onFailure: onRemoveFailure(dismiss),
+        coinsLength: getValues('coins').length,
         lpAmount: BigInt(getValues('pool.valueBN').toFixed(0)),
       });
     } catch (e) {
