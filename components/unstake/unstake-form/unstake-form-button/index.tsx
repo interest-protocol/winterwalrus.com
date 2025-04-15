@@ -78,7 +78,7 @@ const UnstakeFormButton: FC = () => {
     >
       {isAfterVotes ? (
         <>
-          Unavailable until{' '}
+          Unstake in{' '}
           <Countdown date={Date.now() + (data?.msUntilNextEpoch ?? 0)} />
         </>
       ) : insufficientAmountIn ? (
