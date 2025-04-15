@@ -1,8 +1,10 @@
 import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
+import Countdown from 'react-countdown';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
 import { useCoins } from '@/hooks/use-coins';
+import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -14,9 +16,18 @@ import UnstakeFormButtonPreview from './unstake-form-button-preview';
 const UnstakeFormButton: FC = () => {
   const { fees } = useFees();
   const { coins } = useCoins();
-  const { setContent } = useModal();
   const form = useFormContext();
+  const { data } = useEpochData();
+  const { setContent } = useModal();
   const { onUnstake, loading } = useUnstakeAction();
+  const percentage = +(
+    data && data.currentEpoch
+      ? ((data.epochDurationMs - data.msUntilNextEpoch) * 100) /
+        data.epochDurationMs
+      : 0
+  ).toFixed(2);
+
+  const isAfterVotes = percentage > 49;
 
   const { control, getValues } = form;
 
@@ -37,7 +48,7 @@ const UnstakeFormButton: FC = () => {
 
   const insufficientAmount = insufficientAmountIn || insufficientBalance;
 
-  const disabled = insufficientAmount || loading;
+  const disabled = isAfterVotes || insufficientAmount || loading;
 
   const handleUnstake = () =>
     setContent(
@@ -65,13 +76,20 @@ const UnstakeFormButton: FC = () => {
       onClick={disabled ? undefined : handleUnstake}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
     >
-      {insufficientAmountIn
-        ? `You must unstake at least ${minMaxAmountIn}`
-        : insufficientBalance
-          ? 'Insufficient Balance'
-          : loading
-            ? 'Unstaking...'
-            : 'Unstake'}
+      {isAfterVotes ? (
+        <>
+          Unavailable until{' '}
+          <Countdown date={Date.now() + (data?.msUntilNextEpoch ?? 0)} />
+        </>
+      ) : insufficientAmountIn ? (
+        `You must unstake at least ${minMaxAmountIn}`
+      ) : insufficientBalance ? (
+        'Insufficient Balance'
+      ) : loading ? (
+        'Unstaking...'
+      ) : (
+        'Unstake'
+      )}
     </Button>
   );
 };
