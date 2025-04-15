@@ -27,7 +27,7 @@ const UnstakeFormButton: FC = () => {
       : 0
   ).toFixed(2);
 
-  const isAfterVotes = percentage > 49;
+  const isAfterVotes = percentage > 50;
 
   const { control, getValues } = form;
 
