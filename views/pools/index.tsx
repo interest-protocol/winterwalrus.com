@@ -1,5 +1,5 @@
 import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
-import { Div, H2, P } from '@stylin.js/elements';
+import { Div, H2, Input, P } from '@stylin.js/elements';
 import { toPairs } from 'ramda';
 import { FC } from 'react';
 import unikey from 'unikey';
@@ -7,6 +7,8 @@ import unikey from 'unikey';
 import { Layout } from '@/components';
 
 import { PoolRow } from './components';
+import LiquidityPools from './components/liquidity-pools';
+import PoolsPerformance from './components/pools-performance';
 
 const Pools: FC = () => (
   <Layout>
@@ -22,18 +24,50 @@ const Pools: FC = () => (
       maxWidth={['100%', '51.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <Div display="flex" gap="1rem" color="#ffffff">
-        <H2>Charts</H2>
+      <Div
+        width="100%"
+        display="flex"
+        gap={['0.5rem', '1rem']}
+        flexDirection={['column', 'column', 'row']}
+        justifyContent="space-between"
+        alignItems={['stretch']}
+      >
+        <LiquidityPools />
+        <PoolsPerformance />
       </Div>
-      <Div display="flex" justifyItems="space-between" alignItems="center">
-        <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
+      <Div
+        width="100%"
+        display="flex"
+        gap={['0.5rem', '1rem']}
+        justifyContent="space-between"
+        alignItems="center"
+        flexDirection={['column', 'row']}
+      >
+        <H2
+          fontWeight="600"
+          fontSize="1rem"
+          color="#FFFFFF"
+          alignSelf="flex-start"
+        >
           Pools
         </H2>
-        Search
+        <Input
+          width="100%"
+          maxWidth={['100%', '17.625rem']}
+          height="2.5rem"
+          borderRadius="0.625rem"
+          padding="0 1rem"
+          fontSize="0.875rem"
+          color="#FFFFFF80"
+          placeholder="Search pools..."
+          bg="#FFFFFF0D"
+          border="1px solid #FFFFFF1A"
+          borderColor="#FFFFFF1A"
+        />
       </Div>
       <Div
         p="1rem"
-        gap="1rem"
+        gap={['0.5rem', '1rem']}
         bg="#FFFFFF0D"
         display="flex"
         overflowX="auto"
