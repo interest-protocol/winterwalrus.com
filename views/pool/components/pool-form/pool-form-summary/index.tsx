@@ -26,7 +26,7 @@ const PoolFormSummary: FC = () => {
     ...(coins?.map(({ type }) => type) ?? []),
   ]);
 
-  if (!tab)
+  if (tab === 0)
     return (
       <Div px="1rem" color="#FFFFFF">
         <Div
@@ -63,70 +63,94 @@ const PoolFormSummary: FC = () => {
       </Div>
     );
 
-  return (
-    <Div
-      px="1rem"
-      gap="0.5rem"
-      display="flex"
-      color="#FFFFFF"
-      flexDirection="column"
-    >
-      {coins.map(({ type, value }, index) => (
-        <Div
-          gap="0.5rem"
-          key={unikey()}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Div display="flex" alignItems="center" gap="0.5rem">
-            <Span
-              cursor="pointer"
-              onClick={() => {
-                setValue(
-                  'selectedCoinIndex',
-                  selectedCoinIndex === index ? undefined : index
-                );
-                coins.forEach((_, internalIndex) => {
-                  setValue(`coins.${internalIndex}.value`, '0');
-                  setValue(`coins.${internalIndex}.valueBN`, ZERO_BIG_NUMBER);
-                });
-              }}
-            >
-              <CheckboxSVG
-                width="100%"
-                maxWidth="1rem"
-                status={
-                  isNil(selectedCoinIndex)
-                    ? 'active'
-                    : selectedCoinIndex === index
-                      ? 'checked'
-                      : 'unchecked'
-                }
-              />
+  if (tab === 1)
+    return (
+      <Div
+        px="1rem"
+        gap="0.5rem"
+        display="flex"
+        color="#FFFFFF"
+        flexDirection="column"
+      >
+        {coins.map(({ type, value }, index) => (
+          <Div
+            gap="0.5rem"
+            key={unikey()}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Div display="flex" alignItems="center" gap="0.5rem">
+              <Span
+                cursor="pointer"
+                onClick={() => {
+                  setValue(
+                    'selectedCoinIndex',
+                    selectedCoinIndex === index ? undefined : index
+                  );
+                  coins.forEach((_, internalIndex) => {
+                    setValue(`coins.${internalIndex}.value`, '0');
+                    setValue(`coins.${internalIndex}.valueBN`, ZERO_BIG_NUMBER);
+                  });
+                }}
+              >
+                <CheckboxSVG
+                  width="100%"
+                  maxWidth="1rem"
+                  status={
+                    isNil(selectedCoinIndex)
+                      ? 'active'
+                      : selectedCoinIndex === index
+                        ? 'checked'
+                        : 'unchecked'
+                  }
+                />
+              </Span>
+              {isLoading ? (
+                <Skeleton width="5rem" />
+              ) : (
+                <Img
+                  width="1.5rem"
+                  height="1.5rem"
+                  borderRadius="50%"
+                  alt={data?.[type]?.name}
+                  src={data?.[type]?.iconUrl}
+                />
+              )}
+              {isLoading ? (
+                <Skeleton width="5rem" />
+              ) : (
+                <Span color="#FFFFFF">{data?.[type]?.symbol}</Span>
+              )}
+            </Div>
+            <Span fontFamily="JetBrains Mono">
+              {quoting ? <Skeleton width="5rem" /> : formatMoney(Number(value))}
             </Span>
-            {isLoading ? (
-              <Skeleton width="5rem" />
-            ) : (
-              <Img
-                width="1.5rem"
-                height="1.5rem"
-                borderRadius="50%"
-                alt={data?.[type]?.name}
-                src={data?.[type]?.iconUrl}
-              />
-            )}
-            {isLoading ? (
-              <Skeleton width="5rem" />
-            ) : (
-              <Span color="#FFFFFF">{data?.[type]?.symbol}</Span>
-            )}
           </Div>
-          <Span fontFamily="JetBrains Mono">
-            {quoting ? <Skeleton width="5rem" /> : formatMoney(Number(value))}
+        ))}
+      </Div>
+    );
+
+  return (
+    <Div px="1rem" color="#FFFFFF">
+      <Div
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        gap="1rem"
+      >
+        <Div display="flex" alignItems="center" gap="0.5rem">
+          <Span fontFamily="JetBrains Mono" fontSize="1rem">
+            1 UpWAL ≈ 0.3525 WAL
+          </Span>
+          <Span fontSize="1.5rem" display="flex" alignItems="center">
+            &#8646;
           </Span>
         </Div>
-      ))}
+        <Span fontFamily="JetBrains Mono" fontSize="1rem">
+          $2.34
+        </Span>
+      </Div>
     </Div>
   );
 };

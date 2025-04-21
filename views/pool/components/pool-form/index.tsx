@@ -9,7 +9,6 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 import PoolFields from './pool-fields';
 import { IPoolForm } from './pool-form.types';
-import PoolFormButton from './pool-form-button';
 import PoolFormManager from './pool-form-manager';
 import PoolFormSummary from './pool-form-summary';
 
@@ -39,7 +38,6 @@ const PoolForm: FC = () => {
       <Div gap="1rem" display="flex" flexDirection="column">
         <PoolFormManager />
         <PoolFields />
-        <PoolFormButton />
         <PoolFormSummary />
       </Div>
     </FormProvider>

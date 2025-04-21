@@ -22,9 +22,15 @@ const Pools: FC = () => (
       maxWidth={['100%', '51.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
-        Pools
-      </H2>
+      <Div display="flex" gap="1rem" color="#ffffff">
+        <H2>Charts</H2>
+      </Div>
+      <Div display="flex" justifyItems="space-between" alignItems="center">
+        <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
+          Pools
+        </H2>
+        Search
+      </Div>
       <Div
         p="1rem"
         gap="1rem"
