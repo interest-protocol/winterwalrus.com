@@ -1,8 +1,8 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC, useState } from 'react';
 
-import { usePoolsMetricsOvertime } from '../../pools-metrics.hook';
 import { PoolsChart } from './pools-chart';
+import { usePoolsMetricsOvertime } from './pools-stats.hooks';
 
 const PoolsPerformance: FC = () => {
   const { totalTvl } = usePoolsMetricsOvertime();
@@ -10,51 +10,48 @@ const PoolsPerformance: FC = () => {
   const [interval, setInterval] = useState<'D' | 'W' | 'M'>('D');
 
   return (
-    <Div
-      flex={1}
-      p="1rem"
-      bg="#FFFFFF0D"
-      border="1px solid"
-      borderRadius="1rem"
-    >
+    <Div p="1rem" bg="#FFFFFF0D" border="1px solid" borderRadius="1rem">
       <Div
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
         mb="0.5rem"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
       >
         <Div>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            ${totalTvl.toLocaleString('en-US')}
+            ${totalTvl?.toLocaleString('en-US')}
           </P>
           <P color="#FFFFFF80">Total Value Locked</P>
         </Div>
 
         <Div
-          display="flex"
+          p="0.25rem"
           gap="0.5rem"
+          display="flex"
           border="1px solid #99EFE44D"
           borderRadius="0.25rem"
-          p="0.25rem"
         >
-          {(['D', 'W', 'M'] as const).map((intv) => (
+          {(['D', 'W', 'M'] as const).map((intendedInterval) => (
             <Div
-              key={intv}
+              key={intendedInterval}
               padding="0.5rem 0.75rem"
               borderRadius="0.25rem"
-              pointerEvents={interval === intv ? 'none' : undefined}
-              onClick={() => setInterval(intv)}
+              pointerEvents={interval === intendedInterval ? 'none' : undefined}
+              onClick={() => setInterval(intendedInterval)}
               fontSize={'0.875rem'}
-              backgroundColor={interval === intv ? '#99EFE480' : 'transparent'}
-              color={interval === intv ? '#99EFE480' : '#99EFE4'}
-              style={{ cursor: interval === intv ? 'default' : 'pointer' }}
+              backgroundColor={
+                interval === intendedInterval ? '#99EFE480' : 'transparent'
+              }
+              color={interval === intendedInterval ? '#99EFE480' : '#99EFE4'}
+              style={{
+                cursor: interval === intendedInterval ? 'default' : 'pointer',
+              }}
             >
-              {intv}
+              {intendedInterval}
             </Div>
           ))}
         </Div>
       </Div>
-
       <PoolsChart
         agg={
           interval === 'D' ? 'daily' : interval === 'W' ? 'weekly' : 'monthly'

@@ -5,10 +5,13 @@ import Skeleton from 'react-loading-skeleton';
 
 import { Routes, RoutesEnum } from '@/constants';
 import useMetadata from '@/hooks/use-metadata';
+import { formatDollars } from '@/utils';
 
+import { usePoolsMetrics } from '../pools-stats/pools-stats.hooks';
 import { PoolRowProps } from './pool-row.types';
 
-const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id }) => {
+const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
+  const { metrics, isLoading: metricsLoading } = usePoolsMetrics();
   const { data: metadata, isLoading: metadataLoading } = useMetadata([
     lpCoinType,
   ]);
@@ -45,16 +48,48 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id }) => {
           )}
         </Div>
         <Span whiteSpace="nowrap" textAlign="center">
-          --
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics?.[objectId]
+                ? formatDollars(Number(metrics[objectId].tvl))
+                : '--'}
+            </Span>
+          )}
         </Span>
         <Span whiteSpace="nowrap" textAlign="center">
-          --
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics?.[objectId]
+                ? formatDollars(Number(metrics[objectId].apr))
+                : '--'}
+            </Span>
+          )}
         </Span>
         <Span whiteSpace="nowrap" textAlign="center">
-          --
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics?.[objectId]
+                ? formatDollars(Number(metrics[objectId].volume1D))
+                : '--'}
+            </Span>
+          )}
         </Span>
         <Span whiteSpace="nowrap" textAlign="center">
-          --
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics?.[objectId]
+                ? formatDollars(Number(metrics[objectId].volume30D))
+                : '--'}
+            </Span>
+          )}
         </Span>
       </Div>
     </Link>

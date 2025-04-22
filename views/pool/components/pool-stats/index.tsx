@@ -6,9 +6,9 @@ import Skeleton from 'react-loading-skeleton';
 
 import useMetadata from '@/hooks/use-metadata';
 import { SdkPool } from '@/interface';
-import { formatMoney } from '@/utils';
+import { formatDollars, formatMoney } from '@/utils';
 
-import { usePoolMetrics } from '../../pool-metrics.hook';
+import { usePoolMetrics } from './pool-stats.hooks';
 
 const PoolStats: FC = () => {
   const { query } = useRouter();
@@ -19,13 +19,14 @@ const PoolStats: FC = () => {
   );
 
   const { data } = usePoolMetrics(pool?.objectId);
+
   const stats = [
-    { label: 'TVL', value: formatMoney(data?.tvl ?? 0) },
-    { label: 'Volume', value: formatMoney(data?.volume30D ?? 0) },
-    { label: 'Fees', value: formatMoney(data?.totalFees ?? 0) },
+    { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
+    { label: 'Volume', value: formatDollars(Number(data?.volume30D ?? '0')) },
+    { label: 'Fees', value: formatDollars(Number(data?.totalFees ?? '0')) },
     {
       label: 'APR',
-      value: (data?.apr ?? 0) > 0 ? `${(data?.apr ?? 0).toFixed(2)}%` : '0.00%',
+      value: formatMoney(+Number(data?.apr ?? '0').toFixed(2)),
     },
   ];
 
@@ -83,12 +84,12 @@ const PoolStats: FC = () => {
         </Span>
       </Div>
       <Div
-        display="flex"
         gap="0.5rem"
+        display="flex"
         flexWrap="wrap"
-        justifyContent={['flex-start', 'flex-end']}
-        width={['100%', 'auto']}
         mt={['1rem', '0']}
+        width={['100%', 'auto']}
+        justifyContent={['flex-start', 'flex-end']}
       >
         {stats.map(({ label, value }) => (
           <Div
@@ -96,15 +97,15 @@ const PoolStats: FC = () => {
             p="1rem"
             gap="0.25rem"
             display="flex"
+            minWidth="6rem"
             border="1px solid"
             alignItems="center"
             fontSize="0.875rem"
+            mb={['0.5rem', '0']}
             flexDirection="column"
             borderRadius="0.625rem"
             borderColor="#FFFFFF1A"
-            minWidth="6rem"
             width={['48%', 'auto']}
-            mb={['0.5rem', '0']}
           >
             <P color="#FFFFFF" fontFamily="JetBrains Mono">
               {value}

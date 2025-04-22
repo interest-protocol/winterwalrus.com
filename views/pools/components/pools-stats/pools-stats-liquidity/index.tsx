@@ -1,10 +1,13 @@
 import { Div, H2, P } from '@stylin.js/elements';
+import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
-import { usePoolsMetricsOvertime } from '../../pools-metrics.hook';
+import { formatDollars } from '@/utils';
 
-const LiquidityPools = () => {
-  const { totalVolume, totalTvl, isLoading } = usePoolsMetricsOvertime();
+import { usePoolsMetrics } from '../pools-stats.hooks';
+
+const LiquidityPools: FC = () => {
+  const { metrics, isLoading } = usePoolsMetrics();
 
   return (
     <Div
@@ -43,9 +46,8 @@ const LiquidityPools = () => {
           ) : (
             <>
               <P color="#FFFFFF" fontFamily="JetBrains Mono">
-                ${totalTvl.toLocaleString('en-US')}
+                {formatDollars(metrics?.tvl ?? 0)}
               </P>
-
               <P color="#FFFFFF80">Total Value Locked</P>
             </>
           )}
@@ -69,7 +71,7 @@ const LiquidityPools = () => {
           ) : (
             <>
               <P color="#FFFFFF" fontFamily="JetBrains Mono">
-                ${totalVolume.toLocaleString('en-US')}
+                {formatDollars(metrics?.volume ?? 0)}
               </P>
               <P color="#FFFFFF80">Cumulative Volume</P>
             </>

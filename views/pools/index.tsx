@@ -24,11 +24,11 @@ const Pools: FC = () => (
     >
       <Div
         width="100%"
-        display="flex"
+        display="grid"
+        alignItems="stretch"
         gap={['0.5rem', '1rem']}
-        flexDirection={['column', 'column', 'row']}
         justifyContent="space-between"
-        alignItems={['stretch']}
+        gridTemplateColumns={['1fr', '1fr', '1fr 3fr']}
       >
         <LiquidityPools />
         <PoolsPerformance />
@@ -51,16 +51,16 @@ const Pools: FC = () => (
         </H2>
         <Input
           width="100%"
-          maxWidth={['100%', '17.625rem']}
-          height="2.5rem"
-          borderRadius="0.625rem"
-          padding="0 1rem"
-          fontSize="0.875rem"
-          color="#FFFFFF80"
-          placeholder="Search pools..."
           bg="#FFFFFF0D"
-          border="1px solid #FFFFFF1A"
+          height="2.5rem"
+          padding="0 1rem"
+          color="#FFFFFF80"
+          fontSize="0.875rem"
+          borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
+          placeholder="Search pools..."
+          border="1px solid #FFFFFF1A"
+          maxWidth={['100%', '17.625rem']}
         />
       </Div>
       <Div

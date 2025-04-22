@@ -33,11 +33,9 @@ const Pool: FC = () => (
           Add Liquidity
         </H2>
       </Div>
-
       <PoolStats />
-
       <Div
-        gridTemplateColumns="3fr 3fr"
+        gridTemplateColumns="1fr 1fr"
         flexDirection="column-reverse"
         gap={['3rem', '3rem', '3rem', '1.32rem']}
         display={['flex', 'flex', 'flex', 'grid']}

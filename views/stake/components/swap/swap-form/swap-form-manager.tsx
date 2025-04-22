@@ -48,7 +48,8 @@ const SwapFormManager: FC = () => {
             'out.value',
             FixedPointMath.toNumber(BigNumber(String(amountOut)))
           );
-        });
+        })
+        .catch();
 
       return;
     }

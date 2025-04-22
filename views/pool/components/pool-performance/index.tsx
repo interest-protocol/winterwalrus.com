@@ -1,25 +1,34 @@
 import { Div, P } from '@stylin.js/elements';
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import useSWR from 'swr';
 
 import { Tabs } from '@/components';
+import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
+import useMetadata from '@/hooks/use-metadata';
 import { usePool } from '@/hooks/use-poll';
 import { useTabState } from '@/hooks/use-tab-manager';
-import { useWalPrice } from '@/hooks/use-wal-price';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';
-import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
+import { usePoolsMetricsOvertime } from '@/views/pools/components/pools-stats/pools-stats.hooks';
 
-import { usePoolData } from '../pool-stats/pool-stats.hook';
+import { usePoolData } from '../pool-stats/pool-stats.hooks';
 import { PoolChart } from './pool-chart';
 import { PoolCoinsSummary } from './pool-coins-summary';
 
 const PoolPerformance: FC = () => {
-  const { innerTabs, setInnerTab } = useTabState();
-  const tab = innerTabs['pool-performance'] ?? 0;
-  const { totalTvl, totalVolume, totalFees } = usePoolsMetricsOvertime();
-  const { data: walData } = useWalPrice();
-
   const pool = usePool();
   const { data } = usePoolData(pool?.objectId);
+  const { innerTabs, setInnerTab } = useTabState();
+  const interestStableSdk = useInterestStableSdk();
+  const { totalTvl, totalVolume, totalFees } = usePoolsMetricsOvertime();
+
+  const { data: metadata, isLoading: loadingMetadata } = useMetadata(
+    pool?.coinTypes
+  );
+
+  const tab = innerTabs['pool-performance'] ?? 0;
 
   const tabs = ['TVL', 'Volume', 'Fees'];
   const value = [
@@ -31,6 +40,22 @@ const PoolPerformance: FC = () => {
   const setTab = (tab: number) => {
     setInnerTab('pool-performance', tab);
   };
+
+  const { data: price, isLoading: loadingPrice } = useSWR(
+    ['price', pool?.objectId, interestStableSdk],
+    async () => {
+      if (!interestStableSdk || !pool?.objectId) return;
+
+      const { amountOut } = await interestStableSdk.quoteSwap({
+        pool: pool.objectId,
+        coinInType: pool.coinTypes[0],
+        coinOutType: pool.coinTypes[1],
+        amountIn: String(FixedPointMath.toBigNumber(1)),
+      });
+
+      return FixedPointMath.toNumber(BigNumber(String(amountOut)));
+    }
+  );
 
   return (
     <Div
@@ -52,19 +77,15 @@ const PoolPerformance: FC = () => {
             ${value}
           </P>
         </Div>
-
         <Tabs setTab={setTab} tabs={tabs} tab={tab} />
       </Div>
-
       <PoolChart />
-
       <PoolCoinsSummary />
-
-      <Div display="flex" flexDirection={['column', 'row']} gap="0.5rem">
+      <Div display="grid" gridTemplateColumns={['1fr', '1fr 1fr']} gap="0.5rem">
         <Div
-          p="0.8125rem"
           gap="0.25rem"
           display="flex"
+          p="1.25rem 1rem"
           border="1px solid"
           alignItems="center"
           fontSize="0.875rem"
@@ -80,21 +101,36 @@ const PoolPerformance: FC = () => {
           <P color="#FFFFFF80">Fee tier</P>
         </Div>
         <Div
-          p="0.8125rem"
           gap="0.25rem"
           display="flex"
+          p="1.25rem 1rem"
           border="1px solid"
           alignItems="center"
           fontSize="0.875rem"
+          whiteSpace="nowrap"
           flexDirection="column"
           borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
-          minWidth="6rem"
-          flex={1}
           mb={['0.5rem', '0']}
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            1 WAL ≈ {walData} sWal
+            1{' '}
+            {loadingMetadata ? (
+              <Skeleton width="2rem" />
+            ) : (
+              metadata?.[pool?.coinTypes[0]]?.symbol
+            )}{' '}
+            ≈{' '}
+            {loadingPrice ? (
+              <Skeleton width="1rem" />
+            ) : (
+              formatMoney(Number(price?.toFixed(2)))
+            )}{' '}
+            {loadingMetadata ? (
+              <Skeleton width="2rem" />
+            ) : (
+              metadata?.[pool?.coinTypes[1]]?.symbol
+            )}
           </P>
           <P color="#FFFFFF80">Current price</P>
         </Div>

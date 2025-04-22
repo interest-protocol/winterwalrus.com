@@ -13,7 +13,7 @@ import { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import { useTabState } from '@/hooks/use-tab-manager';
-import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
+import { usePoolsMetricsOvertime } from '@/views/pools/components/pools-stats/pools-stats.hooks';
 
 ChartJS.register(
   CategoryScale,

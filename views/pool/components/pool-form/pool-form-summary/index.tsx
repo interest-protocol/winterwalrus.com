@@ -9,10 +9,9 @@ import { CheckboxSVG } from '@/components/svg';
 import useMetadata from '@/hooks/use-metadata';
 import { usePool } from '@/hooks/use-poll';
 import { useTabState } from '@/hooks/use-tab-manager';
-import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
-import { usePoolData } from '../../pool-stats/pool-stats.hook';
+import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 import { IPoolForm } from '../pool-form.types';
 
 const PoolFormSummary: FC = () => {
@@ -31,7 +30,6 @@ const PoolFormSummary: FC = () => {
 
   const pool = usePool();
   const a = usePoolData(pool?.objectId);
-  const { data: walData } = useWalPrice();
 
   a.data?.balances[0];
   if (tab === 0)

@@ -11,7 +11,7 @@ import { usePool } from '@/hooks/use-poll';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
-import { usePoolData } from '../../pool-stats/pool-stats.hook';
+import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 
 export const PoolCoinsSummary: FC = () => {
   const pool = usePool();
@@ -41,13 +41,9 @@ export const PoolCoinsSummary: FC = () => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleCopy = async (index: number, value: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedIndex(index);
-      setTimeout(() => setCopiedIndex(null), 1500);
-    } catch {
-      // handle error if needed
-    }
+    await navigator.clipboard.writeText(value);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 1500);
   };
 
   return (

@@ -1,24 +1,26 @@
 import { Button, Div } from '@stylin.js/elements';
-import { FC, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import InputField from '@/components/input-field';
 import { SwapSVG } from '@/components/svg';
-import { COIN_TYPES, LST_TYPES } from '@/constants';
 
 import SwapFormButton from './swap-form-button';
 import SwapFormManager from './swap-form-manager';
 
 const SwapForm: FC = () => {
-  const { setValue, getValues } = useFormContext();
-  const [flipped, setFlipped] = useState(false);
+  const { setValue, getValues, control } = useFormContext();
+
+  const [inType, outType] = useWatch({
+    control,
+    name: ['in.type', 'out.type'],
+  });
 
   const handleFlipTokens = () => {
     const coinIn = getValues('in.type');
     const coinOut = getValues('out.type');
     setValue('in', { value: '0', type: coinOut });
     setValue('out', { value: '0', type: coinIn });
-    setFlipped((prev) => !prev);
   };
 
   return (
@@ -28,9 +30,9 @@ const SwapForm: FC = () => {
         <InputField
           name="in"
           label="In"
+          types={[inType]}
           oppositeName="out"
           topContent="balance"
-          types={!flipped ? [...COIN_TYPES] : [...COIN_TYPES, ...LST_TYPES]}
         />
         <Button
           all="unset"
@@ -56,8 +58,8 @@ const SwapForm: FC = () => {
           disabled
           name="out"
           label="Out"
+          types={[outType]}
           oppositeName="in"
-          types={flipped ? [...COIN_TYPES] : [...COIN_TYPES, ...LST_TYPES]}
         />
       </Div>
       <SwapFormButton />
