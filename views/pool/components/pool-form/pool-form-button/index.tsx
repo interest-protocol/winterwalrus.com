@@ -50,9 +50,11 @@ const PoolFormButton: FC = () => {
         ? 'Insert an amount'
         : quoting
           ? 'Quoting...'
-          : tab
-            ? 'Withdraw'
-            : 'Deposit'}
+          : tab === 0
+            ? 'Deposit'
+            : tab === 1
+              ? 'Withdraw'
+              : 'Swap'}
     </WalletGuardButton>
   );
 };

@@ -8,7 +8,7 @@ const useInterestStableSdk = () => {
   const localRPC = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;
 
   const { data } = useSWR<InterestStableSwapSDK>(
-    [useInterestStableSdk.name, localRPC],
+    [useInterestStableSdk.name, localRPC, 'stable-swap'],
     () =>
       new InterestStableSwapSDK({
         fullNodeUrl: RPC_MAP[Network.MAINNET][localRPC],

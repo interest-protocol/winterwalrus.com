@@ -9,11 +9,9 @@ import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
 import { useSwap } from './use-swap';
-import { useTransmute } from './use-transmute';
 
 export const useSwapAction = () => {
   const swap = useSwap();
-  const transmute = useTransmute();
   const { update } = useAppState();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
@@ -48,7 +46,7 @@ export const useSwapAction = () => {
           ).plus(getValues('out.valueBN')),
           [getValues('in.type')]: (
             balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
-          ).minus(getValues('in.valueNoFeeBN')),
+          ).minus(getValues('out.valueBN')),
         },
       }));
 
@@ -86,36 +84,5 @@ export const useSwapAction = () => {
     }
   };
 
-  const onFailureTransmute = (stopLoading: () => void) => (error?: string) => {
-    stopLoading();
-    toasting.error({
-      action: 'Transmute',
-      message: error ?? 'Error executing transaction',
-    });
-  };
-
-  const onTransmute = async () => {
-    const form = getValues();
-
-    if (!form.in.value || !form.out.value) return;
-    setLoading(true);
-    const dismiss = toasting.loading({ message: 'Transmuting...' });
-
-    try {
-      await transmute({
-        coinInType: form.in.type,
-        onSuccess: onSuccess(dismiss),
-        onFailure: onFailureTransmute(dismiss),
-        coinOutType: typeFromMaybeNftType(coinOut),
-        coinInValue: BigInt(form.in.valueBN.toFixed(0)),
-        coinOutValue: BigInt(form.in.valueNoFeeBN.toFixed(0)),
-      });
-    } catch (e) {
-      onFailureTransmute(dismiss)((e as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { onSwap, onTransmute, loading };
+  return { onSwap, loading };
 };

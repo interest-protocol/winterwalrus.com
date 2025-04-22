@@ -32,6 +32,9 @@ importers:
       bignumber.js:
         specifier: ^9.1.2
         version: 9.1.2
+      chart.js:
+        specifier: ^4.4.9
+        version: 4.4.9
       decimal.js-light:
         specifier: ^2.5.1
         version: 2.5.1
@@ -50,6 +53,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.0(chart.js@4.4.9)(react@18.2.0)
       react-countdown:
         specifier: ^2.3.6
         version: 2.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -461,6 +467,9 @@ packages:
 
   '@interest-protocol/interest-stable-swap-sdk@1.0.0':
     resolution: {integrity: sha512-gfDJg1lc7BqSZRbm69LEO1NEKltUrCRJA+lY31+ox1zq+M0NlJTphE5ZuKS5onRpAfuLg6NX0CuAKVDUvF532A==}
+
+  '@kurkle/color@0.3.4':
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
   '@mysten/bcs@1.4.0':
     resolution: {integrity: sha512-YwDYspceLt8b7v6ohPvy8flQEi+smtfSG5d2A98CbUA48XBmOqTSPNmpw9wsZVVnrH2avr+BS5uVhDZT+EquYA==}
@@ -1195,6 +1204,10 @@ packages:
   chalk@5.3.0:
     resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+
+  chart.js@4.4.9:
+    resolution: {integrity: sha512-EyZ9wWKgpAU0fLJ43YAEIF8sr5F2W3LqbS40ZJyHIner2lY14ufqv2VMp69MAiZ2rpwxEUxEhIH/0U3xyRynxg==}
+    engines: {pnpm: '>=8'}
 
   cli-cursor@4.0.0:
     resolution: {integrity: sha512-VGtlMu3x/4DOtIUwEkRezxUZ2lBacNJCHash0N0WeZDBS+7Ux1dm3XWAgWYxLJFMMdOeXMHXorshEFhbMSGelg==}
@@ -2438,6 +2451,12 @@ packages:
   ramda@0.30.1:
     resolution: {integrity: sha512-tEF5I22zJnuclswcZMc8bDIrwRHRzf+NqVEmqg50ShAZMP7MWeR/RGDthfM/p+BlqvF2fXAzpn8i+SJcYD3alw==}
 
+  react-chartjs-2@5.3.0:
+    resolution: {integrity: sha512-UfZZFnDsERI3c3CZGxzvNJd02SHjaSJ8kgW1djn65H1KK8rehwTjyrRKOG3VTMG8wtHZ5rgAO5oTHtHi9GCCmw==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   react-countdown@2.3.6:
     resolution: {integrity: sha512-ZfX6S08Hb6x6W6eCn1hMDvxPICI/T30fd+gaeVTCR/2cGZ2WJ3f26e4ImNIMX1fHkopJrUdnRpWXP13/D39+gg==}
     peerDependencies:
@@ -3431,6 +3450,8 @@ snapshots:
       - '@gql.tada/vue-support'
       - typescript
 
+  '@kurkle/color@0.3.4': {}
+
   '@mysten/bcs@1.4.0':
     dependencies:
       bs58: 6.0.0
@@ -4243,6 +4264,10 @@ snapshots:
       supports-color: 7.2.0
 
   chalk@5.3.0: {}
+
+  chart.js@4.4.9:
+    dependencies:
+      '@kurkle/color': 0.3.4
 
   cli-cursor@4.0.0:
     dependencies:
@@ -5592,6 +5617,11 @@ snapshots:
   quick-lru@4.0.1: {}
 
   ramda@0.30.1: {}
+
+  react-chartjs-2@5.3.0(chart.js@4.4.9)(react@18.2.0):
+    dependencies:
+      chart.js: 4.4.9
+      react: 18.2.0
 
   react-countdown@2.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:

@@ -1,12 +1,12 @@
 import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
-import { Div, H2, P } from '@stylin.js/elements';
+import { Div, H2, Input, P } from '@stylin.js/elements';
 import { toPairs } from 'ramda';
 import { FC } from 'react';
 import unikey from 'unikey';
 
 import { Layout } from '@/components';
 
-import { PoolRow } from './components';
+import { LiquidityPools, PoolRow, PoolsPerformance } from './components';
 
 const Pools: FC = () => (
   <Layout>
@@ -22,12 +22,50 @@ const Pools: FC = () => (
       maxWidth={['100%', '51.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
-        Pools
-      </H2>
+      <Div
+        width="100%"
+        display="grid"
+        alignItems="stretch"
+        gap={['0.5rem', '1rem']}
+        justifyContent="space-between"
+        gridTemplateColumns={['1fr', '1fr', '1fr 3fr']}
+      >
+        <LiquidityPools />
+        <PoolsPerformance />
+      </Div>
+      <Div
+        width="100%"
+        display="flex"
+        gap={['0.5rem', '1rem']}
+        justifyContent="space-between"
+        alignItems="center"
+        flexDirection={['column', 'row']}
+      >
+        <H2
+          fontWeight="600"
+          fontSize="1rem"
+          color="#FFFFFF"
+          alignSelf="flex-start"
+        >
+          Pools
+        </H2>
+        <Input
+          width="100%"
+          bg="#FFFFFF0D"
+          height="2.5rem"
+          padding="0 1rem"
+          color="#FFFFFF80"
+          fontSize="0.875rem"
+          borderRadius="0.625rem"
+          borderColor="#FFFFFF1A"
+          placeholder="Search pools..."
+          border="1px solid #FFFFFF1A"
+          maxWidth={['100%', '17.625rem']}
+        />
+      </Div>
       <Div
         p="1rem"
-        gap="1rem"
+        gap={['0.5rem', '1rem']}
         bg="#FFFFFF0D"
         display="flex"
         overflowX="auto"

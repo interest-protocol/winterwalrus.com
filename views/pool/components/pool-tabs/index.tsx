@@ -10,7 +10,9 @@ const PoolTabs: FC = () => {
     setTab(0);
   }, []);
 
-  return <Tabs tabs={['Deposit', 'Withdraw']} tab={tab} setTab={setTab} />;
+  return (
+    <Tabs tabs={['Deposit', 'Withdraw', 'Swap']} tab={tab} setTab={setTab} />
+  );
 };
 
 export default PoolTabs;

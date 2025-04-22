@@ -9,7 +9,7 @@ import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
-import { usePoolData } from '../../../pool-stats/pool-stats.hook';
+import { usePoolData } from '../../../pool-stats/pool-stats.hooks';
 import { IPoolForm } from '../../pool-form.types';
 import { useAddLiquidity } from './use-add-liquidity';
 import { useRemoveLiquidity } from './use-remove-liquidity';

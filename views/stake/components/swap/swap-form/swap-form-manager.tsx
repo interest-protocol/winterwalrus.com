@@ -33,7 +33,7 @@ const SwapFormManager: FC = () => {
         coinTypes.every((type) => coins.includes(type))
       );
 
-      if (!pool) return;
+      if (!pool || !interestStableSdk['quoteSwap']) return;
 
       interestStableSdk
         .quoteSwap({
@@ -44,11 +44,13 @@ const SwapFormManager: FC = () => {
         })
         .then(({ amountOut }) => {
           setValue('out.valueBN', BigNumber(String(amountOut)));
+          setValue('in.valueNoFeeBN', BigNumber(String(amountOut)));
           setValue(
             'out.value',
             FixedPointMath.toNumber(BigNumber(String(amountOut)))
           );
-        });
+        })
+        .catch();
 
       return;
     }
@@ -77,6 +79,10 @@ const SwapFormManager: FC = () => {
               FixedPointMath.toNumber(BigNumber(String(amountOut)))
             );
           });
+        setValue(
+          'in.valueNoFeeBN',
+          BigNumber(coinInValue.times(1 - fees.transmute / 100).toFixed(0))
+        );
       });
   }, [coinInValue]);
 
