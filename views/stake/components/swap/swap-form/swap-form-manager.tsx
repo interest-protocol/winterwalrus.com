@@ -33,10 +33,10 @@ const SwapFormManager: FC = () => {
         coinTypes.every((type) => coins.includes(type))
       );
 
-      if (!pool) return;
+      if (!pool || !interestStableSdk['quoteSwap']) return;
 
       interestStableSdk
-        .quoteSwap?.({
+        .quoteSwap({
           pool: pool.objectId,
           coinInType: getValues('in.type'),
           coinOutType: getValues('out.type'),
