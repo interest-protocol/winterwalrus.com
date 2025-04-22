@@ -36,7 +36,7 @@ const SwapFormManager: FC = () => {
       if (!pool) return;
 
       interestStableSdk
-        .quoteSwap({
+        .quoteSwap?.({
           pool: pool.objectId,
           coinInType: getValues('in.type'),
           coinOutType: getValues('out.type'),
