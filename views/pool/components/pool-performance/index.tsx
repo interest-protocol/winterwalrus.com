@@ -2,10 +2,13 @@ import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import { Tabs } from '@/components';
+import { usePool } from '@/hooks/use-poll';
 import { useTabState } from '@/hooks/use-tab-manager';
+import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatMoney } from '@/utils';
 import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
 
+import { usePoolData } from '../pool-stats/pool-stats.hook';
 import { PoolChart } from './pool-chart';
 import { PoolCoinsSummary } from './pool-coins-summary';
 
@@ -13,6 +16,10 @@ const PoolPerformance: FC = () => {
   const { innerTabs, setInnerTab } = useTabState();
   const tab = innerTabs['pool-performance'] ?? 0;
   const { totalTvl, totalVolume, totalFees } = usePoolsMetricsOvertime();
+  const { data: walData } = useWalPrice();
+
+  const pool = usePool();
+  const { data } = usePoolData(pool?.objectId);
 
   const tabs = ['TVL', 'Volume', 'Fees'];
   const value = [
@@ -64,12 +71,11 @@ const PoolPerformance: FC = () => {
           flexDirection="column"
           borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
-          minWidth="6rem"
-          flex={1}
+          minWidth="max-content"
           mb={['0.5rem', '0']}
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            2%
+            {Number(data?.fees?.fee ?? 0) / 10 ** 16}%
           </P>
           <P color="#FFFFFF80">Fee tier</P>
         </Div>
@@ -88,7 +94,7 @@ const PoolPerformance: FC = () => {
           mb={['0.5rem', '0']}
         >
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            1 WAL ≈ 0.45 sWal
+            1 WAL ≈ {walData} sWal
           </P>
           <P color="#FFFFFF80">Current price</P>
         </Div>

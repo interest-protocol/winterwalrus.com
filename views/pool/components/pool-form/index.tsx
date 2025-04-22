@@ -1,10 +1,8 @@
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { Div } from '@stylin.js/elements';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { SdkPool } from '@/interface';
+import { usePool } from '@/hooks/use-poll';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import PoolFields from './pool-fields';
@@ -13,8 +11,7 @@ import PoolFormManager from './pool-form-manager';
 import PoolFormSummary from './pool-form-summary';
 
 const PoolForm: FC = () => {
-  const { query } = useRouter();
-  const pool = (POOLS as Record<string, SdkPool>)[String(query.pool)];
+  const pool = usePool();
 
   const form = useForm<IPoolForm>({
     defaultValues: {
