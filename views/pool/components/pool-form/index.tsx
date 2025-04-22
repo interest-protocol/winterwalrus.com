@@ -2,7 +2,7 @@ import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { usePool } from '@/hooks/use-poll';
+import { usePool } from '@/hooks/use-pool';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 import PoolFields from './pool-fields';

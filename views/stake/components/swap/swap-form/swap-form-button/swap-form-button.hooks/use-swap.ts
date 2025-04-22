@@ -1,55 +1,60 @@
+import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
+import { values } from 'ramda';
 import invariant from 'tiny-invariant';
 
-import { STAKING_OBJECT } from '@/constants';
-import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
+import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import { signAndExecute } from '@/utils';
 
 import { SwapArgs } from '../swap-form-button.types';
 
 export const useSwap = () => {
   const client = useSuiClient();
-  const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
+  const interestStableSdk = useInterestStableSdk();
 
   return async ({
-    nodeId,
-    coinIn,
-    coinOut,
-    coinValue,
     onSuccess,
     onFailure,
-    isAfterVote,
+    coinInType,
+    coinOutType,
+    coinInValue,
+    coinOutValue,
   }: SwapArgs) => {
+    const pool = values(POOLS).find(
+      ({ coinTypes }) =>
+        coinTypes.includes(coinInType) && coinTypes.includes(coinOutType)
+    );
+
+    invariant(pool, 'Failed to load pool');
     invariant(currentAccount?.address, 'You must be logged in');
-    invariant(blizzardSdk, 'Failed to load sdk');
+    invariant(interestStableSdk, 'Failed to load sdk');
 
     const tx = new Transaction();
 
     tx.setSender(currentAccount.address);
 
-    const walCoin = coinWithBalance({
-      type: coinIn,
-      balance: coinValue,
+    const coinIn = coinWithBalance({
+      type: coinInType,
+      balance: coinInValue,
     })(tx);
 
-    const { returnValues } = await blizzardSdk[
-      isAfterVote ? 'mintAfterVotesFinished' : 'mint'
-    ]({
+    const { returnValues } = await interestStableSdk.swap({
       tx,
-      nodeId,
-      walCoin,
-      blizzardStaking: STAKING_OBJECT[coinOut],
+      coinIn,
+      coinInType,
+      coinOutType,
+      pool: pool.objectId,
+      minAmountOut: coinOutValue,
     });
 
-    if (isAfterVote) blizzardSdk.keepStakeNft({ tx, nft: returnValues });
-    else tx.transferObjects([returnValues], currentAccount.address);
+    tx.transferObjects([returnValues], currentAccount.address);
 
     return signAndExecute({
       tx,

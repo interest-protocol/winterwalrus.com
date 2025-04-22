@@ -7,7 +7,7 @@ import unikey from 'unikey';
 import { CopySVG } from '@/components/svg';
 import ExternalLink from '@/components/svg/external-link';
 import useMetadata from '@/hooks/use-metadata';
-import { usePool } from '@/hooks/use-poll';
+import { usePool } from '@/hooks/use-pool';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 

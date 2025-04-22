@@ -19,13 +19,11 @@ export const useTransmute = () => {
   const signTransaction = useSignTransaction();
 
   return async ({
-    nodeId,
-    coinIn,
-    coinOut,
-    coinValue,
     onSuccess,
     onFailure,
-    isAfterVote,
+    coinInType,
+    coinInValue,
+    coinOutValue,
   }: SwapArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
     invariant(blizzardSdk, 'Failed to load sdk');
@@ -34,22 +32,29 @@ export const useTransmute = () => {
 
     tx.setSender(currentAccount.address);
 
-    const walCoin = coinWithBalance({
-      type: coinIn,
-      balance: coinValue,
+    const coinIn = coinWithBalance({
+      type: coinInType,
+      balance: coinInValue,
     })(tx);
 
-    const { returnValues } = await blizzardSdk[
-      isAfterVote ? 'mintAfterVotesFinished' : 'mint'
-    ]({
+    const {
+      returnValues: [, withdrawIXs],
+    } = await blizzardSdk.fcfs({
       tx,
-      nodeId,
-      walCoin,
-      blizzardStaking: STAKING_OBJECT[coinOut],
+      value: coinOutValue,
+      blizzardStaking: STAKING_OBJECT[coinInType],
     });
 
-    if (isAfterVote) blizzardSdk.keepStakeNft({ tx, nft: returnValues });
-    else tx.transferObjects([returnValues], currentAccount.address);
+    const {
+      returnValues: [extraLst, wWal],
+    } = await blizzardSdk.transmute({
+      tx,
+      withdrawIXs,
+      fromCoin: coinIn,
+      fromBlizzardStaking: STAKING_OBJECT[coinInType],
+    });
+
+    tx.transferObjects([extraLst, wWal], currentAccount.address);
 
     return signAndExecute({
       tx,

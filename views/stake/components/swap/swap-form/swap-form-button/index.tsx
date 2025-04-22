@@ -14,11 +14,15 @@ import { useSwapAction } from './swap-form-button.hooks';
 
 const SwapFormButton: FC = () => {
   const { coins } = useCoins();
-  const { onStake, loading } = useSwapAction();
   const { control, getValues } = useFormContext();
+  const { onSwap, onTransmute, loading } = useSwapAction();
+
   const { fees } = useFees(getValues('in.type'));
 
-  const amountIn = useWatch({ control, name: 'in.value' });
+  const [inType, outType, amountIn] = useWatch({
+    control,
+    name: ['in.type', 'out.type', 'in.value'],
+  });
 
   const minAmountIn = 1 + (fees?.transmute ?? 0) / 100;
 
@@ -32,7 +36,7 @@ const SwapFormButton: FC = () => {
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
 
-  const isSwap = getValues(['in.type', 'out.type']).includes(TYPES.WAL);
+  const isSwap = [inType, outType].includes(TYPES.WAL);
 
   const hasMarket =
     isSwap &&
@@ -42,9 +46,12 @@ const SwapFormButton: FC = () => {
       )
     );
 
+  const validTransmute = !isSwap && outType === TYPES.WWAL;
+
   const disabled =
     loading ||
     (isSwap && !hasMarket) ||
+    (!isSwap && !validTransmute) ||
     insufficientAmountIn ||
     insufficientBalance;
 
@@ -60,9 +67,9 @@ const SwapFormButton: FC = () => {
       disabled={disabled}
       borderRadius="0.625rem"
       opacity={disabled ? 0.7 : 1}
-      onClick={disabled ? undefined : onStake}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientBalance ? '#FF898B' : '#99EFE4'}
+      onClick={disabled ? undefined : isSwap ? onSwap : onTransmute}
     >
       {insufficientBalance
         ? 'Insufficient Balance'
@@ -72,11 +79,13 @@ const SwapFormButton: FC = () => {
             : loading
               ? 'Swapping...'
               : 'Swap'
-          : loading
-            ? 'Transmuting...'
-            : insufficientAmountIn
-              ? `You must transmute at least ${minMaxAmountIn}`
-              : 'Transmute'}
+          : !validTransmute
+            ? 'You can only transmute to wWAL'
+            : loading
+              ? 'Transmuting...'
+              : insufficientAmountIn
+                ? `You must transmute at least ${minMaxAmountIn}`
+                : 'Transmute'}
     </WalletGuardButton>
   );
 };

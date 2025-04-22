@@ -7,11 +7,9 @@ import unikey from 'unikey';
 
 import { CheckboxSVG } from '@/components/svg';
 import useMetadata from '@/hooks/use-metadata';
-import { usePool } from '@/hooks/use-poll';
 import { useTabState } from '@/hooks/use-tab-manager';
 import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
-import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 import { IPoolForm } from '../pool-form.types';
 
 const PoolFormSummary: FC = () => {
@@ -28,10 +26,6 @@ const PoolFormSummary: FC = () => {
     ...(coins?.map(({ type }) => type) ?? []),
   ]);
 
-  const pool = usePool();
-  const a = usePoolData(pool?.objectId);
-
-  a.data?.balances[0];
   if (tab === 0)
     return (
       <Div px="1rem" color="#FFFFFF">
@@ -137,28 +131,7 @@ const PoolFormSummary: FC = () => {
       </Div>
     );
 
-  return (
-    <Div px="1rem" color="#FFFFFF">
-      <Div
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        gap="1rem"
-      >
-        <Div display="flex" alignItems="center" gap="0.5rem">
-          <Span fontFamily="JetBrains Mono" fontSize="1rem">
-            1 UpWAL ≈ 0.3525 WAL
-          </Span>
-          <Span fontSize="1.5rem" display="flex" alignItems="center">
-            &#8646;
-          </Span>
-        </Div>
-        <Span fontFamily="JetBrains Mono" fontSize="1rem">
-          $2.34
-        </Span>
-      </Div>
-    </Div>
-  );
+  return null;
 };
 
 export default PoolFormSummary;

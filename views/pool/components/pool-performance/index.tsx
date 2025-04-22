@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { Tabs } from '@/components';
 import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import useMetadata from '@/hooks/use-metadata';
-import { usePool } from '@/hooks/use-poll';
+import { usePool } from '@/hooks/use-pool';
 import { useTabState } from '@/hooks/use-tab-manager';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';

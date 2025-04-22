@@ -24,8 +24,6 @@ const SwapFormManager: FC = () => {
   useEffect(() => {
     if (!interestStableSdk || !blizzardSdk || !coinInValue) return;
 
-    console.log({ interestStableSdk });
-
     const coins = getValues(['in.type', 'out.type']);
 
     const isSwap = coins.includes(TYPES.WAL);
@@ -46,6 +44,7 @@ const SwapFormManager: FC = () => {
         })
         .then(({ amountOut }) => {
           setValue('out.valueBN', BigNumber(String(amountOut)));
+          setValue('in.valueNoFeeBN', BigNumber(String(amountOut)));
           setValue(
             'out.value',
             FixedPointMath.toNumber(BigNumber(String(amountOut)))
@@ -80,6 +79,10 @@ const SwapFormManager: FC = () => {
               FixedPointMath.toNumber(BigNumber(String(amountOut)))
             );
           });
+        setValue(
+          'in.valueNoFeeBN',
+          BigNumber(coinInValue.times(1 - fees.transmute / 100).toFixed(0))
+        );
       });
   }, [coinInValue]);
 
