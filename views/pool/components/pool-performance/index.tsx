@@ -3,6 +3,8 @@ import { FC } from 'react';
 
 import { Tabs } from '@/components';
 import { useTabState } from '@/hooks/use-tab-manager';
+import { formatMoney } from '@/utils';
+import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
 
 import { PoolChart } from './pool-chart';
 import { PoolCoinsSummary } from './pool-coins-summary';
@@ -10,8 +12,14 @@ import { PoolCoinsSummary } from './pool-coins-summary';
 const PoolPerformance: FC = () => {
   const { innerTabs, setInnerTab } = useTabState();
   const tab = innerTabs['pool-performance'] ?? 0;
+  const { totalTvl, totalVolume, totalFees } = usePoolsMetricsOvertime();
 
   const tabs = ['TVL', 'Volume', 'Fees'];
+  const value = [
+    formatMoney(totalTvl),
+    formatMoney(totalVolume),
+    (totalFees > 0 ? totalFees.toFixed(2) : '0.00') + '%',
+  ][tab];
 
   const setTab = (tab: number) => {
     setInnerTab('pool-performance', tab);
@@ -34,7 +42,7 @@ const PoolPerformance: FC = () => {
         <Div>
           <P color="#FFFFFF80">{tabs[tab]}</P>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            $1.43K
+            ${value}
           </P>
         </Div>
 

@@ -6,20 +6,29 @@ import Skeleton from 'react-loading-skeleton';
 
 import useMetadata from '@/hooks/use-metadata';
 import { SdkPool } from '@/interface';
+import { formatMoney } from '@/utils';
 
-const stats = [
-  { label: 'TVL', value: '--' },
-  { label: 'Volume', value: '--' },
-  { label: 'Fees', value: '--' },
-  { label: 'APR', value: '--' },
-];
+import { usePoolMetrics } from '../../pool-metrics.hook';
 
 const PoolStats: FC = () => {
   const { query } = useRouter();
+
   const pool = useMemo(
     () => (POOLS as Record<string, SdkPool>)[String(query.pool)],
     [query]
   );
+
+  const { data } = usePoolMetrics(pool?.objectId);
+  const stats = [
+    { label: 'TVL', value: formatMoney(data?.tvl ?? 0) },
+    { label: 'Volume', value: formatMoney(data?.volume30D ?? 0) },
+    { label: 'Fees', value: formatMoney(data?.totalFees ?? 0) },
+    {
+      label: 'APR',
+      value: (data?.apr ?? 0) > 0 ? `${(data?.apr ?? 0).toFixed(2)}%` : '0.00%',
+    },
+  ];
+
   const type = pool?.lpCoinType;
 
   const { data: metadata, isLoading } = useMetadata([

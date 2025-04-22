@@ -1,9 +1,12 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC, useState } from 'react';
 
+import { usePoolsMetricsOvertime } from '../../pools-metrics.hook';
 import { PoolsChart } from './pools-chart';
 
 const PoolsPerformance: FC = () => {
+  const { totalTvl } = usePoolsMetricsOvertime();
+
   const [interval, setInterval] = useState<'D' | 'W' | 'M'>('D');
 
   return (
@@ -22,7 +25,7 @@ const PoolsPerformance: FC = () => {
       >
         <Div>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            $143,023,310.98
+            ${totalTvl.toLocaleString('en-US')}
           </P>
           <P color="#FFFFFF80">Total Value Locked</P>
         </Div>
@@ -52,7 +55,11 @@ const PoolsPerformance: FC = () => {
         </Div>
       </Div>
 
-      <PoolsChart />
+      <PoolsChart
+        agg={
+          interval === 'D' ? 'daily' : interval === 'W' ? 'weekly' : 'monthly'
+        }
+      />
     </Div>
   );
 };

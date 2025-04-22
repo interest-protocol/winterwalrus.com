@@ -6,9 +6,7 @@ import unikey from 'unikey';
 
 import { Layout } from '@/components';
 
-import { PoolRow } from './components';
-import LiquidityPools from './components/liquidity-pools';
-import PoolsPerformance from './components/pools-performance';
+import { LiquidityPools, PoolRow, PoolsPerformance } from './components';
 
 const Pools: FC = () => (
   <Layout>

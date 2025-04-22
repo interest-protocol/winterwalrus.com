@@ -12,6 +12,9 @@ import {
 import { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 
+import { useTabState } from '@/hooks/use-tab-manager';
+import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -50,15 +53,29 @@ export const options = {
   },
 };
 
-const labels = ['Mon 12', 'Tue 13', 'Wed 14', 'Thu 15'];
-const DATA = [5, 10, 7, 6];
-
 export const PoolChart: FC = () => {
+  const { innerTabs } = useTabState();
+  const tab = innerTabs['pool-performance'] ?? 0;
+  const {
+    tvlOvertime = [],
+    volumeOvertime = [],
+    feesOvertime = [],
+  } = usePoolsMetricsOvertime();
+
+  const [x, y] = [
+    (tab == 0 ? tvlOvertime : tab == 1 ? volumeOvertime : feesOvertime).map(
+      (item) => item.x
+    ),
+    (tab == 0 ? tvlOvertime : tab == 1 ? volumeOvertime : feesOvertime).map(
+      (item) => item.y
+    ),
+  ];
+
   const data = {
-    labels,
+    labels: x,
     datasets: [
       {
-        data: DATA,
+        data: y,
         borderColor: '#99EFE4',
         backgroundColor: 'rgba(153, 239, 228, 0.1)',
         fill: true,

@@ -36,7 +36,7 @@ export const PoolCoinsSummary: FC = () => {
 
   return (
     <Div gap="0.5rem" display="flex" color="#FFFFFF" flexDirection="column">
-      {coins.map(({ type, value }) => (
+      {coins?.map(({ type, value }) => (
         <Div
           gap="0.5rem"
           key={unikey()}

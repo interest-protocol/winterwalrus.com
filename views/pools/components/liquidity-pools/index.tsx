@@ -1,6 +1,11 @@
 import { Div, H2, P } from '@stylin.js/elements';
+import Skeleton from 'react-loading-skeleton';
+
+import { usePoolsMetricsOvertime } from '../../pools-metrics.hook';
 
 const LiquidityPools = () => {
+  const { totalVolume, totalTvl, isLoading } = usePoolsMetricsOvertime();
+
   return (
     <Div
       p="1rem"
@@ -30,10 +35,20 @@ const LiquidityPools = () => {
           borderColor="#FFFFFF1A"
           minWidth="max-content"
         >
-          <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            $143,023,310.98
-          </P>
-          <P color="#FFFFFF80">Total Value Locked</P>
+          {isLoading ? (
+            <>
+              <Skeleton width="1.5rem" height="1rem" borderRadius="50%" />
+              <Skeleton width="1.5rem" height="1rem" borderRadius="50%" />
+            </>
+          ) : (
+            <>
+              <P color="#FFFFFF" fontFamily="JetBrains Mono">
+                ${totalTvl.toLocaleString('en-US')}
+              </P>
+
+              <P color="#FFFFFF80">Total Value Locked</P>
+            </>
+          )}
         </Div>
         <Div
           p="1.5rem"
@@ -44,12 +59,21 @@ const LiquidityPools = () => {
           flexDirection="column"
           borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
-          minWidth="6rem"
+          minWidth="max-content"
         >
-          <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            $52,358,809,514.02
-          </P>
-          <P color="#FFFFFF80">Cumulative Volume</P>
+          {isLoading ? (
+            <>
+              <Skeleton width="1.5rem" height="1rem" borderRadius="50%" />
+              <Skeleton width="1.5rem" height="1rem" borderRadius="50%" />
+            </>
+          ) : (
+            <>
+              <P color="#FFFFFF" fontFamily="JetBrains Mono">
+                ${totalVolume.toLocaleString('en-US')}
+              </P>
+              <P color="#FFFFFF80">Cumulative Volume</P>
+            </>
+          )}
         </Div>
       </Div>
     </Div>

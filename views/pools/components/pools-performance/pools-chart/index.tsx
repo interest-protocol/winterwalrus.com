@@ -13,6 +13,8 @@ import {
 import { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 
+import { usePoolsMetricsOvertime } from '@/views/pools/pools-metrics.hook';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -52,15 +54,16 @@ export const options = {
   },
 };
 
-const labels = ['Mon 12', 'Tue 13', 'Wed 14', 'Thu 15'];
-const DATA = [5, 10, 7, 6];
+export const PoolsChart: FC<{ agg: 'daily' | 'weekly' | 'monthly' }> = ({
+  agg,
+}) => {
+  const { tvlOvertime = [] } = usePoolsMetricsOvertime(agg);
 
-export const PoolsChart: FC = () => {
   const data = {
-    labels,
+    labels: tvlOvertime.map((item) => item.x),
     datasets: [
       {
-        data: DATA,
+        data: tvlOvertime.map((item) => item.y),
         borderColor: '#99EFE4',
         backgroundColor: 'rgba(153, 239, 228, 0.1)',
         fill: true,
@@ -70,11 +73,11 @@ export const PoolsChart: FC = () => {
   };
 
   return (
-    <Div maxHeight="182px" width="100%" display="grid">
+    <Div maxHeight="182px" maxWidth={[undefined, undefined, '480px']} flex={1}>
       <Line
         options={options}
         data={data}
-        style={{ height: '182px', width: '90%' }}
+        style={{ height: '182px', width: '80%' }}
       />
     </Div>
   );
