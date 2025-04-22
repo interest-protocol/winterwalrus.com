@@ -133,7 +133,7 @@ export const useUnstakeAction = () => {
         onSuccess: onSuccess(dismiss),
         onFailure: onFailure(dismiss),
         coinInValue: BigInt(form.in.valueBN.toFixed(0)),
-        coinOutValue: BigInt(form.out.valueBN.toFixed(0)),
+        coinOutValue: BigInt(form.in.valueNoFeeBN.toFixed(0)),
       });
     } catch (e) {
       onFailure(dismiss)((e as Error).message);

@@ -31,9 +31,12 @@ const UnstakeFormManager: FC = () => {
 
     if (!rate) return;
 
-    const valueBN = valueInBN.times(1 - fees.unstaking / 100).times(rate);
+    const valueInNoFeeBN = valueInBN.times(1 - fees.unstaking / 100);
+
+    const valueBN = valueInNoFeeBN.times(rate);
 
     setValue('out.valueBN', valueBN);
+    setValue('in.valueNoFeeBN', valueInNoFeeBN);
     setValue('out.value', FixedPointMath.toNumber(valueBN));
   }, [valueInBN, epoch, quotes, coinOut]);
 
