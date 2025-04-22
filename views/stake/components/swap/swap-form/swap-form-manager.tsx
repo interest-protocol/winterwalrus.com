@@ -24,6 +24,8 @@ const SwapFormManager: FC = () => {
   useEffect(() => {
     if (!interestStableSdk || !blizzardSdk || !coinInValue) return;
 
+    console.log({ interestStableSdk });
+
     const coins = getValues(['in.type', 'out.type']);
 
     const isSwap = coins.includes(TYPES.WAL);
