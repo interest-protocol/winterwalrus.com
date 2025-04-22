@@ -17,15 +17,15 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
   const { handleClose } = useModal();
   const { control } = useFormContext();
 
-  const [coinIn, valueIn, valueOut] = useWatch({
+  const [coinIn, valueIn, valueInNoFee, valueOut] = useWatch({
     control,
-    name: ['in.type', 'in.valueBN', 'out.valueBN'],
+    name: ['in.type', 'in.valueBN', 'in.valueNoFeeBN', 'out.valueBN'],
   });
 
   const { data, isLoading, error } = usePreviewUnstake({
     coinIn,
     coinInValue: BigInt(String(valueIn)),
-    coinOutValue: BigInt(String(valueOut)),
+    coinOutValue: BigInt(String(valueInNoFee)),
   });
 
   const walAmount = BigNumber(
