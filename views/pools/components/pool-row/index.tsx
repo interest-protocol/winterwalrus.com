@@ -65,7 +65,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
           ) : (
             <Span whiteSpace="nowrap">
               {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].apr))
+                ? `${(Number(metrics[objectId].apr ?? 0) * 100).toFixed(2)}%`
                 : '--'}
             </Span>
           )}
