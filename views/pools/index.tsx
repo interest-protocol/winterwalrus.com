@@ -48,7 +48,7 @@ const Pools: FC = () => {
           alignItems="stretch"
           gap={['0.5rem', '1rem']}
           justifyContent="space-between"
-          gridTemplateColumns={['1fr', '1fr', '1fr 3fr']}
+          gridTemplateColumns={['1fr', '1fr', '1fr 510px']}
         >
           <LiquidityPools />
           <PoolsPerformance />
