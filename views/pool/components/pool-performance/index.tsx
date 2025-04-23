@@ -32,9 +32,9 @@ const PoolPerformance: FC = () => {
 
   const tabs = ['TVL', 'Volume', 'Fees'];
   const value = [
-    formatMoney(totalTvl),
-    formatMoney(totalVolume),
-    (totalFees > 0 ? totalFees.toFixed(2) : '0.00') + '%',
+    `$${formatMoney(totalTvl)}`,
+    `$${formatMoney(totalVolume)}`,
+    (totalFees > 0 ? (totalFees * 100).toFixed(2) : '0.00') + '%',
   ][tab];
 
   const setTab = (tab: number) => {
@@ -74,7 +74,7 @@ const PoolPerformance: FC = () => {
         <Div>
           <P color="#FFFFFF80">{tabs[tab]}</P>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            ${value}
+            {value}
           </P>
         </Div>
         <Tabs setTab={setTab} tabs={tabs} tab={tab} />

@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 
 import useMetadata from '@/hooks/use-metadata';
 import { SdkPool } from '@/interface';
-import { formatDollars, formatMoney } from '@/utils';
+import { formatDollars } from '@/utils';
 
 import { usePoolMetrics } from './pool-stats.hooks';
 
@@ -23,10 +23,13 @@ const PoolStats: FC = () => {
   const stats = [
     { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
     { label: 'Volume', value: formatDollars(Number(data?.volume30D ?? '0')) },
-    { label: 'Fees', value: formatDollars(Number(data?.totalFees ?? '0')) },
+    {
+      label: 'Fees',
+      value: `${((Number(data?.totalFees) ?? 0) * 100).toFixed(2)}%`,
+    },
     {
       label: 'APR',
-      value: formatMoney(+Number(data?.apr ?? '0').toFixed(2)),
+      value: `${((Number(data?.apr) ?? 0) * 100).toFixed(2)}%`,
     },
   ];
 
