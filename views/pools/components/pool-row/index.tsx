@@ -27,7 +27,8 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
         borderColor="#FFFFFF1A"
         borderRadius="0.625rem"
         nHover={{ borderColor: '#99EFE44D' }}
-        gridTemplateColumns="2fr repeat(4, 1fr)"
+        alignItems="center"
+        gridTemplateColumns="2fr repeat(4, 1fr) 43px"
       >
         <Div display="flex" alignItems="center" gap="0.5rem">
           {metadataLoading ? (
@@ -91,6 +92,29 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             </Span>
           )}
         </Span>
+        <Div
+          width="43px"
+          height="42px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="0.625rem"
+          border="1px solid #99EFE480"
+          background="#99EFE41A"
+        >
+          <Div
+            width="20px"
+            height="20px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="0.375rem"
+            border="1px solid #99EFE4"
+            background="#99EFE41A"
+          >
+            +
+          </Div>
+        </Div>
       </Div>
     </Link>
   );
