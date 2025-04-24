@@ -1,20 +1,26 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
 import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import InputField from '@/components/input-field';
 import { SwapSVG } from '@/components/svg';
-import { COIN_TYPES, LST_TYPES } from '@/constants';
+import { LST_TYPES } from '@/constants';
 
 import SwapFormButton from './swap-form-button';
 import SwapFormManager from './swap-form-manager';
 
 const SwapForm: FC = () => {
-  const { setValue, getValues } = useFormContext();
+  const { setValue, control } = useFormContext();
+
+  const [inType, outType] = useWatch({
+    control,
+    name: ['in.type', 'out.type'],
+  });
 
   const handleFlipTokens = () => {
-    const coinIn = getValues('in.type');
-    const coinOut = getValues('out.type');
+    const coinIn = inType;
+    const coinOut = outType;
     setValue('in', { value: '0', type: coinOut });
     setValue('out', { value: '0', type: coinIn });
   };
@@ -28,7 +34,7 @@ const SwapForm: FC = () => {
           label="In"
           oppositeName="out"
           topContent="balance"
-          types={[...COIN_TYPES, ...LST_TYPES]}
+          types={inType === TYPES.WAL ? [TYPES.WAL] : LST_TYPES}
         />
         <Button
           all="unset"
@@ -55,7 +61,7 @@ const SwapForm: FC = () => {
           name="out"
           label="Out"
           oppositeName="in"
-          types={[...COIN_TYPES, ...LST_TYPES]}
+          types={outType === TYPES.WAL ? [TYPES.WAL] : LST_TYPES}
         />
       </Div>
       <SwapFormButton />

@@ -10,7 +10,7 @@ import { STAKING_OBJECT } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import { signAndExecute } from '@/utils';
 
-import { SwapArgs } from '../swap-form-button.types';
+import { TransmuteArgs } from '../transmute-form-button.types';
 
 export const useTransmute = () => {
   const client = useSuiClient();
@@ -24,7 +24,7 @@ export const useTransmute = () => {
     coinInType,
     coinInValue,
     coinOutValue,
-  }: SwapArgs) => {
+  }: TransmuteArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
     invariant(blizzardSdk, 'Failed to load sdk');
 

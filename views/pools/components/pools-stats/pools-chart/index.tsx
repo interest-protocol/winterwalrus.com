@@ -14,7 +14,7 @@ export const PoolsChart: FC<PoolsChartProps> = ({ agg }) => {
   const { tvlOvertime = [] } = usePoolsMetricsOvertime(agg);
 
   return (
-    <Div maxHeight="12rem" width="100%">
+    <Div>
       <Line
         options={poolsChartOptions}
         data={getChartsData(tvlOvertime)}

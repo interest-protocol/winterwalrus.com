@@ -16,6 +16,7 @@ export interface MetricsAPI {
   volume1D: string;
   volume30D: string;
   totalFees: string;
+  totalVolume: string;
 }
 
 export interface PoolsChartProps {

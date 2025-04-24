@@ -4,7 +4,15 @@ import unikey from 'unikey';
 
 import { useTabState } from '@/hooks/use-tab-manager';
 
-import { Epoch, NFT, Stake, StakeTabs, Swap, Unstake } from './components';
+import {
+  Epoch,
+  NFT,
+  Stake,
+  StakeTabs,
+  Swap,
+  Transmute,
+  Unstake,
+} from './components';
 
 const StakeContent: FC = () => {
   const { tab } = useTabState();
@@ -26,6 +34,7 @@ const StakeContent: FC = () => {
         [
           <Stake key={unikey()} />,
           <Unstake key={unikey()} />,
+          <Transmute key={unikey()} />,
           <Swap key={unikey()} />,
           <NFT key={unikey()} />,
         ][tab]

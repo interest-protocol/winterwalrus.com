@@ -23,6 +23,7 @@ const StakeTabs: FC = () => {
   const tabs = [
     'Stake',
     'Unstake',
+    'Transmute',
     'Swap',
     `NFT ${objectsToActivate ? `(${objectsToActivate})` : ''}`,
   ];
