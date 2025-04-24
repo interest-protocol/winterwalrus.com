@@ -18,7 +18,7 @@ const StakeFormManager: FC = () => {
   const { control, setValue, getValues } = useFormContext();
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
-  const { fees } = useFees(getValues('in.type'));
+  const { fees } = useFees(getValues('out.type'));
   const coinOut = useWatch({ control, name: 'out.type' });
   const valueInBN = useWatch({ control, name: 'in.valueBN' });
 
@@ -77,6 +77,9 @@ const StakeFormManager: FC = () => {
   }, [nodes, coinOut, validator]);
 
   useEffect(() => {
+    console.log('1');
+
+    console.log({ quotes, fees });
     if (!quotes || !fees) return;
 
     if (!valueInBN || valueInBN.isZero()) {
@@ -86,6 +89,8 @@ const StakeFormManager: FC = () => {
     }
 
     const rate = quotes.quoteLst;
+
+    console.log({ rate });
 
     if (!rate) return;
 
