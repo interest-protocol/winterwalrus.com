@@ -10,7 +10,13 @@ const PoolsPerformance: FC = () => {
   const [interval, setInterval] = useState<'D' | 'W' | 'M'>('D');
 
   return (
-    <Div p="1rem" bg="#FFFFFF0D" border="1px solid" borderRadius="1rem">
+    <Div
+      p="1rem"
+      bg="#FFFFFF0D"
+      border="1px solid"
+      borderRadius="1rem"
+      // maxWidth={['100%', undefined, '30rem', '32.5rem']}
+    >
       <Div
         mb="0.5rem"
         display="flex"
