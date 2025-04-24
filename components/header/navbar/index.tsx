@@ -65,21 +65,6 @@ const Navbar: FC = () => {
           <ExternalLinkSVG maxWidth="1rem" width="100%" />
         </Div>
       </Link>
-      <Link
-        target="_blank"
-        href="https://app.sentio.xyz/share/zc5tzoh0e45tx1a2"
-      >
-        <Div
-          gap="0.5rem"
-          display="flex"
-          color="#FFFFFF80"
-          alignItems="center"
-          nHover={{ color: '#99EFE4' }}
-        >
-          <Span>Metrics</Span>
-          <ExternalLinkSVG maxWidth="1rem" width="100%" />
-        </Div>
-      </Link>
     </Nav>
   );
 };
