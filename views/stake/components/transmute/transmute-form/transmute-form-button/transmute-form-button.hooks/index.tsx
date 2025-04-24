@@ -8,11 +8,10 @@ import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
 
-import { useSwap } from './use-swap';
+import { useTransmute } from './use-transmute';
 
-export const useSwapAction = () => {
-  const swap = useSwap();
-
+export const useTransmuteAction = () => {
+  const transmute = useTransmute();
   const { update } = useAppState();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
@@ -31,7 +30,7 @@ export const useSwapAction = () => {
     (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
       stopLoading();
       toasting.success({
-        action: 'Swapped',
+        action: 'Transmute',
         message: 'See on explorer',
         link: getExplorerUrl(
           dryTx.effects.transactionDigest,
@@ -54,36 +53,36 @@ export const useSwapAction = () => {
       reset();
     };
 
-  const onFailureSwap = (stopLoading: () => void) => (error?: string) => {
+  const onFailureTransmute = (stopLoading: () => void) => (error?: string) => {
     stopLoading();
     toasting.error({
-      action: 'Swap',
+      action: 'Transmute',
       message: error ?? 'Error executing transaction',
     });
   };
 
-  const onSwap = async () => {
+  const onTransmute = async () => {
     const form = getValues();
 
     if (!form.in.value || !form.out.value) return;
     setLoading(true);
-    const dismiss = toasting.loading({ message: 'Swapping...' });
+    const dismiss = toasting.loading({ message: 'Transmuting...' });
 
     try {
-      await swap({
+      await transmute({
         coinInType: form.in.type,
         onSuccess: onSuccess(dismiss),
-        onFailure: onFailureSwap(dismiss),
+        onFailure: onFailureTransmute(dismiss),
         coinOutType: typeFromMaybeNftType(coinOut),
         coinInValue: BigInt(form.in.valueBN.toFixed(0)),
-        coinOutValue: BigInt(form.out.valueBN.toFixed(0)),
+        coinOutValue: BigInt(form.in.valueNoFeeBN.toFixed(0)),
       });
     } catch (e) {
-      onFailureSwap(dismiss)((e as Error).message);
+      onFailureTransmute(dismiss)((e as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
-  return { onSwap, loading };
+  return { onTransmute, loading };
 };

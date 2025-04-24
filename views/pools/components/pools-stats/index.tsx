@@ -33,16 +33,16 @@ const PoolsPerformance: FC = () => {
         >
           {(['D', 'W', 'M'] as const).map((intendedInterval) => (
             <Div
+              fontSize="0.875rem"
+              borderRadius="0.25rem"
               key={intendedInterval}
               padding="0.5rem 0.75rem"
-              borderRadius="0.25rem"
-              pointerEvents={interval === intendedInterval ? 'none' : undefined}
               onClick={() => setInterval(intendedInterval)}
-              fontSize={'0.875rem'}
+              color={interval === intendedInterval ? '#99EFE480' : '#99EFE4'}
+              pointerEvents={interval === intendedInterval ? 'none' : undefined}
               backgroundColor={
                 interval === intendedInterval ? '#99EFE480' : 'transparent'
               }
-              color={interval === intendedInterval ? '#99EFE480' : '#99EFE4'}
               style={{
                 cursor: interval === intendedInterval ? 'default' : 'pointer',
               }}

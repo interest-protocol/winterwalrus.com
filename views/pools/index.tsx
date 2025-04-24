@@ -65,7 +65,6 @@ const Pools: FC = () => (
       </Div>
       <Div
         p="1rem"
-        gap={['0.5rem', '1rem']}
         bg="#FFFFFF0D"
         display="flex"
         overflowX="auto"
@@ -74,6 +73,7 @@ const Pools: FC = () => (
         alignItems="stretch"
         flexDirection="column"
         borderColor="#FFFFFF1A"
+        gap={['0.5rem', '1rem']}
       >
         <Div
           px="1rem"
@@ -81,7 +81,7 @@ const Pools: FC = () => (
           minWidth="30rem"
           color="#FFFFFF80"
           fontSize="0.875rem"
-          gridTemplateColumns="2fr repeat(4, 1fr)"
+          gridTemplateColumns="4fr repeat(4, 2fr) 1fr"
         >
           <Div gap="0.25rem" display="flex" alignItems="center">
             <P fontFamily="JetBrains Mono" whiteSpace="nowrap">

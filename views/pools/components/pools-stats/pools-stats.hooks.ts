@@ -29,7 +29,7 @@ export const usePoolsMetrics = () => {
         ),
         tvl: data.reduce((acc, metrics) => acc + parseFloat(metrics.tvl), 0),
         volume: data.reduce(
-          (acc, metrics) => acc + parseFloat(metrics.volume30D),
+          (acc, metrics) => acc + parseFloat(metrics.totalVolume),
           0
         ),
       } as PoolsMetrics;
