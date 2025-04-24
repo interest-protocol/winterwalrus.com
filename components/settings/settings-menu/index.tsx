@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
-import unikey from 'unikey';
 
 import { Routes, RoutesEnum } from '@/constants';
 
@@ -39,7 +38,7 @@ const SettingsMenu: FC = () => {
         <Nav display={['block', 'block', 'block', 'none']}>
           {[RoutesEnum.Stake, RoutesEnum.Pools, RoutesEnum.Stats].map(
             (route) => (
-              <Link href={Routes[route]} key={unikey()}>
+              <Link href={Routes[route]} key={route}>
                 <Div
                   px="1rem"
                   py="0.5rem"

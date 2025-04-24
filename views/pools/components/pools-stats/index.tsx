@@ -10,7 +10,13 @@ const PoolsPerformance: FC = () => {
   const [interval, setInterval] = useState<'D' | 'W' | 'M'>('D');
 
   return (
-    <Div p="1rem" bg="#FFFFFF0D" border="1px solid" borderRadius="1rem">
+    <Div
+      p="1rem"
+      bg="#FFFFFF0D"
+      border="1px solid"
+      borderRadius="1rem"
+      borderColor="#FFFFFF1A"
+    >
       <Div
         mb="0.5rem"
         display="flex"
@@ -23,7 +29,6 @@ const PoolsPerformance: FC = () => {
           </P>
           <P color="#FFFFFF80">Total Value Locked</P>
         </Div>
-
         <Div
           p="0.25rem"
           gap="0.5rem"

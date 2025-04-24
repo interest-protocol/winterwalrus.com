@@ -14,10 +14,11 @@ const LiquidityPools: FC = () => {
       p="1rem"
       gap="1rem"
       bg="#FFFFFF0D"
+      display="flex"
       border="1px solid"
       borderRadius="1rem"
-      display="flex"
       flexDirection="column"
+      borderColor="#FFFFFF1A"
     >
       <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
         Liquidity Pools
