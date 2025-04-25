@@ -179,7 +179,7 @@ const Statistics: FC = () => {
               nHover={{ color: '#99EFE4' }}
             >
               <P textAlign="center" fontFamily="JetBrains Mono">
-                Total Staked
+                TVL
               </P>
               <Div display="flex" flexDirection="column" gap="0.125rem">
                 {!sorting ||
@@ -202,7 +202,7 @@ const Statistics: FC = () => {
               nHover={{ color: '#99EFE4' }}
             >
               <P textAlign="center" fontFamily="JetBrains Mono">
-                Total Users
+                Users
               </P>
               <Div display="flex" flexDirection="column" gap="0.125rem">
                 <Div display="flex" flexDirection="column" gap="0.125rem">
