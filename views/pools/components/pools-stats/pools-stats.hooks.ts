@@ -43,10 +43,11 @@ export const usePoolsMetrics = () => {
 };
 
 export const usePoolsMetricsOvertime = (
-  aggregation: PoolsAggregation = 'daily'
+  aggregation: PoolsAggregation = 'daily',
+  poolId?: string
 ) => {
   const { data, ...rest } = useSWR(
-    [usePoolsMetricsOvertime.name, aggregation],
+    [usePoolsMetricsOvertime.name, aggregation, 'daily', poolId],
     async () => {
       const url = `${INTEREST_STABLE_DEX_API}/metrics-overtime?interval=1%20month&aggregation=${aggregation}`;
 
@@ -54,18 +55,9 @@ export const usePoolsMetricsOvertime = (
         (res) => res.json()
       );
 
-      const totalTvl = data.reduce(
-        (acc, pool) => acc + parseFloat(pool.tvl),
-        0
-      );
-      const totalFees = data.reduce(
-        (acc, pool) => acc + parseFloat(pool.fees),
-        0
-      );
-      const totalVolume = data.reduce(
-        (acc, pool) => acc + parseFloat(pool.volume),
-        0
-      );
+      const latestTvl = Number(data.toReversed()[0].tvl ?? 0);
+      const latestFees = Number(data.toReversed()[0].fees ?? 0);
+      const latestVolume = Number(data.toReversed()[0].volume ?? 0);
 
       const tvlOvertime = data.map((pool) => ({
         y: parseFloat(pool.tvl),
@@ -93,10 +85,10 @@ export const usePoolsMetricsOvertime = (
 
       return {
         data,
-        totalTvl,
-        totalFees,
+        latestTvl,
+        latestFees,
         tvlOvertime,
-        totalVolume,
+        latestVolume,
         feesOvertime,
         volumeOvertime,
       };
@@ -106,9 +98,9 @@ export const usePoolsMetricsOvertime = (
   return {
     ...(data ?? {
       data: [],
-      totalTvl: 0,
-      totalFees: 0,
-      totalVolume: 0,
+      latestTvl: 0,
+      latestFees: 0,
+      latestVolume: 0,
       tvlOvertime: [],
       feesOvertime: [],
       volumeOvertime: [],

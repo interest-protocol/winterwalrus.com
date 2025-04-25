@@ -1,22 +1,15 @@
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { Div, Img, P, Span } from '@stylin.js/elements';
-import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import useMetadata from '@/hooks/use-metadata';
-import { SdkPool } from '@/interface';
+import { usePool } from '@/hooks/use-pool';
 import { formatDollars } from '@/utils';
 
 import { usePoolMetrics } from './pool-stats.hooks';
 
 const PoolStats: FC = () => {
-  const { query } = useRouter();
-
-  const pool = useMemo(
-    () => (POOLS as Record<string, SdkPool>)[String(query.pool)],
-    [query]
-  );
+  const pool = usePool();
 
   const { data } = usePoolMetrics(pool?.objectId);
 
@@ -25,7 +18,7 @@ const PoolStats: FC = () => {
     { label: 'Volume', value: formatDollars(Number(data?.totalVolume ?? '0')) },
     {
       label: 'Fees',
-      value: `${((Number(data?.totalFees) ?? 0) * 100).toFixed(2)}%`,
+      value: `${formatDollars(+(Number(data?.totalFees) ?? 0).toFixed(2))}`,
     },
     {
       label: 'APR',
@@ -50,11 +43,11 @@ const PoolStats: FC = () => {
       width="100%"
     >
       <Div
-        display="flex"
         gap="1rem"
+        display="flex"
         alignItems="center"
-        flexDirection={['column', 'row']}
         width={['100%', 'auto']}
+        flexDirection={['column', 'row']}
       >
         <Div display="flex" gap="0.5rem" color="#FFFFFF" alignItems="center">
           {isLoading ? (
@@ -64,8 +57,8 @@ const PoolStats: FC = () => {
               width="1.5rem"
               height="1.5rem"
               borderRadius="50%"
-              src={metadata?.[type]?.iconUrl}
               alt={metadata?.[type]?.name}
+              src={metadata?.[type]?.iconUrl}
             />
           )}
           {isLoading ? (
