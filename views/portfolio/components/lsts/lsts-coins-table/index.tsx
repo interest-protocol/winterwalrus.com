@@ -6,7 +6,7 @@ import LSTsCoinsRow from '../lsts-coins-row';
 
 const LSTsCoinsTable: FC = () => {
   type LST = {
-    objectid: string;
+    objectId: string;
     coinType: string;
     [key: string]: unknown;
   };
@@ -15,14 +15,14 @@ const LSTsCoinsTable: FC = () => {
     [
       '0x1::coin::USDC',
       {
-        objectid: '0x1::coin::USDC',
+        objectId: '0x1::coin::USDC',
         coinType: '0x1::coin::USDC',
       },
     ],
     [
       '0x1::coin::ETH',
       {
-        objectid: '0x1::coin::ETH',
+        objectId: '0x1::coin::ETH',
         coinType: '0x1::coin::ETH',
       },
     ],
@@ -86,7 +86,7 @@ const LSTsCoinsTable: FC = () => {
           </Div>
         ) : (
           lsts.map(([key, lst]) => (
-            <LSTsCoinsRow {...lst} key={unikey()} id={key} />
+            <LSTsCoinsRow key={unikey()} id={key} {...lst} />
           ))
         )}
       </Div>

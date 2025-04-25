@@ -1,3 +1,3 @@
 export interface NativeStakedWalButtonProps {
-  status: 'ready-to-get' | 'withdrawing' | 'staked';
+  status: 'ready' | 'withdrawing' | 'staked';
 }

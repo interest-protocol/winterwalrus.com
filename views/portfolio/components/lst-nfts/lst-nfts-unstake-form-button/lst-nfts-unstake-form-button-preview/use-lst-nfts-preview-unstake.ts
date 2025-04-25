@@ -6,7 +6,7 @@ import invariant from 'tiny-invariant';
 import { STAKING_OBJECT } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 
-import { LSTNFTsUnstakeArgs } from '../native-staked--unstake-form-button.types';
+import { LSTNFTsUnstakeArgs } from '../lst-nfts-unstake-form-button.types';
 
 export const useLSTNFTsPreviewUnstake = ({
   coinIn,

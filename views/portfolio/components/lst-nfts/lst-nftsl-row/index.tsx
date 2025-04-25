@@ -48,7 +48,14 @@ const LSTNFTsCoinsRow: FC<LSTNFTsCoinsRowProps> = ({
     [objectId]: {
       totalStaked: 123456.78,
       toWithdraw: 0.045,
-      status: id == '1' ? 'Ready to Get' : id == '2' ? 'Withdrawing' : 'staked',
+      status:
+        id == '1'
+          ? 'Ready to Get'
+          : id == '2'
+            ? 'Withdrawing'
+            : id == '3'
+              ? '12:12'
+              : 'staked',
     },
   };
 

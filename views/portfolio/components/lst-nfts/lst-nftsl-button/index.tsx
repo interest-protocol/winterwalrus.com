@@ -16,7 +16,7 @@ const LSTNFTsButton: FC<LSTNFTsButtonProps> = ({ status }) => {
         textAlign="center"
         position="relative"
         borderRadius="0.625rem"
-        bg="#99EFE4"
+        bg={status === '12:12' ? '#C484F680' : '#C484F6'}
         disabled={status === '12:12'}
         cursor={status === '12:12' ? 'not-allowed' : 'pointer'}
         opacity={status === '12:12' ? 0.7 : 1}

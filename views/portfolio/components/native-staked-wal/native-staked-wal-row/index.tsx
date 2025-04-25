@@ -43,7 +43,7 @@ const NativeStakedWalCoinsRow: FC<NativeStakedWalCoinsRowProps> = ({
     [objectId]: {
       totalStaked: 123456.78,
       toWithdraw: 0.045,
-      status: id == '1' ? 'ready-to-get' : id == '2' ? 'withdrawing' : 'staked',
+      status: id == '1' ? 'ready' : id == '2' ? 'withdrawing' : 'staked',
     },
   };
 
@@ -109,14 +109,14 @@ const NativeStakedWalCoinsRow: FC<NativeStakedWalCoinsRowProps> = ({
           <Div
             whiteSpace="nowrap"
             background={
-              status === 'ready-to-get'
+              status === 'ready'
                 ? '#F5B72214'
                 : status === 'withdrawing'
                   ? '#83F34E14'
                   : '#FFFFFF14'
             }
             color={
-              status === 'ready-to-get'
+              status === 'ready'
                 ? '#F5B722'
                 : status === 'withdrawing'
                   ? '#83F34E'
@@ -129,7 +129,7 @@ const NativeStakedWalCoinsRow: FC<NativeStakedWalCoinsRowProps> = ({
             fontWeight="bold"
             textAlign="center"
           >
-            {status === 'ready-to-get'
+            {status === 'ready'
               ? 'Ready To Withdraw'
               : status === 'withdrawing'
                 ? 'Withdrawing'

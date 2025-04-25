@@ -5,7 +5,7 @@ import NativeStakedWalUnstakeFormButton from '../native-staked-unstake-form-butt
 import { NativeStakedWalButtonProps } from './native-staked-wal-row';
 
 const NativeStakedWalButton: FC<NativeStakedWalButtonProps> = ({ status }) => {
-  if (status === 'ready-to-get')
+  if (status === 'ready')
     return (
       <Button
         all="unset"
