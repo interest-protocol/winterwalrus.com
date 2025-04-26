@@ -17,6 +17,16 @@ import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
 import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 
+const iconHoverStyle: React.CSSProperties = {
+  cursor: 'pointer',
+  transition: 'transform 0.1s, filter 0.1s',
+};
+
+const iconHoverActiveStyle: React.CSSProperties = {
+  transform: 'scale(1.15)',
+  filter: 'drop-shadow(0 0 1px #99EFE4)',
+};
+
 export const PoolCoinsSummary: FC = () => {
   const getExplorerUrl = useGetExplorerUrl();
 
@@ -45,6 +55,10 @@ export const PoolCoinsSummary: FC = () => {
   );
 
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  // For hover animation
+  const [hoveredCopy, setHoveredCopy] = useState<number | null>(null);
+  const [hoveredExternal, setHoveredExternal] = useState<number | null>(null);
 
   const handleCopy = async (index: number, value: string) => {
     await navigator.clipboard.writeText(value);
@@ -103,25 +117,41 @@ export const PoolCoinsSummary: FC = () => {
                     width="1rem"
                     maxHeight="1rem"
                     color="#99EFE4"
-                    style={{ cursor: 'pointer' }}
+                    style={iconHoverStyle}
                   />
                 ) : (
                   <CopySVG
+                    style={{
+                      ...iconHoverStyle,
+                      ...(hoveredCopy === index
+                        ? iconHoverActiveStyle
+                        : undefined),
+                    }}
                     width="1rem"
                     maxHeight="1rem"
-                    style={{ cursor: 'pointer' }}
                     onClick={() => handleCopy(index, balance)}
+                    onMouseEnter={() => setHoveredCopy(index)}
+                    onMouseLeave={() => setHoveredCopy(null)}
                   />
                 )}
               </Div>
               <Link
                 href={getExplorerUrl(type, ExplorerMode.Coin)}
                 target="_blank"
+                style={{ display: 'flex', alignItems: 'center' }}
               >
                 <ExternalLink
-                  width="100%"
+                  style={{
+                    ...iconHoverStyle,
+                    ...(hoveredExternal === index
+                      ? iconHoverActiveStyle
+                      : undefined),
+                  }}
+                  width="0.8rem"
                   maxWidth="0.8rem"
                   maxHeight="0.8rem"
+                  onMouseEnter={() => setHoveredExternal(index)}
+                  onMouseLeave={() => setHoveredExternal(null)}
                 />
               </Link>
             </Div>

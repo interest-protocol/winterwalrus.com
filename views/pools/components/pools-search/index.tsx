@@ -26,6 +26,7 @@ const PoolsSearch: FC = () => {
         all="unset"
         width="100%"
         placeholder="Search pools..."
+        cursor="text"
         {...register('search')}
       />
     </Label>
