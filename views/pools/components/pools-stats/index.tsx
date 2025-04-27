@@ -5,7 +5,7 @@ import { PoolsChart } from './pools-chart';
 import { usePoolsMetricsOvertime } from './pools-stats.hooks';
 
 const PoolsPerformance: FC = () => {
-  const { totalTvl } = usePoolsMetricsOvertime();
+  const { latestTvl } = usePoolsMetricsOvertime();
 
   const [interval, setInterval] = useState<'D' | 'W' | 'M'>('D');
 
@@ -25,7 +25,7 @@ const PoolsPerformance: FC = () => {
       >
         <Div>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            ${totalTvl?.toLocaleString('en-US')}
+            ${latestTvl?.toLocaleString('en-US')}
           </P>
           <P color="#FFFFFF80">Total Value Locked</P>
         </Div>
