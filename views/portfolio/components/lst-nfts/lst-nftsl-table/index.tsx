@@ -2,9 +2,15 @@ import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
+import { useAppState } from '@/hooks/use-app-state';
+
 import LSTNFTsRow from '../lst-nftsl-row';
 
 const LSTNFTsTable: FC = () => {
+  const { principalsByType } = useAppState();
+
+  console.log('principalsByType', principalsByType);
+
   type LST = {
     id: string;
     objectId: string;

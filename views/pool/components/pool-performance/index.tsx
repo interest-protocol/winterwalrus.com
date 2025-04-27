@@ -1,16 +1,13 @@
 import { Div, P } from '@stylin.js/elements';
-import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import useSWR from 'swr';
 
 import { Tabs } from '@/components';
-import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import useMetadata from '@/hooks/use-metadata';
 import { usePool } from '@/hooks/use-pool';
+import { usePoolPrice } from '@/hooks/use-pool-price';
 import { useTabState } from '@/hooks/use-tab-manager';
-import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { formatMoney } from '@/utils';
+import { formatDollars, formatMoney } from '@/utils';
 import { usePoolsMetricsOvertime } from '@/views/pools/components/pools-stats/pools-stats.hooks';
 
 import { usePoolData } from '../pool-stats/pool-stats.hooks';
@@ -21,41 +18,28 @@ const PoolPerformance: FC = () => {
   const pool = usePool();
   const { data } = usePoolData(pool?.objectId);
   const { innerTabs, setInnerTab } = useTabState();
-  const interestStableSdk = useInterestStableSdk();
-  const { totalTvl, totalVolume, totalFees } = usePoolsMetricsOvertime();
 
+  const { price, loadingPrice } = usePoolPrice(pool);
   const { data: metadata, isLoading: loadingMetadata } = useMetadata(
     pool?.coinTypes
+  );
+  const { latestTvl, latestVolume, latestFees } = usePoolsMetricsOvertime(
+    'daily',
+    pool?.objectId
   );
 
   const tab = innerTabs['pool-performance'] ?? 0;
 
   const tabs = ['TVL', 'Volume', 'Fees'];
   const value = [
-    `$${formatMoney(totalTvl)}`,
-    `$${formatMoney(totalVolume)}`,
-    (totalFees > 0 ? (totalFees * 100).toFixed(2) : '0.00') + '%',
+    `${formatDollars(latestTvl)}`,
+    `${formatDollars(latestVolume)}`,
+    `${formatDollars(latestFees)}`,
   ][tab];
 
   const setTab = (tab: number) => {
     setInnerTab('pool-performance', tab);
   };
-
-  const { data: price, isLoading: loadingPrice } = useSWR(
-    ['price', pool?.objectId, interestStableSdk],
-    async () => {
-      if (!interestStableSdk || !pool?.objectId) return;
-
-      const { amountOut } = await interestStableSdk.quoteSwap({
-        pool: pool.objectId,
-        coinInType: pool.coinTypes[0],
-        coinOutType: pool.coinTypes[1],
-        amountIn: String(FixedPointMath.toBigNumber(1)),
-      });
-
-      return FixedPointMath.toNumber(BigNumber(String(amountOut)));
-    }
-  );
 
   return (
     <Div
@@ -72,7 +56,7 @@ const PoolPerformance: FC = () => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <Div>
-          <P color="#FFFFFF80">{tabs[tab]}</P>
+          <P color="#FFFFFF80">24H {tabs[tab]}</P>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {value}
           </P>
