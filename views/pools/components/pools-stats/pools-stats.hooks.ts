@@ -15,11 +15,6 @@ export const usePoolsMetrics = () => {
       const url = `${INTEREST_STABLE_DEX_API}/metrics`;
 
       const data: MetricsAPI = await fetch(url).then((res) => res.json());
-      console.log(data, '>>>Metrics', {
-        [data.poolId]: data,
-        tvl: parseFloat(data.tvl),
-        volume: parseFloat(data.volume),
-      });
       return data;
     }
   );
