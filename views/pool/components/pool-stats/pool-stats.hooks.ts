@@ -24,9 +24,7 @@ export const usePoolMetrics = (poolId?: string) =>
       poolId
     )}`;
 
-    const data: ReadonlyArray<MetricsAPI> = await fetch(url).then((res) =>
-      res.json()
-    );
+    const data: MetricsAPI = await fetch(url).then((res) => res.json());
 
-    return data[0] as MetricsAPI;
+    return data;
   });

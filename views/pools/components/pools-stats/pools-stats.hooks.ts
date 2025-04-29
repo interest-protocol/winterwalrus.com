@@ -6,33 +6,21 @@ import {
   MetricsAPI,
   MetricsOvertimeAPI,
   PoolsAggregation,
-  PoolsMetrics,
 } from './pools-stats.types';
 
 export const usePoolsMetrics = () => {
-  const { data, ...rest } = useSWR<PoolsMetrics>(
+  const { data, ...rest } = useSWR<MetricsAPI>(
     [usePoolsMetrics.name],
     async () => {
       const url = `${INTEREST_STABLE_DEX_API}/metrics`;
 
-      const data: ReadonlyArray<MetricsAPI> = await fetch(url).then((res) =>
-        res.json()
-      );
-
-      return {
-        ...data.reduce(
-          (acc, metrics) => ({
-            ...acc,
-            [metrics.poolId]: metrics,
-          }),
-          {} as Record<string, MetricsAPI>
-        ),
-        tvl: data.reduce((acc, metrics) => acc + parseFloat(metrics.tvl), 0),
-        volume: data.reduce(
-          (acc, metrics) => acc + parseFloat(metrics.volume),
-          0
-        ),
-      } as PoolsMetrics;
+      const data: MetricsAPI = await fetch(url).then((res) => res.json());
+      console.log(data, '>>>Metrics', {
+        [data.poolId]: data,
+        tvl: parseFloat(data.tvl),
+        volume: parseFloat(data.volume),
+      });
+      return data;
     }
   );
 
