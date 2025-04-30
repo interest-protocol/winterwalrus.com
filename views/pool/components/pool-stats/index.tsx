@@ -22,7 +22,7 @@ const PoolStats: FC = () => {
     },
     {
       label: 'APR',
-      value: `${((Number(data?.apr) ?? 0) * 100).toFixed(4)}%`,
+      value: `${(Number(data?.apr) ?? 0).toFixed(4)}%`,
     },
   ];
 
