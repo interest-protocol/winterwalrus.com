@@ -20,7 +20,7 @@ const StakeDetails: FC = () => {
           {aprLoading ? (
             <Skeleton width="4rem" />
           ) : (
-            `${((data?.apr ?? 0) * 100).toFixed(2)} %`
+            `${(data?.apr ?? 0).toFixed(2)} %`
           )}
         </P>
       </Div>
