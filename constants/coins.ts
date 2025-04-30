@@ -1,4 +1,5 @@
 import { SHARED_OBJECTS, TYPES } from '@interest-protocol/blizzard-sdk';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 
 import { AssetMetadata } from '@/interface';
 
@@ -91,7 +92,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
   },
 };
 
-export const COIN_TYPES: ReadonlyArray<string> = [TYPES.WAL];
+export const COIN_TYPES: ReadonlyArray<string> = [SUI_TYPE_ARG, TYPES.WAL];
 
 export const LST_LIST: ReadonlyArray<AssetMetadata> = [
   ASSET_METADATA[LST_TYPES_MAP.WWAL],
