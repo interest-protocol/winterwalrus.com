@@ -1,10 +1,8 @@
 export type PoolsAggregation = 'daily' | 'weekly' | 'monthly';
 
 export interface MetricsOvertimeAPI {
-  tvl: string;
-  fees: string;
   volume: string;
-  period: string;
+  epoch: string;
   cumulativeTvl: string;
   cumulativeFees: string;
 }
@@ -12,11 +10,12 @@ export interface MetricsOvertimeAPI {
 export interface MetricsAPI {
   tvl: string;
   apr: string;
+  fees: string;
+  volume: string;
   poolId: string;
   volume1D: string;
+  volume7D: string;
   volume30D: string;
-  totalFees: string;
-  totalVolume: string;
 }
 
 export interface PoolsChartProps {

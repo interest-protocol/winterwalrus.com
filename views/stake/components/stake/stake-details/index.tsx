@@ -5,12 +5,15 @@ import Skeleton from 'react-loading-skeleton';
 
 import { useFees } from '@/hooks/use-fees';
 import useLstAPR from '@/hooks/use-lst-apr';
+import { typeFromMaybeNftType } from '@/utils';
 
 const StakeDetails: FC = () => {
   const { control } = useFormContext();
   const lst = useWatch({ control, name: 'out.type' });
   const { fees, isLoading: feesLoading } = useFees(lst);
-  const { data, isLoading: aprLoading } = useLstAPR(lst);
+  const { data, isLoading: aprLoading } = useLstAPR(typeFromMaybeNftType(lst));
+
+  console.log({ data });
 
   return (
     <Div color="#F8F8F880" display="flex" flexDirection="column" gap="0.5rem">
@@ -20,7 +23,7 @@ const StakeDetails: FC = () => {
           {aprLoading ? (
             <Skeleton width="4rem" />
           ) : (
-            `${((data?.apr ?? 0) * 100).toFixed(2)} %`
+            `${(data?.apr ?? 0).toFixed(2)} %`
           )}
         </P>
       </Div>

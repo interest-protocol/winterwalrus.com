@@ -15,14 +15,17 @@ const PoolStats: FC = () => {
 
   const stats = [
     { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
-    { label: 'Volume', value: formatDollars(Number(data?.totalVolume ?? '0')) },
     {
-      label: 'Fees',
-      value: `${formatDollars(+(Number(data?.totalFees) ?? 0).toFixed(2))}`,
+      label: '24h Volume',
+      value: formatDollars(Number(data?.volume1D ?? '0')),
+    },
+    {
+      label: '24h Fees',
+      value: `${formatDollars(+(Number(data?.fees) ?? 0).toFixed(2))}`,
     },
     {
       label: 'APR',
-      value: `${((Number(data?.apr) ?? 0) * 100).toFixed(4)}%`,
+      value: `${(Number(data?.apr) ?? 0).toFixed(4)}%`,
     },
   ];
 

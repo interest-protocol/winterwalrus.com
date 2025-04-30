@@ -56,7 +56,9 @@ const PoolPerformance: FC = () => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <Div>
-          <P color="#FFFFFF80">24H {tabs[tab]}</P>
+          <P color="#FFFFFF80">
+            {tabs[tab] === 'Volume' && '24H'} {tabs[tab]}
+          </P>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {value}
           </P>
@@ -82,7 +84,7 @@ const PoolPerformance: FC = () => {
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {Number(data?.fees?.fee ?? 0) / 10 ** 16}%
           </P>
-          <P color="#FFFFFF80">Fee tier</P>
+          <P color="#FFFFFF80">Fee</P>
         </Div>
         <Div
           gap="0.25rem"

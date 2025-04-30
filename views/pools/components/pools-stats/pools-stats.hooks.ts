@@ -6,33 +6,16 @@ import {
   MetricsAPI,
   MetricsOvertimeAPI,
   PoolsAggregation,
-  PoolsMetrics,
 } from './pools-stats.types';
 
 export const usePoolsMetrics = () => {
-  const { data, ...rest } = useSWR<PoolsMetrics>(
+  const { data, ...rest } = useSWR<MetricsAPI>(
     [usePoolsMetrics.name],
     async () => {
       const url = `${INTEREST_STABLE_DEX_API}/metrics`;
 
-      const data: ReadonlyArray<MetricsAPI> = await fetch(url).then((res) =>
-        res.json()
-      );
-
-      return {
-        ...data.reduce(
-          (acc, metrics) => ({
-            ...acc,
-            [metrics.poolId]: metrics,
-          }),
-          {} as Record<string, MetricsAPI>
-        ),
-        tvl: data.reduce((acc, metrics) => acc + parseFloat(metrics.tvl), 0),
-        volume: data.reduce(
-          (acc, metrics) => acc + parseFloat(metrics.totalVolume),
-          0
-        ),
-      } as PoolsMetrics;
+      const data: MetricsAPI = await fetch(url).then((res) => res.json());
+      return data;
     }
   );
 
@@ -49,19 +32,19 @@ export const usePoolsMetricsOvertime = (
   const { data, ...rest } = useSWR(
     [usePoolsMetricsOvertime.name, aggregation, 'daily', poolId],
     async () => {
-      const url = `${INTEREST_STABLE_DEX_API}/metrics-overtime?interval=1%20month&aggregation=${aggregation}`;
+      const url = `${INTEREST_STABLE_DEX_API}/metrics-overtime?aggregation=${aggregation}`;
 
       const data: ReadonlyArray<MetricsOvertimeAPI> = await fetch(url).then(
         (res) => res.json()
       );
 
-      const latestTvl = Number(data.toReversed()[0].tvl ?? 0);
-      const latestFees = Number(data.toReversed()[0].fees ?? 0);
+      const latestTvl = Number(data.toReversed()[0].cumulativeTvl ?? 0);
+      const latestFees = Number(data.toReversed()[0].cumulativeFees ?? 0);
       const latestVolume = Number(data.toReversed()[0].volume ?? 0);
 
       const tvlOvertime = data.map((pool) => ({
-        y: parseFloat(pool.tvl),
-        x: new Date(pool.period).toLocaleDateString(undefined, {
+        y: parseFloat(pool.cumulativeTvl),
+        x: new Date(pool.epoch).toLocaleDateString(undefined, {
           weekday: 'short',
           day: '2-digit',
         }),
@@ -69,15 +52,15 @@ export const usePoolsMetricsOvertime = (
 
       const volumeOvertime = data.map((pool) => ({
         y: parseFloat(pool.volume),
-        x: new Date(pool.period).toLocaleDateString(undefined, {
+        x: new Date(pool.epoch).toLocaleDateString(undefined, {
           weekday: 'short',
           day: '2-digit',
         }),
       }));
 
       const feesOvertime = data.map((pool) => ({
-        y: parseFloat(pool.fees),
-        x: new Date(pool.period).toLocaleDateString(undefined, {
+        y: parseFloat(pool.cumulativeFees),
+        x: new Date(pool.epoch).toLocaleDateString(undefined, {
           weekday: 'short',
           day: '2-digit',
         }),

@@ -10,7 +10,7 @@ import { formatDollars } from '@/utils';
 import { usePoolsMetrics } from '../pools-stats/pools-stats.hooks';
 import { PoolRowProps } from './pool-row.types';
 
-const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
+const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({ lpCoinType, id }) => {
   const { metrics, isLoading: metricsLoading } = usePoolsMetrics();
   const { data: metadata, isLoading: metadataLoading } = useMetadata([
     lpCoinType,
@@ -28,7 +28,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
         borderColor="#FFFFFF1A"
         borderRadius="0.625rem"
         nHover={{ borderColor: '#99EFE44D' }}
-        gridTemplateColumns="4fr repeat(4, 2fr) 1fr"
+        gridTemplateColumns="2fr repeat(5, 1fr) 43px"
       >
         <Div display="flex" alignItems="center" gap="0.5rem">
           {metadataLoading ? (
@@ -53,9 +53,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].tvl))
-                : '--'}
+              {metrics ? formatDollars(Number(metrics.tvl)) : '--'}
             </Span>
           )}
         </Span>
@@ -64,9 +62,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? `${(Number(metrics[objectId].apr ?? 0) * 100).toFixed(2)}%`
-                : '--'}
+              {metrics ? `${Number(metrics.apr ?? 0).toFixed(2)}%` : '--'}
             </Span>
           )}
         </Span>
@@ -75,9 +71,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].volume1D))
-                : '--'}
+              {metrics ? formatDollars(Number(metrics.volume1D)) : '--'}
             </Span>
           )}
         </Span>
@@ -86,9 +80,16 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].volume30D))
-                : '--'}
+              {metrics ? formatDollars(Number(metrics.volume7D)) : '--'}
+            </Span>
+          )}
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics ? formatDollars(Number(metrics.volume30D)) : '--'}
             </Span>
           )}
         </Span>

@@ -16,6 +16,7 @@ import InputFieldModal from './input-field-modal';
 const InputFieldAsset: FC<InputFieldAssetProps> = ({
   name,
   types,
+  redirecting,
   oppositeName,
 }) => {
   const form = useFormContext();
@@ -51,6 +52,7 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
       <FormProvider {...form}>
         <InputFieldModal
           name={name}
+          redirecting={redirecting}
           oppositeName={oppositeName}
           assetList={values(metadata)}
         />

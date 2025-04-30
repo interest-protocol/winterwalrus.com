@@ -67,7 +67,7 @@ const PoolsTable: FC = () => {
         minWidth="30rem"
         color="#FFFFFF80"
         fontSize="0.875rem"
-        gridTemplateColumns="2fr repeat(4, 1fr) 43px"
+        gridTemplateColumns="2fr repeat(5, 1fr) 43px"
       >
         <Div gap="0.25rem" display="flex" alignItems="center">
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
@@ -102,6 +102,16 @@ const PoolsTable: FC = () => {
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             1D Vol
+          </P>
+        </Div>
+        <Div
+          gap="0.25rem"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+            7D Vol
           </P>
         </Div>
         <Div
