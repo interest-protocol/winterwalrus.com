@@ -10,7 +10,7 @@ import { formatDollars } from '@/utils';
 import { usePoolsMetrics } from '../pools-stats/pools-stats.hooks';
 import { PoolRowProps } from './pool-row.types';
 
-const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
+const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({ lpCoinType, id }) => {
   const { metrics, isLoading: metricsLoading } = usePoolsMetrics();
   const { data: metadata, isLoading: metadataLoading } = useMetadata([
     lpCoinType,
@@ -53,8 +53,17 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].tvl))
+              {metrics ? formatDollars(Number(metrics.tvl)) : '--'}
+            </Span>
+          )}
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics
+                ? `${(Number(metrics.apr ?? 0) * 100).toFixed(2)}%`
                 : '--'}
             </Span>
           )}
@@ -64,9 +73,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? `${(Number(metrics[objectId].apr ?? 0) * 100).toFixed(2)}%`
-                : '--'}
+              {metrics ? formatDollars(Number(metrics.volume1D)) : '--'}
             </Span>
           )}
         </Span>
@@ -75,20 +82,7 @@ const PoolRow: FC<PoolRowProps> = ({ lpCoinType, id, objectId }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].volume1D))
-                : '--'}
-            </Span>
-          )}
-        </Span>
-        <Span whiteSpace="nowrap" textAlign="center">
-          {metricsLoading ? (
-            <Skeleton width="4rem" />
-          ) : (
-            <Span whiteSpace="nowrap">
-              {metrics?.[objectId]
-                ? formatDollars(Number(metrics[objectId].volume30D))
-                : '--'}
+              {metrics ? formatDollars(Number(metrics.volume30D)) : '--'}
             </Span>
           )}
         </Span>

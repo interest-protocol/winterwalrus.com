@@ -47,7 +47,7 @@ const LiquidityPools: FC = () => {
           ) : (
             <>
               <P color="#FFFFFF" fontFamily="JetBrains Mono">
-                {formatDollars(metrics?.tvl ?? 0)}
+                {metrics ? formatDollars(Number(metrics.tvl)) : '--'}
               </P>
               <P color="#FFFFFF80">Total Value Locked</P>
             </>
@@ -72,7 +72,7 @@ const LiquidityPools: FC = () => {
           ) : (
             <>
               <P color="#FFFFFF" fontFamily="JetBrains Mono">
-                {formatDollars(metrics?.volume ?? 0)}
+                {metrics ? formatDollars(Number(metrics.volume)) : '--'}
               </P>
               <P color="#FFFFFF80">Cumulative Volume</P>
             </>
