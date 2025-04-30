@@ -56,7 +56,9 @@ const PoolPerformance: FC = () => {
     >
       <Div display="flex" justifyContent="space-between" alignItems="center">
         <Div>
-          <P color="#FFFFFF80">24H {tabs[tab]}</P>
+          <P color="#FFFFFF80">
+            {tabs[tab] === 'Volume' && '24H'} {tabs[tab]}
+          </P>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {value}
           </P>
