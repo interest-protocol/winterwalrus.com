@@ -13,7 +13,6 @@ import {
   NativeStakedWal,
   PortfolioTabs,
 } from './components';
-import PortfolioTabHeader from './components/portfolio-tab-header';
 
 const PortfolioContent: FC = () => {
   const { tab } = useTabState();
@@ -22,9 +21,7 @@ const PortfolioContent: FC = () => {
   return (
     <Div display="flex" flexDirection="column" gap="1rem">
       <PortfolioTabs />
-      <PortfolioTabHeader />
-      {/* {!currentAccount ? ( */}
-      {currentAccount ? (
+      {!currentAccount ? (
         <Div
           p="3.25rem"
           bg="#FFFFFF0D"

@@ -1,6 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { SuiObjectResponse } from '@mysten/sui/client';
+import { SuiObjectDataFilter, SuiObjectResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import { path, pathEq, pathOr } from 'ramda';
@@ -15,7 +15,12 @@ interface Response {
   balancesByLst: Record<string, BigNumber>;
 }
 
-export const useStakingObjects = () => {
+export const useStakingObjects = (
+  MatchAny: SuiObjectDataFilter[] = [
+    { StructType: TYPES.STAKED_WAL },
+    { StructType: TYPES.BLIZZARD_STAKE_NFT },
+  ]
+) => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
@@ -37,12 +42,7 @@ export const useStakingObjects = () => {
         const data = await suiClient.getOwnedObjects({
           owner: currentAccount.address,
           options: { showContent: true, showType: true },
-          filter: {
-            MatchAny: [
-              { StructType: TYPES.STAKED_WAL },
-              { StructType: TYPES.BLIZZARD_STAKE_NFT },
-            ],
-          },
+          filter: { MatchAny },
         });
 
         hasNextPage = data.hasNextPage;

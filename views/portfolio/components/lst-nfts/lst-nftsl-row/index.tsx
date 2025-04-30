@@ -1,165 +1,223 @@
-import { Div, Img, Span } from '@stylin.js/elements';
-import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import Skeleton from 'react-loading-skeleton';
+import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { formatAddress } from '@mysten/sui/utils';
+import { Button, Div, Img, P } from '@stylin.js/elements';
+import BigNumber from 'bignumber.js';
+import Link from 'next/link';
+import { memo, useCallback } from 'react';
+import Countdown from 'react-countdown';
+import unikey from 'unikey';
 
-import { COIN_TYPES } from '@/constants';
-import { formatDollars, formatMoney } from '@/utils';
+import { ExternalLinkSVG } from '@/components/svg';
+import { ExplorerMode, NFT_IMAGE } from '@/constants';
+import useEpochData from '@/hooks/use-epoch-data';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
+import { useNodeName } from '@/hooks/use-node';
+import { useStakingObject } from '@/hooks/use-staking-object';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { formatDollars } from '@/utils';
+import LSTNFTsCoinsRowModal from '@/views/stake/components/nft/nft-assets/nft-assets-item/nft-assets-item-modal';
+import { useStakingAction } from '@/views/stake/components/nft/nft-assets/staking-assets-item.hooks';
+import StakingAssetsItemLoading from '@/views/stake/components/nft/nft-assets/staking-assets-item-loading';
 
-import LSTNFTsButton from '../lst-nftsl-button';
 import { LSTNFTsCoinsRowProps } from './lst-nftsl.types';
 
-const LSTNFTsCoinsRow: FC<LSTNFTsCoinsRowProps> = ({
-  id,
-  objectId,
-  coinType,
-}) => {
-  const form = useForm({
-    defaultValues: {
-      out: {
-        type: COIN_TYPES[0],
-        value: 0,
-      },
-    },
-  });
+const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
+  const { data } = useEpochData();
+  const { setContent } = useModal();
+  const getExplorerUrl = useGetExplorerUrl();
+  const { stakingObject, isLoading } = useStakingObject(id);
+  const { nodeName } = useNodeName(stakingObject?.nodeId);
 
-  const metadataLoading = false;
-  const metadata: Record<string, { iconUrl: string; symbol: string }> = {
-    [coinType]: {
-      iconUrl: 'https://via.placeholder.com/24',
-      symbol: coinType.toUpperCase(),
-    },
-  };
+  const isActivated = useCallback(
+    (activationEpoch: number) =>
+      !!(data?.currentEpoch && activationEpoch <= data.currentEpoch),
+    [data?.currentEpoch]
+  );
 
-  const metricsLoading = false;
-  const metrics: Record<
-    string,
-    {
-      totalStaked: number;
-      toWithdraw: number;
-      status:
-        | 'Ready to Get'
-        | 'Read to Withdraw'
-        | 'Withdrawing'
-        | 'staked'
-        | '12:12';
-    }
-  > = {
-    [objectId]: {
-      totalStaked: 123456.78,
-      toWithdraw: 0.045,
-      status:
-        id == '1'
-          ? 'Ready to Get'
-          : id == '2'
-            ? 'Withdrawing'
-            : id == '3'
-              ? '12:12'
-              : 'staked',
-    },
-  };
+  const { onBurn, loading } = useStakingAction(stakingObject, isActivated);
 
-  const status = metrics?.[objectId]?.status;
+  if (isLoading) return <StakingAssetsItemLoading />;
+
+  if (!stakingObject) return null;
+
+  const {
+    type,
+    state,
+    display,
+    objectId,
+    withdrawEpoch,
+    activationEpoch,
+    principal,
+  } = stakingObject;
+
+  const usdValue = 0;
+
+  const activation = withdrawEpoch ?? activationEpoch;
+
+  const activationTime = data
+    ? (activation - (data.currentEpoch + 1)) * data?.epochDurationMs +
+      data.msUntilNextEpoch
+    : 0;
+
+  const openModal = () =>
+    setContent(
+      <LSTNFTsCoinsRowModal
+        nodeName={nodeName}
+        isActivated={isActivated}
+        activationTime={activationTime}
+        {...stakingObject}
+      />,
+      { title: 'NFT Details' }
+    );
 
   return (
     <Div
-      p="1rem"
-      display="grid"
+      key={unikey()}
       color="#ffffff"
+      cursor="pointer"
       border="1px solid"
-      fontSize="0.875rem"
-      alignItems="center"
+      onClick={openModal}
       borderColor="#FFFFFF1A"
       borderRadius="0.625rem"
+      transition="all 300ms linear"
       nHover={{ borderColor: '#99EFE44D' }}
-      gridTemplateColumns="0.5fr repeat(4, 1fr)"
+      p={['0.5rem', '1rem']}
+      display="grid"
+      alignItems="center"
+      gridTemplateColumns="2fr repeat(4, 1fr)"
     >
-      <Div display="flex" alignItems="center" gap="0.5rem">
-        {metadataLoading ? (
-          <Skeleton width="1.5rem" height="1.5rem" borderRadius="50%" />
-        ) : (
+      <Div display="flex" alignItems="center" gap="0.75rem">
+        <Div
+          display="flex"
+          width="2.5rem"
+          height="2.5rem"
+          alignItems="center"
+          position="relative"
+          borderRadius="0.5rem"
+          justifyContent="center"
+        >
           <Img
-            width="1.5rem"
-            height="1.5rem"
-            borderRadius="50%"
-            src={metadata?.[coinType]?.iconUrl}
-            alt={metadata?.[coinType]?.symbol}
+            alt={type}
+            width="2.5rem"
+            height="2.5rem"
+            position="relative"
+            borderRadius="0.5rem"
+            src={display ?? NFT_IMAGE[type]}
           />
-        )}
-        {metadataLoading ? (
-          <Skeleton width="6rem" />
-        ) : (
-          <Div display="flex" flexDirection="column" gap="0.25rem">
-            <Span whiteSpace="nowrap">Wal addr</Span>
-            <Span whiteSpace="nowrap">StakedWal</Span>
-          </Div>
-        )}
-      </Div>
-      <Span whiteSpace="nowrap" textAlign="center">
-        {metricsLoading ? (
-          <Skeleton width="4rem" />
-        ) : (
-          <Span whiteSpace="nowrap">
-            {metrics?.[objectId]
-              ? formatMoney(Number(metrics[objectId].totalStaked))
-              : '--'}
-          </Span>
-        )}
-      </Span>
-      <Span whiteSpace="nowrap" textAlign="center">
-        {metricsLoading ? (
-          <Skeleton width="4rem" />
-        ) : (
-          <Span whiteSpace="nowrap">
-            {metrics?.[objectId]
-              ? formatDollars(Number(metrics[objectId].toWithdraw))
-              : '--'}
-          </Span>
-        )}
-      </Span>
-      <Div display="flex" justifyContent="center">
-        {metricsLoading ? (
-          <Skeleton width="4rem" />
-        ) : (
-          <Div
-            whiteSpace="nowrap"
-            background={
-              status === 'Ready to Get'
-                ? '#C484F614'
-                : status === 'Withdrawing'
-                  ? '#83F34E14'
-                  : '#FFFFFF14'
-            }
-            color={
-              status === 'Ready to Get'
-                ? '#C484F6'
-                : status === 'Withdrawing'
-                  ? '#83F34E'
-                  : '#FFFFFF'
-            }
-            px="0.75rem"
-            py="0.25rem"
-            mx="0.5rem"
-            borderRadius="1rem"
-            fontWeight="bold"
-            textAlign="center"
+        </Div>
+        <Div>
+          <Link
+            target="_blank"
+            onClick={(e) => e.stopPropagation()}
+            href={getExplorerUrl(objectId, ExplorerMode.Object)}
           >
-            {status === 'Ready to Get'
-              ? 'Ready To Withdraw'
-              : status === 'Withdrawing'
-                ? 'Withdrawing'
-                : status === 'staked'
-                  ? 'Staked'
-                  : status}
-          </Div>
-        )}
+            <Div
+              gap="0.5rem"
+              display="flex"
+              fontSize="0.875rem"
+              nHover={{ color: '#99EFE4' }}
+            >
+              <P fontFamily="JetBrains Mono">
+                {objectId ? formatAddress(objectId) : ''}
+              </P>
+              <ExternalLinkSVG maxWidth="0.85rem" width="100%" />
+            </Div>
+          </Link>
+          <P fontSize="0.75rem" color="#FFFFFF80">
+            {nodeName}
+          </P>
+        </Div>
       </Div>
 
-      <FormProvider {...form}>
-        <LSTNFTsButton status={metrics?.[objectId]?.status} />
-      </FormProvider>
+      <Div>
+        <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
+          {principal ? FixedPointMath.toNumber(BigNumber(principal), 9) : '-'}
+        </P>
+      </Div>
+
+      <Div>
+        <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
+          {usdValue ? formatDollars(usdValue) : '-'}
+        </P>
+      </Div>
+
+      <Div
+        whiteSpace="nowrap"
+        background={
+          state === 'Ready to Get'
+            ? '#C484F614'
+            : state === 'Withdrawing'
+              ? '#83F34E14'
+              : '#FFFFFF14'
+        }
+        color={
+          state === 'Ready to Get'
+            ? '#C484F6'
+            : state === 'Withdrawing'
+              ? '#83F34E'
+              : '#FFFFFF'
+        }
+        px="0.75rem"
+        py="0.25rem"
+        mx="0.5rem"
+        borderRadius="1rem"
+        fontWeight="bold"
+        textAlign="center"
+      >
+        <P>
+          {state === 'Ready to Get'
+            ? 'Ready To Withdraw'
+            : state === 'Withdrawing'
+              ? 'Withdrawing'
+              : state === 'staked'
+                ? 'Staked'
+                : state}
+        </P>
+      </Div>
+
+      <Div
+        display="flex"
+        alignItems="center"
+        gap="1rem"
+        justifyContent="flex-end"
+      >
+        <Button
+          all="unset"
+          py="0.5rem"
+          width="7rem"
+          color="#000000"
+          textAlign="center"
+          borderRadius="0.5rem"
+          bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
+          disabled={loading || !isActivated(activation)}
+          opacity={loading || isActivated(activation) ? 1 : 0.5}
+          cursor={isActivated(activation) ? 'pointer' : 'not-allowed'}
+          onClick={(e) => {
+            e.stopPropagation();
+            onBurn();
+          }}
+        >
+          {isActivated(activation) ? (
+            type === TYPES.STAKED_WAL ? (
+              state === 'Staked' ? (
+                'Unstake'
+              ) : (
+                'Withdraw'
+              )
+            ) : loading ? (
+              'Getting...'
+            ) : (
+              'Get LST'
+            )
+          ) : (
+            <Countdown date={Date.now() + activationTime} />
+          )}
+        </Button>
+      </Div>
     </Div>
   );
-};
+});
+LSTNFTsCoinsRow.displayName = 'LSTNFTsCoinsRow';
 
 export default LSTNFTsCoinsRow;

@@ -1,12 +1,13 @@
 import { FC } from 'react';
 
-import CoinsTable from './coins-table';
+import LstsOrCoinsTable from '../lsts-or-coins-table';
 
 const Coins: FC = () => {
   return (
     <>
-      <CoinsTable />
+      <LstsOrCoinsTable name="Coins" />
     </>
   );
 };
+
 export default Coins;

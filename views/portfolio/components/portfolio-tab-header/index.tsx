@@ -1,18 +1,18 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
-import { useAppState } from '@/hooks/use-app-state';
 import { useTabState } from '@/hooks/use-tab-manager';
-import { formatDollars } from '@/utils';
+import { formatDollars, formatMoney } from '@/utils';
 
-const PortfolioTabHeader: FC = () => {
+import { PortfolioTabHeaderProps } from './portfolio-tab-header.types';
+
+const PortfolioTabHeader: FC<PortfolioTabHeaderProps> = ({
+  usdValue,
+  walValue,
+  loading,
+}) => {
   const { tab } = useTabState();
-  const { balances } = useAppState();
-
-  console.log('balances', balances);
-
-  const walValue = [10, 12, 5, 32][tab];
-  const usdValue = [90, 100, 40, 330][tab];
 
   return (
     <Div
@@ -23,30 +23,39 @@ const PortfolioTabHeader: FC = () => {
     >
       <P color="#fff">{['LSTs', 'Native Staked WAL', 'NFTs', 'Coins'][tab]}</P>
 
-      <Div display="flex" gap="1rem">
-        <Div
-          fontFamily="JetBrains Mono"
-          color="#FFF"
-          fontSize="1rem"
-          borderRadius="0.5rem"
-          padding="0.5rem"
-          border="1px solid #99EFE44D"
-        >
-          {walValue} WAL
+      {loading ? (
+        <Div display="flex" gap="1rem">
+          <Skeleton width="4rem" height="2.3rem" />
+          <Skeleton width="4rem" height="2.3rem" />
         </Div>
-        {usdValue && (
-          <Div
-            fontFamily="JetBrains Mono"
-            color="#FFF"
-            fontSize="1rem"
-            borderRadius="0.5rem"
-            padding="0.5rem"
-            border="1px solid #99EFE44D"
-          >
-            {formatDollars(usdValue)}
-          </Div>
-        )}
-      </Div>
+      ) : (
+        <Div display="flex" gap="1rem">
+          {walValue !== undefined && walValue >= 0 && (
+            <Div
+              fontFamily="JetBrains Mono"
+              color="#FFF"
+              fontSize="1rem"
+              borderRadius="0.5rem"
+              padding="0.5rem"
+              border="1px solid #99EFE44D"
+            >
+              {formatMoney(walValue)} WAL
+            </Div>
+          )}
+          {usdValue !== undefined && usdValue >= 0 && (
+            <Div
+              fontFamily="JetBrains Mono"
+              color="#FFF"
+              fontSize="1rem"
+              borderRadius="0.5rem"
+              padding="0.5rem"
+              border="1px solid #99EFE44D"
+            >
+              {formatDollars(usdValue)}
+            </Div>
+          )}
+        </Div>
+      )}
     </Div>
   );
 };

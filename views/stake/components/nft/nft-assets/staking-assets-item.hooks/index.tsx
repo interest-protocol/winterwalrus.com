@@ -1,10 +1,9 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount } from '@mysten/dapp-kit';
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { path } from 'ramda';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
@@ -24,7 +23,13 @@ export const useStakingAction = (
   const burn = useBurn();
   const { update } = useAppState();
   const { setContent } = useModal();
-  const account = useCurrentAccount();
+  const account = useMemo(
+    () => ({
+      address:
+        '0xc23ea8e493616b1510d9405ce05593f8bd1fb30f44f92303ab2c54f6c8680ecb',
+    }),
+    []
+  );
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
 
