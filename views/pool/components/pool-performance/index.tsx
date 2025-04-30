@@ -84,7 +84,7 @@ const PoolPerformance: FC = () => {
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
             {Number(data?.fees?.fee ?? 0) / 10 ** 16}%
           </P>
-          <P color="#FFFFFF80">Fee tier</P>
+          <P color="#FFFFFF80">Fee</P>
         </Div>
         <Div
           gap="0.25rem"
