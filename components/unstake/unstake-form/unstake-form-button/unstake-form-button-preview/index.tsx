@@ -24,8 +24,8 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
 
   const { data, isLoading, error } = usePreviewUnstake({
     coinIn,
-    coinInValue: BigInt(String(valueIn)),
-    coinOutValue: BigInt(String(valueInNoFee)),
+    coinInValue: BigInt(valueIn.toFixed(0)),
+    coinOutValue: BigInt(valueInNoFee.toFixed(0)),
   });
 
   const walAmount = BigNumber(
