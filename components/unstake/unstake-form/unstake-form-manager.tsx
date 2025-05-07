@@ -33,7 +33,7 @@ const UnstakeFormManager: FC = () => {
 
     const valueInNoFeeBN = valueInBN.times(1 - fees.unstaking / 100);
 
-    const valueBN = valueInNoFeeBN.times(rate);
+    const valueBN = valueInNoFeeBN.times(rate).decimalPlaces(0, 1);
 
     setValue('out.valueBN', valueBN);
     setValue('in.valueNoFeeBN', valueInNoFeeBN);
