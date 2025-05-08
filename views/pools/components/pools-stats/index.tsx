@@ -1,6 +1,8 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC, useState } from 'react';
 
+import { formatDollars } from '@/utils';
+
 import { PoolsChart } from './pools-chart';
 import { usePoolsMetricsOvertime } from './pools-stats.hooks';
 
@@ -25,7 +27,7 @@ const PoolsPerformance: FC = () => {
       >
         <Div>
           <P color="#FFFFFF" fontFamily="JetBrains Mono">
-            ${latestTvl?.toLocaleString('en-US')}
+            {formatDollars(latestTvl)}
           </P>
           <P color="#FFFFFF80">Total Value Locked</P>
         </Div>

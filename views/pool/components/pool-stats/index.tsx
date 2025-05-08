@@ -11,7 +11,7 @@ import { usePoolMetrics } from './pool-stats.hooks';
 const PoolStats: FC = () => {
   const pool = usePool();
 
-  const { data } = usePoolMetrics(pool?.objectId);
+  const { data, isLoading: poolLoading } = usePoolMetrics(pool?.objectId);
 
   const stats = [
     { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
@@ -25,7 +25,7 @@ const PoolStats: FC = () => {
     },
     {
       label: 'APR',
-      value: `${(Number(data?.apr) ?? 0).toFixed(4)}%`,
+      value: `${(Number(data?.apr) ?? 0).toFixed(2)}%`,
     },
   ];
 
@@ -107,7 +107,7 @@ const PoolStats: FC = () => {
             width={['48%', 'auto']}
           >
             <P color="#FFFFFF" fontFamily="JetBrains Mono">
-              {value}
+              {poolLoading ? <Skeleton width="4rem" /> : value}
             </P>
             <P color="#FFFFFF80">{label}</P>
           </Div>

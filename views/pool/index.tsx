@@ -30,7 +30,7 @@ const Pool: FC = () => (
           </Button>
         </Link>
         <H2 fontSize="1rem" fontWeight="600">
-          Add Liquidity
+          Pools
         </H2>
       </Div>
       <PoolStats />

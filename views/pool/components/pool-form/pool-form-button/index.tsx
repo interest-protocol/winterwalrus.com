@@ -14,7 +14,7 @@ const PoolFormButton: FC = () => {
   const { tab } = useTabState();
   const { control } = useFormContext<IPoolForm>();
   const quoting = useWatch({ control, name: 'quoting' });
-  const { addLiquidity, removeLiquidity } = useLiquidity();
+  const { addLiquidity, removeLiquidity, loading } = useLiquidity();
 
   const [pool, tokens] = useWatch({ control, name: ['pool', 'coins'] });
 
@@ -28,7 +28,7 @@ const PoolFormButton: FC = () => {
         valueBN.gt(coins?.[type] ?? ZERO_BIG_NUMBER)
       );
 
-  const disabled = quoting || insufficientBalance || emptyFields;
+  const disabled = quoting || insufficientBalance || emptyFields || loading;
 
   return (
     <WalletGuardButton
@@ -51,10 +51,16 @@ const PoolFormButton: FC = () => {
         : quoting
           ? 'Quoting...'
           : tab === 0
-            ? 'Deposit'
+            ? loading
+              ? 'Depositing...'
+              : 'Deposit'
             : tab === 1
-              ? 'Withdraw'
-              : 'Swap'}
+              ? loading
+                ? 'Withdrawing...'
+                : 'Withdraw'
+              : loading
+                ? 'Swapping...'
+                : 'Swap'}
     </WalletGuardButton>
   );
 };

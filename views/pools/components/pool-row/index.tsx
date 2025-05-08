@@ -5,12 +5,17 @@ import Skeleton from 'react-loading-skeleton';
 
 import { Routes, RoutesEnum } from '@/constants';
 import useMetadata from '@/hooks/use-metadata';
-import { formatDollars } from '@/utils';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { formatDollars, formatMoney } from '@/utils';
 
 import { usePoolsMetrics } from '../pools-stats/pools-stats.hooks';
 import { PoolRowProps } from './pool-row.types';
 
-const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({ lpCoinType, id }) => {
+const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
+  id,
+  position,
+  lpCoinType,
+}) => {
   const { metrics, isLoading: metricsLoading } = usePoolsMetrics();
   const { data: metadata, isLoading: metadataLoading } = useMetadata([
     lpCoinType,
@@ -89,7 +94,11 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({ lpCoinType, id }) => {
             <Skeleton width="4rem" />
           ) : (
             <Span whiteSpace="nowrap">
-              {metrics ? formatDollars(Number(metrics.volume30D)) : '--'}
+              {position
+                ? formatMoney(FixedPointMath.toNumber(position))
+                : metrics
+                  ? formatDollars(Number(metrics.volume30D))
+                  : '--'}
             </Span>
           )}
         </Span>

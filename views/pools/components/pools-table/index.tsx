@@ -121,7 +121,7 @@ const PoolsTable: FC = () => {
           justifyContent="center"
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
-            30D Vol
+            {tab ? 'Position' : '30D Vol'}
           </P>
         </Div>
       </Div>
@@ -140,7 +140,14 @@ const PoolsTable: FC = () => {
           </Div>
         ) : (
           pools.map(([key, pool]) => (
-            <PoolRow {...pool} key={unikey()} id={key} />
+            <PoolRow
+              {...pool}
+              id={key}
+              key={unikey()}
+              position={
+                tab ? balances[normalizeStructTag(pool.lpCoinType)] : null
+              }
+            />
           ))
         )}
       </Div>
