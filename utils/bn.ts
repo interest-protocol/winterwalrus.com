@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { MAX_BPS } from '@interest-protocol/blizzard-sdk';
 import BigNumber from 'bignumber.js';
 
 import { BigNumberish } from '@/interface';
@@ -36,3 +37,24 @@ export function isBigNumberish(value: any): value is BigNumberish {
 }
 
 export const isNumeric = (bn: BigNumber) => !Number.isNaN(bn.toNumber());
+
+/**
+ * @name bpsCalcUp
+ * @description this is the function that takes the fees based on @interest/bps package
+ * @link https://github.com/interest-protocol/interest-mvr/blob/a2ed0e88d7b993a014c73061d7b369cc45c45624/bps/sources/bps.move#L57
+ */
+export const feesCalcUp = (
+  feeBps: number,
+  amount: BigNumber
+): [BigNumber, BigNumber] => {
+  const [fee, value, maxBps] = [
+    BigInt(feeBps),
+    BigInt(String(amount.decimalPlaces(0, 1))),
+    MAX_BPS,
+  ];
+
+  const fees =
+    (fee * value) / maxBps + BigInt((fee * value) % maxBps > BigInt(0) ? 1 : 0);
+
+  return [BigNumber(String(value - fees)), BigNumber(String(fees))];
+};
