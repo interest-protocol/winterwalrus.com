@@ -1,6 +1,5 @@
-import { Div, Img, Span } from '@stylin.js/elements';
+import { A, Div, Img, Span } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import Link from 'next/link';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
@@ -18,9 +17,9 @@ import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 
 export const PoolCoinsSummary: FC = () => {
-  const getExplorerUrl = useGetExplorerUrl();
-
   const pool = usePool();
+  const getExplorerUrl = useGetExplorerUrl();
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const coins = pool?.coinTypes.map((type) => ({
     type,
@@ -43,8 +42,6 @@ export const PoolCoinsSummary: FC = () => {
   const { data: poolData, isLoading: poolLoading } = usePoolData(
     pool?.objectId
   );
-
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleCopy = async (index: number, value: string) => {
     await navigator.clipboard.writeText(value);
@@ -99,31 +96,30 @@ export const PoolCoinsSummary: FC = () => {
               </Span>
               <Div position="relative" display="flex" alignItems="center">
                 {copiedIndex === index ? (
-                  <Checkmark
-                    width="1rem"
-                    maxHeight="1rem"
-                    color="#99EFE4"
-                    style={{ cursor: 'pointer' }}
-                  />
+                  <Span color="#99EFE4">
+                    <Checkmark width="100%" maxHeight="1rem" />
+                  </Span>
                 ) : (
-                  <CopySVG
-                    width="1rem"
-                    maxHeight="1rem"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleCopy(index, balance)}
-                  />
+                  <Span nHover={{ color: '#99EFE4' }}>
+                    <CopySVG
+                      width="100%"
+                      maxHeight="1rem"
+                      onClick={() => handleCopy(index, balance)}
+                    />
+                  </Span>
                 )}
               </Div>
-              <Link
-                href={getExplorerUrl(type, ExplorerMode.Coin)}
+              <A
                 target="_blank"
+                nHover={{ color: '#99EFE4' }}
+                href={getExplorerUrl(type, ExplorerMode.Coin)}
               >
                 <ExternalLink
                   width="100%"
                   maxWidth="0.8rem"
                   maxHeight="0.8rem"
                 />
-              </Link>
+              </A>
             </Div>
           </Div>
         );
