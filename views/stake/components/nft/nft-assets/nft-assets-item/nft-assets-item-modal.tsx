@@ -127,17 +127,20 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
         all="unset"
         py="1rem"
         color="#000000"
-        onClick={() => {
-          handleClose();
-          onBurn();
-        }}
         textAlign="center"
         borderRadius="0.5rem"
         bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
         disabled={loading || !isActivated(withdrawEpoch ?? activationEpoch)}
+        nHover={{
+          bg: type === TYPES.STAKED_WAL ? '#74D5C9' : '#B170E4',
+        }}
         opacity={
           loading || isActivated(withdrawEpoch ?? activationEpoch) ? 1 : 0.5
         }
+        onClick={() => {
+          handleClose();
+          onBurn();
+        }}
         cursor={
           isActivated(withdrawEpoch ?? activationEpoch)
             ? 'pointer'

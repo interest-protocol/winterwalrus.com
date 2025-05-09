@@ -32,8 +32,8 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
         alignItems="center"
         borderColor="#FFFFFF1A"
         borderRadius="0.625rem"
-        nHover={{ borderColor: '#99EFE44D' }}
         gridTemplateColumns="2fr repeat(5, 1fr) 43px"
+        nHover={{ borderColor: '#99EFE44D', bg: '#99EFE433' }}
       >
         <Div display="flex" alignItems="center" gap="0.5rem">
           {metadataLoading ? (
