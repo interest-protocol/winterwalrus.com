@@ -3,7 +3,6 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import WalletGuardButton from '@/components/wallet-button/wallet-guard-button';
 import { useCoins } from '@/hooks/use-coins';
-import { useFees } from '@/hooks/use-fees';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
@@ -14,19 +13,12 @@ const TransmuteFormButton: FC = () => {
   const { control, getValues } = useFormContext();
   const { onTransmute, loading } = useTransmuteAction();
 
-  const { fees } = useFees(getValues('in.type'));
+  const amountIn = useWatch({ control, name: 'in.value' });
 
-  const amountIn = useWatch({
-    control,
-    name: 'in.value',
-  });
-
-  const minAmountIn = 1 + (fees?.transmute ?? 0) / 100;
-
-  const minMaxAmountIn = fees?.transmute ? 1.1 : 1;
+  const minMaxAmountIn = 1.1;
 
   const insufficientAmountIn =
-    !!Number(amountIn) && Number(amountIn) < minAmountIn;
+    !!Number(amountIn) && Number(amountIn) < minMaxAmountIn;
 
   const insufficientBalance =
     !!Number(amountIn) &&
@@ -46,9 +38,9 @@ const TransmuteFormButton: FC = () => {
       position="relative"
       disabled={disabled}
       borderRadius="0.625rem"
+      onClick={disabled ? undefined : onTransmute}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#99EFE4'}
-      onClick={disabled ? undefined : onTransmute}
       nHover={
         !disabled && {
           bg: '#74D5C9',

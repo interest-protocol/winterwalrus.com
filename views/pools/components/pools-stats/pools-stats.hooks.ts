@@ -45,24 +45,39 @@ export const usePoolsMetricsOvertime = (
       const tvlOvertime = data.map((pool) => ({
         y: parseFloat(pool.cumulativeTvl),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 
       const volumeOvertime = data.map((pool) => ({
         y: parseFloat(pool.volume),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 
       const feesOvertime = data.map((pool) => ({
         y: parseFloat(pool.cumulativeFees),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 

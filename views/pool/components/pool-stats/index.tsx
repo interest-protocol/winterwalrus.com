@@ -14,10 +14,13 @@ const PoolStats: FC = () => {
   const { data, isLoading: poolLoading } = usePoolMetrics(pool?.objectId);
 
   const stats = [
-    { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
+    {
+      label: 'TVL',
+      value: formatDollars(+Number(data?.tvl ?? '0').toFixed(2)),
+    },
     {
       label: '24h Volume',
-      value: formatDollars(Number(data?.volume1D ?? '0')),
+      value: formatDollars(+Number(data?.volume1D ?? '0').toFixed(2)),
     },
     {
       label: '24h Fees',
