@@ -95,7 +95,7 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
           ) : (
             <Span whiteSpace="nowrap">
               {position
-                ? formatMoney(FixedPointMath.toNumber(position))
+                ? formatMoney(+FixedPointMath.toNumber(position).toFixed(4))
                 : metrics
                   ? formatDollars(Number(metrics.volume30D))
                   : '--'}
