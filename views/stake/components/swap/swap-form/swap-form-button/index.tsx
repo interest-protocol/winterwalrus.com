@@ -21,9 +21,6 @@ const SwapFormButton: FC = () => {
   });
 
   const insufficientBalance =
-    !values(POOLS).some(({ coinTypes }) =>
-      coinTypes.every((coin) => [coinIn, coinOut].includes(coin))
-    ) &&
     !!Number(amountIn) &&
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
@@ -31,7 +28,11 @@ const SwapFormButton: FC = () => {
   const minAmountOut = 1;
 
   const insufficientAmountOut =
-    !!Number(amountOut) && Number(amountOut) < minAmountOut;
+    !values(POOLS).some(({ coinTypes }) =>
+      coinTypes.every((coin) => [coinIn, coinOut].includes(coin))
+    ) &&
+    !!Number(amountOut) &&
+    Number(amountOut) < minAmountOut;
 
   const disabled =
     quoting || loading || insufficientBalance || insufficientAmountOut;
