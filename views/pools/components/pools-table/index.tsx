@@ -74,6 +74,18 @@ const PoolsTable: FC = () => {
             Pool
           </P>
         </Div>
+        {!!tab && (
+          <Div
+            gap="0.25rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              Position
+            </P>
+          </Div>
+        )}
         <Div
           gap="0.25rem"
           display="flex"
@@ -114,16 +126,18 @@ const PoolsTable: FC = () => {
             7D Vol
           </P>
         </Div>
-        <Div
-          gap="0.25rem"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
-            {tab ? 'Position' : '30D Vol'}
-          </P>
-        </Div>
+        {!tab && (
+          <Div
+            gap="0.25rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              30D Vol
+            </P>
+          </Div>
+        )}
       </Div>
       <Div minWidth="30rem">
         {pools.length === 0 ? (

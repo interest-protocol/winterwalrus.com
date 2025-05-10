@@ -53,6 +53,21 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
             <Span whiteSpace="nowrap">{metadata?.[lpCoinType]?.symbol}</Span>
           )}
         </Div>
+        {position && (
+          <Span whiteSpace="nowrap" textAlign="center">
+            {metricsLoading ? (
+              <Skeleton width="4rem" />
+            ) : (
+              <Span whiteSpace="nowrap">
+                {position
+                  ? formatMoney(+FixedPointMath.toNumber(position).toFixed(4))
+                  : metrics
+                    ? formatDollars(Number(metrics.tvl))
+                    : '--'}
+              </Span>
+            )}
+          </Span>
+        )}
         <Span whiteSpace="nowrap" textAlign="center">
           {metricsLoading ? (
             <Skeleton width="4rem" />
@@ -89,19 +104,17 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
             </Span>
           )}
         </Span>
-        <Span whiteSpace="nowrap" textAlign="center">
-          {metricsLoading ? (
-            <Skeleton width="4rem" />
-          ) : (
-            <Span whiteSpace="nowrap">
-              {position
-                ? formatMoney(+FixedPointMath.toNumber(position).toFixed(4))
-                : metrics
-                  ? formatDollars(Number(metrics.volume30D))
-                  : '--'}
-            </Span>
-          )}
-        </Span>
+        {!position && (
+          <Span whiteSpace="nowrap" textAlign="center">
+            {metricsLoading ? (
+              <Skeleton width="4rem" />
+            ) : (
+              <Span whiteSpace="nowrap">
+                {metrics ? formatDollars(Number(metrics.volume30D)) : '--'}
+              </Span>
+            )}
+          </Span>
+        )}
         <Div
           width="43px"
           height="42px"

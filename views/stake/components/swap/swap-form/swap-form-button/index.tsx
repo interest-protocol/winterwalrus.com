@@ -1,3 +1,5 @@
+import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
+import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -13,12 +15,15 @@ const SwapFormButton: FC = () => {
   const { onSwap, loading } = useSwapAction();
   const { control, getValues } = useFormContext();
 
-  const [amountIn, amountOut, quoting] = useWatch({
+  const [amountIn, amountOut, coinIn, coinOut, quoting] = useWatch({
     control,
-    name: ['in.value', 'out.value', 'quoting'],
+    name: ['in.value', 'out.value', 'in.type', 'out.type', 'quoting'],
   });
 
   const insufficientBalance =
+    !values(POOLS).some(({ coinTypes }) =>
+      coinTypes.every((coin) => [coinIn, coinOut].includes(coin))
+    ) &&
     !!Number(amountIn) &&
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
@@ -44,13 +49,9 @@ const SwapFormButton: FC = () => {
       borderRadius="0.625rem"
       opacity={disabled ? 0.7 : 1}
       onClick={disabled ? undefined : onSwap}
+      nHover={!disabled && { bg: '#74D5C9' }}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#99EFE4'}
-      nHover={
-        !disabled && {
-          bg: '#74D5C9',
-        }
-      }
     >
       {insufficientBalance
         ? 'Insufficient Balance'
