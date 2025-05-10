@@ -8,7 +8,7 @@ const useBlizzardSdk = () => {
   const localRPC = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;
 
   const { data } = useSWR<BlizzardSDK>(
-    [useBlizzardSdk.name, localRPC],
+    [useBlizzardSdk.name, localRPC, 'blizzard'],
     () => new BlizzardSDK({ fullNodeUrl: RPC_MAP[Network.MAINNET][localRPC] })
   );
 

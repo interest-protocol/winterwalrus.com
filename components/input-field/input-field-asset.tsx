@@ -13,7 +13,12 @@ import { ChevronDownSVG } from '../svg';
 import { InputFieldAssetProps } from './input-field.types';
 import InputFieldModal from './input-field-modal';
 
-const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
+const InputFieldAsset: FC<InputFieldAssetProps> = ({
+  name,
+  types,
+  redirecting,
+  oppositeName,
+}) => {
   const form = useFormContext();
   const { setContent } = useModal();
   const { data: metadata, isLoading } = useMetadata(types);
@@ -21,8 +26,11 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const { control } = form;
 
   const type = useWatch({ control, name: `${name}.type` });
+  const oppositeType = useWatch({ control, name: `${oppositeName}.type` });
 
   const nftType = nftTypeFromType(type);
+
+  const availableTypes = types.filter((item) => item !== oppositeType);
 
   if (isLoading || (!metadata?.[type] && !metadata?.[nftType]))
     return (
@@ -45,7 +53,12 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
   const openAssetModal = () =>
     setContent(
       <FormProvider {...form}>
-        <InputFieldModal name={name} assetList={values(metadata)} />
+        <InputFieldModal
+          name={name}
+          redirecting={redirecting}
+          oppositeName={oppositeName}
+          assetList={values(metadata)}
+        />
       </FormProvider>,
       { title: 'Select Asset' }
     );
@@ -60,8 +73,8 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
       whileHover="hover"
       alignItems="center"
       justifyContent="center"
-      cursor={types.length > 1 ? 'pointer' : 'default'}
-      onClick={() => types.length > 1 && openAssetModal()}
+      cursor={availableTypes.length > 1 ? 'pointer' : 'default'}
+      onClick={() => availableTypes.length > 1 && openAssetModal()}
     >
       <Span overflow="hidden" borderRadius="0.5rem" display="flex">
         <Img
@@ -72,7 +85,9 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({ name, types }) => {
         />
       </Span>
       {metadata?.[type]?.symbol ?? metadata?.[nftType]?.symbol ?? 'Select Coin'}
-      {types.length > 1 && <ChevronDownSVG maxWidth="1rem" width="100%" />}
+      {availableTypes.length > 1 && (
+        <ChevronDownSVG maxWidth="1rem" width="100%" />
+      )}
     </Motion>
   );
 };

@@ -1,7 +1,10 @@
+export { default as BarsSVG } from './bars';
 export { default as CaretDownSVG } from './caret-down';
 export { default as CaretUpSVG } from './caret-up';
 export { default as CheckSVG } from './check';
+export { default as CheckboxSVG } from './checkbox';
 export { default as ChevronDownSVG } from './chevron-down';
+export { default as ChevronLeftSVG } from './chevron-left';
 export { default as ChevronRightSVG } from './chevron-right';
 export { default as CogSVG } from './cog';
 export { default as CopySVG } from './copy';
