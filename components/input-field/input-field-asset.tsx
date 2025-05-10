@@ -26,8 +26,11 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
   const { control } = form;
 
   const type = useWatch({ control, name: `${name}.type` });
+  const oppositeType = useWatch({ control, name: `${oppositeName}.type` });
 
   const nftType = nftTypeFromType(type);
+
+  const availableTypes = types.filter((item) => item !== oppositeType);
 
   if (isLoading || (!metadata?.[type] && !metadata?.[nftType]))
     return (
@@ -70,8 +73,8 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
       whileHover="hover"
       alignItems="center"
       justifyContent="center"
-      cursor={types.length > 1 ? 'pointer' : 'default'}
-      onClick={() => types.length > 1 && openAssetModal()}
+      cursor={availableTypes.length > 1 ? 'pointer' : 'default'}
+      onClick={() => availableTypes.length > 1 && openAssetModal()}
     >
       <Span overflow="hidden" borderRadius="0.5rem" display="flex">
         <Img
@@ -82,7 +85,9 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
         />
       </Span>
       {metadata?.[type]?.symbol ?? metadata?.[nftType]?.symbol ?? 'Select Coin'}
-      {types.length > 1 && <ChevronDownSVG maxWidth="1rem" width="100%" />}
+      {availableTypes.length > 1 && (
+        <ChevronDownSVG maxWidth="1rem" width="100%" />
+      )}
     </Motion>
   );
 };

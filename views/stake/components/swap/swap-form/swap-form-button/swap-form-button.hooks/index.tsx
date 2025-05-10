@@ -77,6 +77,7 @@ export const useSwapAction = () => {
         coinOutType: typeFromMaybeNftType(coinOut),
         coinInValue: BigInt(form.in.valueBN.toFixed(0)),
         coinOutValue: BigInt(form.out.valueBN.toFixed(0)),
+        coinInNoFeeValue: BigInt(form.in.valueNoFeeBN.toFixed(0)),
       });
     } catch (e) {
       onFailureSwap(dismiss)((e as Error).message);

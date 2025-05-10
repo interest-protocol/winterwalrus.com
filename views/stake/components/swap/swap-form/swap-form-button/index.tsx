@@ -1,5 +1,3 @@
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
-import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -12,12 +10,12 @@ import { useSwapAction } from './swap-form-button.hooks';
 
 const SwapFormButton: FC = () => {
   const { coins } = useCoins();
-  const { control, getValues } = useFormContext();
   const { onSwap, loading } = useSwapAction();
+  const { control, getValues } = useFormContext();
 
-  const amountIn = useWatch({
+  const [amountIn, amountOut, quoting] = useWatch({
     control,
-    name: 'in.value',
+    name: ['in.value', 'out.value', 'quoting'],
   });
 
   const insufficientBalance =
@@ -25,11 +23,13 @@ const SwapFormButton: FC = () => {
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
 
-  const hasMarket = values(POOLS).some(({ coinTypes }) =>
-    coinTypes.every((type) => getValues(['in.type', 'out.type']).includes(type))
-  );
+  const minAmountOut = 1;
 
-  const disabled = loading || !hasMarket || insufficientBalance;
+  const insufficientAmountOut =
+    !!Number(amountOut) && Number(amountOut) < minAmountOut;
+
+  const disabled =
+    quoting || loading || insufficientBalance || insufficientAmountOut;
 
   return (
     <WalletGuardButton
@@ -54,11 +54,13 @@ const SwapFormButton: FC = () => {
     >
       {insufficientBalance
         ? 'Insufficient Balance'
-        : !hasMarket
-          ? 'Has no market'
-          : loading
-            ? 'Swapping...'
-            : 'Swap'}
+        : quoting
+          ? 'Quoting...'
+          : insufficientAmountOut
+            ? 'You must swap to at least 1'
+            : loading
+              ? 'Swapping...'
+              : 'Swap'}
     </WalletGuardButton>
   );
 };
