@@ -30,7 +30,6 @@ const Pools: FC = () => {
           <Div
             width="100%"
             display="grid"
-            minWidth="30rem"
             color="#FFFFFF80"
             fontSize="0.875rem"
             gap={['0.5rem', '1rem']}

@@ -67,6 +67,7 @@ const PoolsTable: FC = () => {
         minWidth="30rem"
         color="#FFFFFF80"
         fontSize="0.875rem"
+        gap={['0.25rem', 'unset']}
         gridTemplateColumns="2fr repeat(5, 1fr) 43px"
       >
         <Div gap="0.25rem" display="flex" alignItems="center">
