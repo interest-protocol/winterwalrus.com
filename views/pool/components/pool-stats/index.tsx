@@ -24,7 +24,7 @@ const PoolStats: FC = () => {
     },
     {
       label: '24h Fees',
-      value: `${formatDollars(+(Number(data?.fees) ?? 0).toFixed(2))}`,
+      value: formatDollars(+(Number(data?.fees) ?? 0).toFixed(2)),
     },
     {
       label: 'APR',
@@ -42,18 +42,18 @@ const PoolStats: FC = () => {
   return (
     <Div
       gap="1rem"
+      width="100%"
       display="flex"
       justifyContent="space-between"
       flexDirection={['column', 'row']}
       alignItems={['stretch', 'center']}
-      width="100%"
     >
       <Div
         gap="1rem"
         display="flex"
         alignItems="center"
+        justifyContent="center"
         width={['100%', 'auto']}
-        flexDirection={['column', 'row']}
       >
         <Div display="flex" gap="0.5rem" color="#FFFFFF" alignItems="center">
           {isLoading ? (

@@ -43,8 +43,8 @@ const Pools: FC = () => {
             display="flex"
             gap={['0.5rem', '1rem']}
             justifyContent="space-between"
-            alignItems="center"
             flexDirection={['column', 'row']}
+            alignItems={['stretch', 'center']}
           >
             <PoolsTabs />
             <PoolsSearch />
