@@ -1,6 +1,8 @@
 {
   "settings": {
-    "react": { "version": "detect" }
+    "react": {
+      "version": "detect"
+    }
   },
   "env": {
     "browser": true,
@@ -34,12 +36,23 @@
   "rules": {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ],
     "@emotion/jsx-import": "error",
     "@emotion/pkg-renaming": "error",
-    "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
-    "linebreak-style": ["error", "unix"],
-    "semi": ["error", "always"],
+    "prettier/prettier": [
+      "error",
+      {},
+      {
+        "usePrettierrc": true
+      }
+    ],
+    // "linebreak-style": ["error", "unix"],
+    "semi": [
+      "error",
+      "always"
+    ],
     "@typescript-eslint/no-non-null-assertion": "off",
     "react-hooks/exhaustive-deps": "off",
     "@emotion/no-vanilla": "error",

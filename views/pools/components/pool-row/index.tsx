@@ -1,0 +1,146 @@
+import { Div, Img, Span } from '@stylin.js/elements';
+import Link from 'next/link';
+import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
+
+import { Routes, RoutesEnum } from '@/constants';
+import useMetadata from '@/hooks/use-metadata';
+import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { formatDollars, formatMoney } from '@/utils';
+
+import { usePoolsMetrics } from '../pools-stats/pools-stats.hooks';
+import { PoolRowProps } from './pool-row.types';
+
+const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
+  id,
+  position,
+  lpCoinType,
+}) => {
+  const { metrics, isLoading: metricsLoading } = usePoolsMetrics();
+  const { data: metadata, isLoading: metadataLoading } = useMetadata([
+    lpCoinType,
+  ]);
+
+  return (
+    <Link href={`${Routes[RoutesEnum.Pools]}/${id}`} shallow>
+      <Div
+        p="1rem"
+        display="grid"
+        color="#ffffff"
+        border="1px solid"
+        fontSize="0.875rem"
+        alignItems="center"
+        borderColor="#FFFFFF1A"
+        borderRadius="0.625rem"
+        gridTemplateColumns="2fr repeat(5, 1fr) 43px"
+        nHover={{ borderColor: '#99EFE44D', bg: '#99EFE433' }}
+      >
+        <Div display="flex" alignItems="center" gap="0.5rem">
+          {metadataLoading ? (
+            <Skeleton width="1.5rem" height="1.5rem" borderRadius="50%" />
+          ) : (
+            <Img
+              width="1.5rem"
+              height="1.5rem"
+              borderRadius="50%"
+              src={metadata?.[lpCoinType]?.iconUrl}
+              alt={metadata?.[lpCoinType]?.symbol}
+            />
+          )}
+          {metadataLoading ? (
+            <Skeleton width="6rem" />
+          ) : (
+            <Span whiteSpace="nowrap">{metadata?.[lpCoinType]?.symbol}</Span>
+          )}
+        </Div>
+        {position && (
+          <Span whiteSpace="nowrap" textAlign="center">
+            {metricsLoading ? (
+              <Skeleton width="4rem" />
+            ) : (
+              <Span whiteSpace="nowrap">
+                {position
+                  ? formatMoney(+FixedPointMath.toNumber(position).toFixed(4))
+                  : metrics
+                    ? formatDollars(Number(metrics.tvl))
+                    : '--'}
+              </Span>
+            )}
+          </Span>
+        )}
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics ? formatDollars(Number(metrics.tvl)) : '--'}
+            </Span>
+          )}
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics ? `${Number(metrics.apr ?? 0).toFixed(2)}%` : '--'}
+            </Span>
+          )}
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics ? formatDollars(Number(metrics.volume1D)) : '--'}
+            </Span>
+          )}
+        </Span>
+        <Span whiteSpace="nowrap" textAlign="center">
+          {metricsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            <Span whiteSpace="nowrap">
+              {metrics ? formatDollars(Number(metrics.volume7D)) : '--'}
+            </Span>
+          )}
+        </Span>
+        {!position && (
+          <Span whiteSpace="nowrap" textAlign="center">
+            {metricsLoading ? (
+              <Skeleton width="4rem" />
+            ) : (
+              <Span whiteSpace="nowrap">
+                {metrics ? formatDollars(Number(metrics.volume30D)) : '--'}
+              </Span>
+            )}
+          </Span>
+        )}
+        <Div
+          width="43px"
+          height="42px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="0.625rem"
+          border="1px solid #99EFE480"
+          background="#99EFE41A"
+        >
+          <Div
+            width="20px"
+            height="20px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="0.375rem"
+            border="1px solid #99EFE4"
+            background="#99EFE41A"
+          >
+            +
+          </Div>
+        </Div>
+      </Div>
+    </Link>
+  );
+};
+
+export default PoolRow;

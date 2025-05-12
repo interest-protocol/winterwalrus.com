@@ -11,12 +11,14 @@ import InputFieldBalance from './input-field-balance';
 import InputFieldBalances from './input-field-balances';
 import InputFieldPrice from './input-field-price';
 
-const StakeFormField: FC<InputFieldProps> = ({
+const InputField: FC<InputFieldProps> = ({
   name,
   label,
   types,
   disabled,
   topContent,
+  redirecting,
+  oppositeName,
 }) => {
   const { register, setValue } = useFormContext();
 
@@ -66,7 +68,12 @@ const StakeFormField: FC<InputFieldProps> = ({
             },
           })}
         />
-        <InputFieldAsset name={name} types={types} />
+        <InputFieldAsset
+          name={name}
+          types={types}
+          redirecting={redirecting}
+          oppositeName={oppositeName}
+        />
       </Div>
       <Div display="flex" justifyContent="space-between">
         <InputFieldPrice name={name} />
@@ -76,4 +83,4 @@ const StakeFormField: FC<InputFieldProps> = ({
   );
 };
 
-export default StakeFormField;
+export default InputField;

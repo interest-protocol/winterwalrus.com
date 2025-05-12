@@ -1,7 +1,11 @@
 export enum RoutesEnum {
-  Home = 'home',
+  Stake = 'stake',
+  Pools = 'pools',
+  Stats = 'stats',
 }
 
 export const Routes: Record<RoutesEnum, string> = {
-  [RoutesEnum.Home]: '/dapp/swap',
+  [RoutesEnum.Stake]: '/',
+  [RoutesEnum.Pools]: '/pools',
+  [RoutesEnum.Stats]: '/stats',
 };
