@@ -1,1 +1,1 @@
-export const INTEREST_STABLE_DEX_API = 'https://api.interestlabs.io/api/v1/';
+export const INTEREST_STABLE_DEX_API = 'https://api.interestlabs.io/v1/pools';
