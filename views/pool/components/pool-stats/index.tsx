@@ -24,7 +24,7 @@ const PoolStats: FC = () => {
     },
     {
       label: '24h Fees',
-      value: formatDollars(+(Number(data?.fees) ?? 0).toFixed(2)),
+      value: formatDollars(+(Number(data?.fees1D) ?? 0).toFixed(2)),
     },
     {
       label: 'APR',

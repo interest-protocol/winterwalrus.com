@@ -10,12 +10,19 @@ export interface MetricsOvertimeAPI {
 export interface MetricsAPI {
   tvl: string;
   apr: string;
-  fees: string;
+  poolId?: string;
   volume: string;
-  poolId: string;
   volume1D: string;
   volume7D: string;
   volume30D: string;
+  fees: string;
+  fees1D: string;
+  fees7D: string;
+  fees30D: string;
+  revenue: string;
+  revenue1D: string;
+  revenue7D: string;
+  revenue30D: string;
 }
 
 export interface PoolsChartProps {
