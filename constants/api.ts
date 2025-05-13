@@ -1,2 +1,1 @@
-export const INTEREST_STABLE_DEX_API =
-  'https://interest-stable-dex-develop.up.railway.app/api/v1';
+export const INTEREST_STABLE_DEX_API = 'https://api.interestlabs.io/api/v1/';
