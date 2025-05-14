@@ -4,9 +4,7 @@ import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
-import { CopySVG } from '@/components/svg';
-import Checkmark from '@/components/svg/checkmark';
-import ExternalLink from '@/components/svg/external-link';
+import { CheckmarkSVG, CopySVG, ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import useMetadata from '@/hooks/use-metadata';
@@ -96,14 +94,18 @@ export const PoolCoinsSummary: FC = () => {
               </Span>
               <Div position="relative" display="flex" alignItems="center">
                 {copiedIndex === index ? (
-                  <Span color="#99EFE4">
-                    <Checkmark width="100%" maxHeight="1rem" />
+                  <Span color="#99EFE4" display="flex" alignItems="center">
+                    <CheckmarkSVG width="100%" maxWidth="1rem" />
                   </Span>
                 ) : (
-                  <Span nHover={{ color: '#99EFE4' }}>
+                  <Span
+                    display="flex"
+                    alignItems="center"
+                    nHover={{ color: '#99EFE4' }}
+                  >
                     <CopySVG
                       width="100%"
-                      maxHeight="1rem"
+                      maxWidth="1rem"
                       onClick={() => handleCopy(index, balance)}
                     />
                   </Span>
@@ -114,11 +116,7 @@ export const PoolCoinsSummary: FC = () => {
                 nHover={{ color: '#99EFE4' }}
                 href={getExplorerUrl(type, ExplorerMode.Coin)}
               >
-                <ExternalLink
-                  width="100%"
-                  maxWidth="0.8rem"
-                  maxHeight="0.8rem"
-                />
+                <ExternalLinkSVG width="100%" maxWidth="0.9rem" />
               </A>
             </Div>
           </Div>
