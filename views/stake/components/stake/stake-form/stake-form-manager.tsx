@@ -9,7 +9,11 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { nftTypeFromType, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  nftTypeFromType,
+  typeFromMaybeNftType,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 
 const StakeFormManager: FC = () => {
   const { nodes } = useAllowedNodes();
@@ -18,7 +22,7 @@ const StakeFormManager: FC = () => {
   const { control, setValue, getValues } = useFormContext();
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
-  const { fees } = useFees(getValues('in.type'));
+  const { fees } = useFees(typeFromMaybeNftType(getValues('out.type')));
   const coinOut = useWatch({ control, name: 'out.type' });
   const valueInBN = useWatch({ control, name: 'in.valueBN' });
 
@@ -77,18 +81,28 @@ const StakeFormManager: FC = () => {
   }, [nodes, coinOut, validator]);
 
   useEffect(() => {
+    let i = 0;
+
+    console.log(++i);
+
+    console.log({ quotes, fees });
+
     if (!quotes || !fees) return;
 
+    console.log(++i);
     if (!valueInBN || valueInBN.isZero()) {
       setValue('out.value', 0);
       setValue('out.valueBN', ZERO_BIG_NUMBER);
       return;
     }
+    console.log(++i);
 
     const rate = quotes.quoteLst;
 
+    console.log(++i);
     if (!rate) return;
 
+    console.log(++i);
     const valueBN = valueInBN.times(1 - fees.staking / 100).times(rate);
 
     setValue('out.valueBN', valueBN);
