@@ -14,13 +14,13 @@ const Navbar: FC = () => {
     <Nav display={['none', 'none', 'none', 'flex']} gap="2.5rem">
       <Link href={Routes[RoutesEnum.Stake]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
             values(Routes)
               .slice(1)
               .some((route) => pathname.includes(route))
               ? '#FFFFFF80'
-              : '#99EFE4'
+              : '#EE2B5B'
           }
         >
           Stake
@@ -28,10 +28,10 @@ const Navbar: FC = () => {
       </Link>
       <Link href={Routes[RoutesEnum.Pools]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
             pathname.includes(Routes[RoutesEnum.Pools])
-              ? '#99EFE4'
+              ? '#EE2B5B'
               : '#FFFFFF80'
           }
         >
@@ -40,10 +40,10 @@ const Navbar: FC = () => {
       </Link>
       <Link href={Routes[RoutesEnum.Stats]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
             pathname.includes(Routes[RoutesEnum.Stats])
-              ? '#99EFE4'
+              ? '#EE2B5B'
               : '#FFFFFF80'
           }
         >
@@ -59,7 +59,7 @@ const Navbar: FC = () => {
           display="flex"
           color="#FFFFFF80"
           alignItems="center"
-          nHover={{ color: '#99EFE4' }}
+          nHover={{ color: '#EE2B5B' }}
         >
           <Span>Docs</Span>
           <ExternalLinkSVG maxWidth="1rem" width="100%" />
