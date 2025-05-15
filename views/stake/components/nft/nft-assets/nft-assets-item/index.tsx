@@ -118,7 +118,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                   gap="0.5rem"
                   display="flex"
                   fontSize="0.875rem"
-                  nHover={{ color: '#99EFE4' }}
+                  nHover={{ color: '#EE2B5B' }}
                 >
                   <P fontFamily="JetBrains Mono">
                     {objectId ? formatAddress(objectId) : ''}
@@ -153,7 +153,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
             textAlign="center"
             borderRadius="0.5rem"
             disabled={loading || !isActivated(activation)}
-            bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
+            bg={type === TYPES.STAKED_WAL ? '#EE2B5B' : '#C484F6'}
             opacity={loading || isActivated(activation) ? 1 : 0.5}
             cursor={isActivated(activation) ? 'pointer' : 'not-allowed'}
             nHover={{

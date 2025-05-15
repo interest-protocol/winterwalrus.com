@@ -50,7 +50,7 @@ const SwapForm: FC = () => {
           justifyContent="center"
           onClick={handleFlipTokens}
           backdropFilter="blur(20px)"
-          nHover={{ color: '#99EFE4' }}
+          nHover={{ color: '#EE2B5B' }}
         >
           <SwapSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
         </Button>

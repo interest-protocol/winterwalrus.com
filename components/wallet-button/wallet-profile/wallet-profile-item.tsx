@@ -95,7 +95,7 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
               <Span
                 flex="1"
                 cursor="pointer"
-                color={isCurrentAccount ? '#99EFE4' : '#ffffff'}
+                color={isCurrentAccount ? '#EE2B5B' : '#ffffff'}
                 nHover={{
                   textDecoration: isCurrentAccount ? 'underline' : 'none',
                 }}
@@ -116,12 +116,12 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
               <Span
                 cursor="pointer"
                 onClick={copyAddress}
-                nHover={{ color: '#99EFE4' }}
+                nHover={{ color: '#EE2B5B' }}
               >
                 <CopySVG width="100%" maxWidth="1rem" maxHeight="1rem" />
               </Span>
             ) : (
-              <Span cursor="pointer" nHover={{ color: '#99EFE4' }}>
+              <Span cursor="pointer" nHover={{ color: '#EE2B5B' }}>
                 <ChevronDownSVG width="100%" maxWidth="1rem" maxHeight="1rem" />
               </Span>
             )}

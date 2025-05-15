@@ -30,8 +30,8 @@ const Settings: FC = () => {
         cursor="pointer"
         borderRadius="0.75rem"
         onClick={() => setShow(not)}
-        border="1px solid #99EFE44D"
-        nHover={{ bg: '#99EFE480', borderColor: '#99EFE44D' }}
+        border="1px solid #EE2B5B"
+        nHover={{ bg: '#EE2B5B80', borderColor: '#EE2B5B4D' }}
       >
         <Span
           p="0.75rem"

@@ -129,7 +129,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
         color="#000000"
         textAlign="center"
         borderRadius="0.5rem"
-        bg={type === TYPES.STAKED_WAL ? '#99EFE4' : '#C484F6'}
+        bg={type === TYPES.STAKED_WAL ? '#EE2B5B' : '#C484F6'}
         disabled={loading || !isActivated(withdrawEpoch ?? activationEpoch)}
         nHover={{
           bg: type === TYPES.STAKED_WAL ? '#74D5C9' : '#B170E4',

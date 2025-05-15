@@ -69,7 +69,7 @@ const SettingsMenuValidatorModal: FC = () => {
               cursor={id === validator ? 'not-allowed' : 'pointer'}
               borderColor={id === validator ? '#C484F6' : '#FFFFFF1A'}
               nHover={{
-                borderColor: id === validator ? '#C484F6' : '#99EFE44D',
+                borderColor: id === validator ? '#C484F6' : '#EE2B5B',
               }}
               onClick={() => {
                 if (id === validator) return;
@@ -86,7 +86,7 @@ const SettingsMenuValidatorModal: FC = () => {
                   px="0.5rem"
                   py="0.25rem"
                   gap="0.25rem"
-                  bg="#99EFE414"
+                  bg="#EE2B5B14"
                   display="flex"
                   color="#83F34E"
                   textAlign="right"

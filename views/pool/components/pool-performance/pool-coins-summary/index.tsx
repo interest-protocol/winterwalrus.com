@@ -94,14 +94,14 @@ export const PoolCoinsSummary: FC = () => {
               </Span>
               <Div position="relative" display="flex" alignItems="center">
                 {copiedIndex === index ? (
-                  <Span color="#99EFE4" display="flex" alignItems="center">
+                  <Span color="#EE2B5B" display="flex" alignItems="center">
                     <CheckmarkSVG width="100%" maxWidth="1rem" />
                   </Span>
                 ) : (
                   <Span
                     display="flex"
                     alignItems="center"
-                    nHover={{ color: '#99EFE4' }}
+                    nHover={{ color: '#EE2B5B' }}
                   >
                     <CopySVG
                       width="100%"
@@ -113,7 +113,7 @@ export const PoolCoinsSummary: FC = () => {
               </Div>
               <A
                 target="_blank"
-                nHover={{ color: '#99EFE4' }}
+                nHover={{ color: '#EE2B5B' }}
                 href={getExplorerUrl(type, ExplorerMode.Coin)}
               >
                 <ExternalLinkSVG width="100%" maxWidth="0.9rem" />

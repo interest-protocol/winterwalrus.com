@@ -49,7 +49,7 @@ const NFT: FC = () => {
             ),
             9
           )}{' '}
-          <Strong color="#99EFE4" fontFamily="inherit">
+          <Strong color="#EE2B5B" fontFamily="inherit">
             WAL
           </Strong>
         </P>

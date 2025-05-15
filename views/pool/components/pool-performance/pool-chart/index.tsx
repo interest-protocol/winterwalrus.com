@@ -76,7 +76,7 @@ export const PoolChart: FC = () => {
     datasets: [
       {
         data: y,
-        borderColor: '#99EFE4',
+        borderColor: '#EE2B5B',
         backgroundColor: 'rgba(153, 239, 228, 0.1)',
         fill: true,
         tension: 0.4,

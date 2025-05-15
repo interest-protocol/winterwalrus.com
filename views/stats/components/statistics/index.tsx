@@ -73,7 +73,7 @@ const Statistics: FC = () => {
               cursor="pointer"
               border="1px solid"
               fontSize="0.875rem"
-              borderColor="#99EFE4"
+              borderColor="#EE2B5B"
               borderRadius="0.625rem"
               onClick={() => setStatsInUSD(Boolean(index))}
               color={statsInUSD === Boolean(index) ? '#292929' : 'white'}
@@ -176,7 +176,7 @@ const Statistics: FC = () => {
               alignItems="center"
               justifyContent="center"
               onClick={onSort('tvl')}
-              nHover={{ color: '#99EFE4' }}
+              nHover={{ color: '#EE2B5B' }}
             >
               <P textAlign="center" fontFamily="JetBrains Mono">
                 TVL
@@ -199,7 +199,7 @@ const Statistics: FC = () => {
               alignItems="center"
               justifyContent="center"
               onClick={onSort('users')}
-              nHover={{ color: '#99EFE4' }}
+              nHover={{ color: '#EE2B5B' }}
             >
               <P textAlign="center" fontFamily="JetBrains Mono">
                 Users

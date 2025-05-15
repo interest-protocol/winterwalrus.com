@@ -27,7 +27,7 @@ const UnstakeDetails: FC = () => {
       {!!Number(outValue) && (
         <Div display="flex" justifyContent="space-between" color="#F8F8F8">
           <P>To Receive</P>
-          <P color="#99EFE4" fontFamily="JetBrains Mono">
+          <P color="#EE2B5B" fontFamily="JetBrains Mono">
             {outValue} WAL + sWAL{' '}
             <Span
               width="1rem"

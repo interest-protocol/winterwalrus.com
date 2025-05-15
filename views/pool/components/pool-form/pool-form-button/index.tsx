@@ -42,7 +42,7 @@ const PoolFormButton: FC = () => {
       disabled={disabled}
       borderRadius="0.625rem"
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#99EFE4'}
+      bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#EE2B5B'}
       nHover={
         !disabled && {
           bg: '#74D5C9',
