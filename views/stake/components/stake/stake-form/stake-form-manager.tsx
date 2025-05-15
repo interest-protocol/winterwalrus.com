@@ -81,28 +81,18 @@ const StakeFormManager: FC = () => {
   }, [nodes, coinOut, validator]);
 
   useEffect(() => {
-    let i = 0;
-
-    console.log(++i);
-
-    console.log({ quotes, fees });
-
     if (!quotes || !fees) return;
 
-    console.log(++i);
     if (!valueInBN || valueInBN.isZero()) {
       setValue('out.value', 0);
       setValue('out.valueBN', ZERO_BIG_NUMBER);
       return;
     }
-    console.log(++i);
 
     const rate = quotes.quoteLst;
 
-    console.log(++i);
     if (!rate) return;
 
-    console.log(++i);
     const valueBN = valueInBN.times(1 - fees.staking / 100).times(rate);
 
     setValue('out.valueBN', valueBN);
