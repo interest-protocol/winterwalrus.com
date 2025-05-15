@@ -23,7 +23,7 @@ const ConnectWalletModal: FC = () => {
           alignItems="center"
           borderRadius="1rem"
           borderColor="#FFFFFF1A"
-          nHover={{ borderColor: '#99EFE44D' }}
+          nHover={{ borderColor: '#EE2B5B' }}
           onClick={() => {
             connect.mutateAsync({ wallet });
             handleClose();
