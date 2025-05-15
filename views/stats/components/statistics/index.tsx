@@ -77,7 +77,7 @@ const Statistics: FC = () => {
               borderRadius="0.625rem"
               onClick={() => setStatsInUSD(Boolean(index))}
               color={statsInUSD === Boolean(index) ? '#292929' : 'white'}
-              bg={statsInUSD === Boolean(index) ? '#99EFE4' : 'transparent'}
+              bg={statsInUSD === Boolean(index) ? '#EE2B5B' : 'transparent'}
             >
               {value}
             </Button>

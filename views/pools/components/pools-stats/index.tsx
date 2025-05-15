@@ -35,7 +35,7 @@ const PoolsPerformance: FC = () => {
           p="0.25rem"
           gap="0.5rem"
           display="flex"
-          border="1px solid #99EFE44D"
+          border="1px solid #EE2B5B4D"
           borderRadius="0.25rem"
         >
           {(['D', 'W', 'M'] as const).map((intendedInterval) => (
@@ -45,10 +45,10 @@ const PoolsPerformance: FC = () => {
               key={intendedInterval}
               padding="0.5rem 0.75rem"
               onClick={() => setInterval(intendedInterval)}
-              color={interval === intendedInterval ? '#99EFE480' : '#EE2B5B'}
+              color={interval === intendedInterval ? '#EE2B5B80' : '#EE2B5B'}
               pointerEvents={interval === intendedInterval ? 'none' : undefined}
               backgroundColor={
-                interval === intendedInterval ? '#99EFE480' : 'transparent'
+                interval === intendedInterval ? '#EE2B5B80' : 'transparent'
               }
               style={{
                 cursor: interval === intendedInterval ? 'default' : 'pointer',

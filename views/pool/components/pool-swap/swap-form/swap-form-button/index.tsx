@@ -35,7 +35,7 @@ const SwapFormButton: FC = () => {
       borderRadius="0.625rem"
       onClick={disabled ? undefined : onSwap}
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#EE2B5B'}
+      bg={insufficientBalance ? '#FF898B' : disabled ? '#EE2B5B80' : '#EE2B5B'}
       nHover={
         !disabled && {
           bg: '#74D5C9',

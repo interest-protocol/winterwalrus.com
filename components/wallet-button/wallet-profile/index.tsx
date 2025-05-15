@@ -39,13 +39,13 @@ const WalletProfile: FC = () => {
           py="0.75rem"
           gap="0.5rem"
           display="flex"
-          bg="#99EFE41A"
+          bg="#EE2B5B1A"
           color="#F1F1F1"
           cursor="pointer"
           alignItems="center"
           borderRadius="0.75rem"
           px={['0.75rem', '1rem']}
-          nHover={{ bg: '#99EFE433' }}
+          nHover={{ bg: '#EE2B5B33' }}
           onClick={handleOpenProfileDropdown}
         >
           <Img
@@ -71,7 +71,7 @@ const WalletProfile: FC = () => {
       <Button
         all="unset"
         gap="0.5rem"
-        bg="#99EFE41A"
+        bg="#EE2B5B1A"
         color="#F1F1F1"
         cursor="pointer"
         alignItems="center"

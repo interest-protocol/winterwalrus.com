@@ -40,7 +40,7 @@ const NFT: FC = () => {
           color="#fff"
           borderRadius="0.5rem"
           fontFamily="JetBrains Mono"
-          border="1px solid #99EFE44D"
+          border="1px solid #EE2B5B4D"
         >
           {FixedPointMath.toNumber(
             values(principalsByType).reduce(

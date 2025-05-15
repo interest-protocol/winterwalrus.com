@@ -15,7 +15,7 @@ const StakingAssetsItemLoading: FC = () => (
     borderColor="#FFFFFF1A"
     borderRadius="0.625rem"
     transition="all 300ms linear"
-    nHover={{ borderColor: '#99EFE44D' }}
+    nHover={{ borderColor: '#EE2B5B4D' }}
   >
     <Div
       gap="1rem"

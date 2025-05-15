@@ -170,7 +170,7 @@ const Epoch: FC = () => {
                     data
                       ? percentage > 50
                         ? '#C484F6B2'
-                        : '#99EFE4B2'
+                        : '#EE2B5BB2'
                       : '#FFFFFF1A'
                   }`}
                 >

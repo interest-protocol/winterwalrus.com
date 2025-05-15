@@ -5,17 +5,17 @@ const PoolRowButton: FC = () => (
   <Div
     width="43px"
     height="42px"
-    bg="#99EFE41A"
+    bg="#EE2B5B1A"
     display="flex"
     alignItems="center"
     justifyContent="center"
     borderRadius="0.625rem"
-    border="1px solid #99EFE480"
+    border="1px solid #EE2B5B80"
   >
     <Div
       width="20px"
       height="20px"
-      bg="#99EFE41A"
+      bg="#EE2B5B1A"
       display="flex"
       alignItems="center"
       justifyContent="center"
