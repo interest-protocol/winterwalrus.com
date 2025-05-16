@@ -27,7 +27,7 @@ const StakeInputOut: FC = () => {
           py="0.25rem"
           fontSize="0.75rem"
           borderRadius="1.7rem"
-          color={percentage > 50 ? '#C484F6' : '#83F34E'}
+          color={percentage > 50 ? '#83F34E' : '#83F34E'}
           bg={percentage > 50 ? '#C484F633' : '#83F34E14'}
         >
           {percentage > 50 ? 'Minting Stake NFT' : 'Minting LST Coin'}
