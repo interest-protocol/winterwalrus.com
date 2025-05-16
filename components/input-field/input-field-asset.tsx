@@ -60,7 +60,7 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
           assetList={values(metadata)}
         />
       </FormProvider>,
-      { title: 'Select Asset' }
+      { title: 'Select coin' }
     );
 
   return (

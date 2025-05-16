@@ -51,7 +51,7 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
           outline="none"
           bg="transparent"
           color="#FFFFFF80"
-          placeholder="Search asset"
+          placeholder="Search token"
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
       </Label>
