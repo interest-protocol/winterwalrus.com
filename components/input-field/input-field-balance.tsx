@@ -42,7 +42,7 @@ const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
         ) : (
           FixedPointMath.toNumber(
             balance && !balance.isNaN() ? balance : ZERO_BIG_NUMBER
-          )
+          ).toFixed(2)
         )}
       </Span>
     </Button>
