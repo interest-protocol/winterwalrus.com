@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { values } from 'ramda';
 import { FC } from 'react';
 
-import { ExternalLinkSVG } from '@/components/svg';
+import ChevronDown from '@/components/svg/chevron-down';
 import { Routes, RoutesEnum } from '@/constants';
 
 const Navbar: FC = () => {
@@ -38,22 +38,19 @@ const Navbar: FC = () => {
           Pools
         </Span>
       </Link>
-      <Link href={Routes[RoutesEnum.Stats]} shallow>
+      <Link href={Routes[RoutesEnum.Portfolio]} shallow>
         <Span
           nHover={{ color: '#EE2B5B' }}
           color={
-            pathname.includes(Routes[RoutesEnum.Stats])
+            pathname.includes(Routes[RoutesEnum.Portfolio])
               ? '#EE2B5B'
               : '#FFFFFF80'
           }
         >
-          Stats
+          Portfolio
         </Span>
       </Link>
-      <Link
-        target="_blank"
-        href="https://interest-protocol.gitbook.io/winter-walrus"
-      >
+      <Link href={Routes[RoutesEnum.DeFi]} shallow>
         <Div
           gap="0.5rem"
           display="flex"
@@ -61,8 +58,19 @@ const Navbar: FC = () => {
           alignItems="center"
           nHover={{ color: '#EE2B5B' }}
         >
-          <Span>Docs</Span>
-          <ExternalLinkSVG maxWidth="1rem" width="100%" />
+          <Span>DeFi</Span>
+        </Div>
+      </Link>
+      <Link href="https://interest-protocol.gitbook.io/winter-walrus">
+        <Div
+          gap="0.5rem"
+          display="flex"
+          color="#FFFFFF80"
+          alignItems="center"
+          nHover={{ color: '#EE2B5B' }}
+        >
+          <Span>More</Span>
+          <ChevronDown maxWidth="0.9rem" width="100%" />
         </Div>
       </Link>
     </Nav>

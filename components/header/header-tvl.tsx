@@ -13,7 +13,7 @@ const HeaderTVL: FC = () => {
 
   return (
     <Div gap="0.25rem" display="flex" fontSize="0.875rem">
-      <P color="#FFFFFF80">TVL: </P>
+      <P color="#FFFFFF80">TVL</P>
       <P color="#FFFFFF" fontFamily="JetBrains Mono">
         {(!data || !price) && (isLoading || priceLoading) ? (
           <Skeleton width="4rem" />

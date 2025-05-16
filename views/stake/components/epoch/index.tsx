@@ -74,7 +74,7 @@ const Epoch: FC = () => {
                     width={`${percentage}%`}
                     bg={`linear-gradient(90deg, #EE2B5B ${
                       (50 / percentage) * 100 - 1
-                    }%, #C484F6 ${1 + (50 / percentage) * 100}%)`}
+                    }%, #1CDBDA ${1 + (50 / percentage) * 100}%)`}
                   />
                 </Div>
                 <P fontWeight="0.875rem">{percentage}%</P>
