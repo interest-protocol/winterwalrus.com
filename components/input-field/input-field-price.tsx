@@ -25,11 +25,10 @@ const InputFieldPrice: FC<InputFieldGenericProps> = ({ name }) => {
           : quotes?.quoteLst ?? 1)
       : 0;
 
-  return (
-    <Span fontFamily="JetBrains Mono">
-      {formatDollars(price * Number(value), 2)}
-    </Span>
-  );
+  const safeValue = Number(value);
+  const total = isNaN(safeValue) ? 0 : price * safeValue;
+
+  return <Span fontFamily="JetBrains Mono">{formatDollars(total, 2)}</Span>;
 };
 
 export default InputFieldPrice;
