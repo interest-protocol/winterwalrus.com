@@ -1,4 +1,4 @@
-import { Div } from '@stylin.js/elements';
+import { Div, H2 } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
@@ -28,7 +28,9 @@ const DeFiContent: FC = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <h1>Defi</h1>
+        <H2 color="#FFFFFF" fontSize="1.25rem" fontWeight="600">
+          DeFi
+        </H2>
         <DefiTabs />
       </Div>
       {[<All key={unikey()} />][tab]}
