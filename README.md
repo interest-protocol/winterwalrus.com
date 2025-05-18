@@ -14,7 +14,6 @@ Use the version mentioned on `.nvmrc`
   nvm use # or if u don't have installed use just nvm install
 ```
 
-
 Install the project dependencies with yarn
 
 ```bash
