@@ -25,7 +25,7 @@ const Pool: FC = () => (
     >
       <Div display="flex" gap="1rem" color="#ffffff">
         <Link href={Routes[RoutesEnum.Pools]}>
-          <Button all="unset" nHover={{ color: '#99EFE4' }}>
+          <Button all="unset" nHover={{ color: '#EE2B5B' }}>
             <ChevronLeftSVG maxWidth="1.25rem" width="100%" />
           </Button>
         </Link>

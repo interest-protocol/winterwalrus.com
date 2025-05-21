@@ -108,7 +108,7 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
       <Button
         all="unset"
         py="1rem"
-        bg="#99EFE4"
+        bg="#EE2B5B"
         color="#000000"
         textAlign="center"
         borderRadius="0.5rem"

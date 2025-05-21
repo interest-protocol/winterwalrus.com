@@ -51,7 +51,7 @@ const InputFieldBalances: FC<InputFieldGenericProps> = ({ name }) => {
             display="flex"
             key={unikey()}
             cursor="pointer"
-            nHover={{ color: '#99EFE4' }}
+            nHover={{ color: '#EE2B5B' }}
             onClick={() => {
               setValue(
                 `${name}.value`,

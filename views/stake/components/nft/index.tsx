@@ -40,7 +40,7 @@ const NFT: FC = () => {
           color="#fff"
           borderRadius="0.5rem"
           fontFamily="JetBrains Mono"
-          border="1px solid #99EFE44D"
+          border="1px solid #EE2B5B4D"
         >
           {FixedPointMath.toNumber(
             values(principalsByType).reduce(
@@ -49,7 +49,7 @@ const NFT: FC = () => {
             ),
             9
           )}{' '}
-          <Strong color="#99EFE4" fontFamily="inherit">
+          <Strong color="#EE2B5B" fontFamily="inherit">
             WAL
           </Strong>
         </P>

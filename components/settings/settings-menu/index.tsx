@@ -51,7 +51,7 @@ const SettingsMenu: FC = () => {
                       pathname === Routes[RoutesEnum.Stake]) ||
                     (route !== RoutesEnum.Stake &&
                       pathname.includes(Routes[route]))
-                      ? '#99EFE4'
+                      ? '#EE2B5B'
                       : '#FFFFFF80'
                   }
                 >

@@ -11,20 +11,26 @@ const ConnectWallet: FC = () => {
   return (
     <Button
       all="unset"
-      bg="#99EFE4"
+      bg="#EE2B5B"
       display="flex"
-      color="#000000"
+      color="#FFFFFF"
       cursor="pointer"
       position="relative"
       alignItems="center"
       borderRadius="0.75rem"
+      fontWeight={500}
       gap={['0.5rem', '1rem']}
       py={['0.75rem', '1rem']}
       px={['0.75rem', '1.5rem']}
       backdropFilter="blur(16px)"
       onClick={connectWalletModal}
     >
-      <WalletSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
+      <WalletSVG
+        maxWidth="1rem"
+        maxHeight="1rem"
+        width="100%"
+        fontWeight={500}
+      />
       <Span>
         Connect <Span display={['none', 'inline']}>Wallet</Span>
       </Span>

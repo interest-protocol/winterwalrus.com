@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { values } from 'ramda';
 import { FC } from 'react';
 
-import { ExternalLinkSVG } from '@/components/svg';
+import ChevronDown from '@/components/svg/chevron-down';
 import { Routes, RoutesEnum } from '@/constants';
 
 const Navbar: FC = () => {
@@ -14,13 +14,13 @@ const Navbar: FC = () => {
     <Nav display={['none', 'none', 'none', 'flex']} gap="2.5rem">
       <Link href={Routes[RoutesEnum.Stake]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
             values(Routes)
               .slice(1)
               .some((route) => pathname.includes(route))
               ? '#FFFFFF80'
-              : '#99EFE4'
+              : '#EE2B5B'
           }
         >
           Stake
@@ -28,41 +28,49 @@ const Navbar: FC = () => {
       </Link>
       <Link href={Routes[RoutesEnum.Pools]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
             pathname.includes(Routes[RoutesEnum.Pools])
-              ? '#99EFE4'
+              ? '#EE2B5B'
               : '#FFFFFF80'
           }
         >
           Pools
         </Span>
       </Link>
-      <Link href={Routes[RoutesEnum.Stats]} shallow>
+      <Link href={Routes[RoutesEnum.Portfolio]} shallow>
         <Span
-          nHover={{ color: '#99EFE480' }}
+          nHover={{ color: '#EE2B5B' }}
           color={
-            pathname.includes(Routes[RoutesEnum.Stats])
-              ? '#99EFE4'
+            pathname.includes(Routes[RoutesEnum.Portfolio])
+              ? '#EE2B5B'
               : '#FFFFFF80'
           }
         >
-          Stats
+          Portfolio
         </Span>
       </Link>
-      <Link
-        target="_blank"
-        href="https://interest-protocol.gitbook.io/winter-walrus"
-      >
+      <Link href={Routes[RoutesEnum.DeFi]} shallow>
         <Div
           gap="0.5rem"
           display="flex"
           color="#FFFFFF80"
           alignItems="center"
-          nHover={{ color: '#99EFE4' }}
+          nHover={{ color: '#EE2B5B' }}
         >
-          <Span>Docs</Span>
-          <ExternalLinkSVG maxWidth="1rem" width="100%" />
+          <Span>DeFi</Span>
+        </Div>
+      </Link>
+      <Link href="https://interest-protocol.gitbook.io/winter-walrus">
+        <Div
+          gap="0.5rem"
+          display="flex"
+          color="#FFFFFF80"
+          alignItems="center"
+          nHover={{ color: '#EE2B5B' }}
+        >
+          <Span>More</Span>
+          <ChevronDown maxWidth="0.9rem" width="100%" />
         </Div>
       </Link>
     </Nav>

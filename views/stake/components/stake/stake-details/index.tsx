@@ -17,7 +17,7 @@ const StakeDetails: FC = () => {
     <Div color="#F8F8F880" display="flex" flexDirection="column" gap="0.5rem">
       <Div display="flex" justifyContent="space-between">
         <P color="#F8F8F8">APR</P>
-        <P fontFamily="JetBrains Mono" color="#99EFE4">
+        <P fontFamily="JetBrains Mono" color="#1CDBDA">
           {aprLoading ? (
             <Skeleton width="4rem" />
           ) : (

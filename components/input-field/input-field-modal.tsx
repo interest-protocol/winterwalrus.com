@@ -51,7 +51,7 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
           outline="none"
           bg="transparent"
           color="#FFFFFF80"
-          placeholder="Search asset"
+          placeholder="Search token"
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
       </Label>
@@ -88,7 +88,7 @@ const InputFieldModal: FC<InputFieldModalProps> = ({
               borderRadius="1rem"
               border="1px solid #FFFFFF1A"
               gridTemplateColumns="2fr 1fr 1fr"
-              nHover={{ borderColor: '#99EFE44D', bg: '#99EFE433' }}
+              nHover={{ borderColor: '#EE2B5B4D', bg: '#EE2B5B33' }}
               onClick={() => {
                 redirecting &&
                   push(

@@ -52,7 +52,7 @@ const SwapFormButton: FC = () => {
       onClick={disabled ? undefined : onSwap}
       nHover={!disabled && { bg: '#74D5C9' }}
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#99EFE4'}
+      bg={insufficientBalance ? '#FF898B' : disabled ? '#EE2B5B80' : '#EE2B5B'}
     >
       {insufficientBalance
         ? 'Insufficient Balance'

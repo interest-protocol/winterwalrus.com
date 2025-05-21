@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 const SEO: FC = () => (
   <Head>
-    <title>Winter Walrus</title>
+    <title>IKA LST</title>
     <link rel="icon" type="image/x-icon" href="/icon.svg" />
     <meta
       name="viewport"

@@ -68,7 +68,7 @@ export const GlobalStyles = css`
 
   /* Handle */
   ::-webkit-scrollbar-thumb:hover {
-    background: #99efe4cc;
+    background: #ee2b5bc;
   }
 
   /* React hot toast */

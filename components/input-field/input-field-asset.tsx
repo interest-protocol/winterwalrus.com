@@ -60,7 +60,7 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
           assetList={values(metadata)}
         />
       </FormProvider>,
-      { title: 'Select Asset' }
+      { title: 'Select coin' }
     );
 
   return (
@@ -76,7 +76,7 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
       cursor={availableTypes.length > 1 ? 'pointer' : 'default'}
       onClick={() => availableTypes.length > 1 && openAssetModal()}
     >
-      <Span overflow="hidden" borderRadius="0.5rem" display="flex">
+      <Span overflow="hidden" borderRadius="50%" display="flex">
         <Img
           width="2rem"
           height="2rem"

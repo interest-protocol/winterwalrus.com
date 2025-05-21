@@ -72,9 +72,9 @@ const Epoch: FC = () => {
                     overflow="hidden"
                     borderRadius="0.15rem"
                     width={`${percentage}%`}
-                    bg={`linear-gradient(90deg, #99EFE4 ${
+                    bg={`linear-gradient(90deg, #EE2B5B ${
                       (50 / percentage) * 100 - 1
-                    }%, #C484F6 ${1 + (50 / percentage) * 100}%)`}
+                    }%, #1CDBDA ${1 + (50 / percentage) * 100}%)`}
                   />
                 </Div>
                 <P fontWeight="0.875rem">{percentage}%</P>
@@ -170,7 +170,7 @@ const Epoch: FC = () => {
                     data
                       ? percentage > 50
                         ? '#C484F6B2'
-                        : '#99EFE4B2'
+                        : '#EE2B5BB2'
                       : '#FFFFFF1A'
                   }`}
                 >
@@ -179,7 +179,7 @@ const Epoch: FC = () => {
                       data
                         ? percentage > 50
                           ? '#C484F6'
-                          : '#99EFE4'
+                          : '#EE2B5B'
                         : undefined
                     }
                   >

@@ -74,7 +74,7 @@ const UnstakeFormButton: FC = () => {
       opacity={disabled ? 0.7 : 1}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       onClick={disabled ? undefined : handleUnstake}
-      bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
+      bg={insufficientAmount ? '#FF898B' : '#EE2B5B'}
       nHover={
         !disabled && {
           bg: '#74D5C9',

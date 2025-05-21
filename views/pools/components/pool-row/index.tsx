@@ -55,7 +55,7 @@ const PoolRow: FC<Omit<PoolRowProps, 'objectId'>> = ({
       gap={['0.25rem', 'unset']}
       display={['none', 'grid']}
       gridTemplateColumns="2fr repeat(5, 1fr) 43px"
-      nHover={{ borderColor: '#99EFE44D', bg: '#99EFE433' }}
+      nHover={{ borderColor: '#EE2B5BD', bg: '#EE2B5B33' }}
     >
       <PoolRowMetadata lpCoinType={lpCoinType} />
       <PoolRowMetrics position={position} />
