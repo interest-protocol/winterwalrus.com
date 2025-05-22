@@ -7,7 +7,7 @@ import { ILendingCard } from './lending-card.types';
 
 const LendingCard: FC<ILendingCard> = ({
   platform,
-  badgeColor,
+  imageUrl,
   asset,
   apr,
   tvl,
@@ -17,16 +17,16 @@ const LendingCard: FC<ILendingCard> = ({
   return (
     <Div
       p="1rem"
+      gap="1rem"
+      bg="#121212"
       width="100%"
       display="flex"
-      bg="#121212"
       border="1px solid"
       borderRadius="1rem"
       flexDirection="column"
       borderColor="#FFFFFF1A"
-      gap="1rem"
     >
-      <LendingBadge platform={platform} badgeColor={badgeColor} />
+      <LendingBadge platform={platform} imageUrl={imageUrl} />
       <Div
         width="100%"
         display="grid"
@@ -38,17 +38,17 @@ const LendingCard: FC<ILendingCard> = ({
           value={asset}
           icon={
             <Div
+              bg="#3366FF"
               width="1rem"
               height="1rem"
               display="flex"
               alignItems="center"
               justifyContent="center"
               borderRadius="50%"
-              bg="#3366FF"
               color="#FFFFFF"
               fontSize="0.5rem"
             >
-              W
+              Nada
             </Div>
           }
         />

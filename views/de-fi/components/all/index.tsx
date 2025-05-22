@@ -18,7 +18,7 @@ const All: FC = () => {
       maxWidth={['100%', '51.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
-      <Div width="100%" display="flex" flexDirection="column" gap="1rem">
+      <Div gap="1rem" width="100%" display="flex" flexDirection="column">
         {lendingOptions.map((option) => (
           <LendingCard key={unikey()} {...option} />
         ))}

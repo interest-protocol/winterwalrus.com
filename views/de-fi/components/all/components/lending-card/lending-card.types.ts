@@ -1,6 +1,6 @@
 export interface ILendingCard {
   platform: string;
-  badgeColor: string;
+  imageUrl: string;
   asset: string;
   apr: string;
   tvl: string;

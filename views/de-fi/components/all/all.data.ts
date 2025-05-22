@@ -1,7 +1,7 @@
 export const lendingOptions = [
   {
     platform: 'Nemo',
-    badgeColor: '#3366FF',
+    imageUrl: '/blizzard-nft.png',
     asset: 'WAL-SUI',
     apr: '2.21%',
     tvl: '$66.4K',
@@ -10,6 +10,7 @@ export const lendingOptions = [
   },
   {
     platform: 'Bucket',
+    imageUrl: '/blizzard-nft.png',
     badgeColor: '#1A1A1A',
     asset: 'WAL-SUI',
     apr: '2.21%',
