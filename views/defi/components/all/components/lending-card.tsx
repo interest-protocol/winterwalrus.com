@@ -1,12 +1,8 @@
 import { Div } from '@stylin.js/elements';
 import type { FC } from 'react';
 
-import APRInfo from './apr-info';
-import AssetInfo from './asset-info';
-import CategoryInfo from './category-info';
-import LendingBadge from './lending-badget';
-import PointsInfo from './points-info';
-import TVLInfo from './tvl-info';
+import InfoBox from './info-box';
+import LendingBadge from './lending-badge';
 
 interface LendingCardProps {
   platform: string;
@@ -46,11 +42,29 @@ const LendingCard: FC<LendingCardProps> = ({
         gridTemplateColumns={['repeat(2, 1fr)', 'repeat(5, 1fr)']}
         gap="0.5rem"
       >
-        <AssetInfo asset={asset} />
-        <APRInfo apr={apr} />
-        <TVLInfo tvl={tvl} />
-        <CategoryInfo category={category} />
-        <PointsInfo points={points} />
+        <InfoBox
+          label="Assets"
+          value={asset}
+          icon={
+            <Div
+              width="1rem"
+              height="1rem"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              borderRadius="50%"
+              bg="#3366FF"
+              color="#FFFFFF"
+              fontSize="0.5rem"
+            >
+              W
+            </Div>
+          }
+        />
+        <InfoBox label="APR" value={apr} />
+        <InfoBox label="TVL" value={tvl} />
+        <InfoBox label="Category" value={category} />
+        <InfoBox label="SEND Points" value={points} />
       </Div>
     </Div>
   );

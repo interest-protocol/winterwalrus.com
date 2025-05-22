@@ -1,5 +1,5 @@
 import { Div, P } from '@stylin.js/elements';
-import type { FC } from 'react';
+import { FC } from 'react';
 
 interface LendingBadgeProps {
   platform: string;
