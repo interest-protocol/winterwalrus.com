@@ -1,29 +1,11 @@
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
+import unikey from 'unikey';
 
+import { lendingOptions } from './all.data';
 import LendingCard from './components/lending-card';
 
 const All: FC = () => {
-  const lendingOptions = [
-    {
-      platform: 'Nemo',
-      badgeColor: '#3366FF',
-      asset: 'WAL-SUI',
-      apr: '2.21%',
-      tvl: '$66.4K',
-      category: 'Lending',
-      points: '0.033/WAL/day',
-    },
-    {
-      platform: 'Bucket',
-      badgeColor: '#1A1A1A',
-      asset: 'WAL-SUI',
-      apr: '2.21%',
-      tvl: '$66.4K',
-      category: 'Lending',
-      points: '--',
-    },
-  ];
   return (
     <Div
       flex="1"
@@ -37,8 +19,8 @@ const All: FC = () => {
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
       <Div width="100%" display="flex" flexDirection="column" gap="1rem">
-        {lendingOptions.map((option, index) => (
-          <LendingCard key={index} {...option} />
+        {lendingOptions.map((option) => (
+          <LendingCard key={unikey()} {...option} />
         ))}
       </Div>
     </Div>

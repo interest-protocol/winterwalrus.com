@@ -1,20 +1,10 @@
 import { Div } from '@stylin.js/elements';
 import type { FC } from 'react';
 
-import InfoBox from './info-box';
-import LendingBadge from './lending-badge';
+import InfoBox from '../info-box';
+import LendingBadge from '../lending-badge';
 
-interface LendingCardProps {
-  platform: string;
-  badgeColor: string;
-  asset: string;
-  apr: string;
-  tvl: string;
-  category: string;
-  points: string;
-}
-
-const LendingCard: FC<LendingCardProps> = ({
+const LendingCard: FC<ILendingCard> = ({
   platform,
   badgeColor,
   asset,

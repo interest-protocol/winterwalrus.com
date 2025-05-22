@@ -1,13 +1,9 @@
 import { Div, P } from '@stylin.js/elements';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 
-interface InfoBoxProps {
-  label: string;
-  value: string;
-  icon?: ReactNode;
-}
+import { IInfoBox } from './info-box.types';
 
-const InfoBox: FC<InfoBoxProps> = ({ label, value, icon }) => {
+const InfoBox: FC<IInfoBox> = ({ label, value, icon }) => {
   return (
     <Div
       p="0.75rem"

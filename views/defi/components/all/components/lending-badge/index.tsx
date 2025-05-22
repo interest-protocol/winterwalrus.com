@@ -1,12 +1,9 @@
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
 
-interface LendingBadgeProps {
-  platform: string;
-  badgeColor: string;
-}
+import { ILendingBadge } from './lending-badge.types';
 
-const LendingBadge: FC<LendingBadgeProps> = ({ platform, badgeColor }) => {
+const LendingBadge: FC<ILendingBadge> = ({ platform, badgeColor }) => {
   return (
     <Div display="flex" alignItems="center" gap="0.5rem">
       <Div
