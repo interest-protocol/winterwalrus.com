@@ -45,7 +45,7 @@ const PoolsPerformance: FC = () => {
               key={intendedInterval}
               padding="0.5rem 0.75rem"
               onClick={() => setInterval(intendedInterval)}
-              color={interval === intendedInterval ? '#EE2B5B80' : '#EE2B5B'}
+              color="#FFFFFFB2"
               pointerEvents={interval === intendedInterval ? 'none' : undefined}
               backgroundColor={
                 interval === intendedInterval ? '#EE2B5B80' : 'transparent'

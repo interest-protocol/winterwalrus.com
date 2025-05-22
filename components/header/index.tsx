@@ -1,8 +1,8 @@
 import { Div, Header as HTMLHeader } from '@stylin.js/elements';
-import Image from 'next/image';
 import { FC } from 'react';
 
 import Settings from '../settings';
+import Logo from '../svg/logo';
 import WalletButton from '../wallet-button';
 import HeaderTVL from './header-tvl';
 import Navbar from './navbar';
@@ -20,15 +20,7 @@ const Header: FC = () => (
   >
     <Div display="flex" alignItems="center" gap={['0.5rem', '1rem', '2rem']}>
       <Div display="flex" alignItems="center" gap="1rem">
-        <Image
-          src="/logo.svg"
-          alt="Logo"
-          width={104}
-          height={52}
-          style={{
-            objectFit: 'contain',
-          }}
-        />
+        <Logo maxWidth="104" maxHeight="52" />
       </Div>
       <Navbar />
     </Div>

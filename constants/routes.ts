@@ -11,5 +11,5 @@ export const Routes: Record<RoutesEnum, string> = {
   [RoutesEnum.Pools]: '/pools',
   [RoutesEnum.Stats]: '/stats',
   [RoutesEnum.Portfolio]: '/portfolio',
-  [RoutesEnum.DeFi]: '/defi',
+  [RoutesEnum.DeFi]: '/de-fi',
 };
