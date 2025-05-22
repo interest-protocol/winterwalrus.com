@@ -3,6 +3,7 @@ import type { FC } from 'react';
 
 import InfoBox from '../info-box';
 import LendingBadge from '../lending-badge';
+import { ILendingCard } from './lending-card.types';
 
 const LendingCard: FC<ILendingCard> = ({
   platform,
