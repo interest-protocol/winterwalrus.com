@@ -14,8 +14,6 @@ const All: FC = () => {
       width="100%"
       display="flex"
       flexDirection="column"
-      px={['2rem', '0rem']}
-      maxWidth={['100%', '51.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
       <Div gap="1rem" width="100%" display="flex" flexDirection="column">

@@ -32,12 +32,16 @@ const LendingCard: FC<ILendingCard> = ({
       <Div
         width="100%"
         display="grid"
-        gridTemplateColumns={['repeat(2, 1fr)', 'repeat(5, 1fr)']}
+        gridTemplateColumns={[
+          'repeat(2, 1fr)',
+          'repeat(2, 1fr)',
+          'repeat(5, 1fr)',
+        ]}
         gap="0.5rem"
       >
         <InfoBox
-          label="Assets"
           value={asset}
+          label="Assets"
           iconImages={[assetIconA, assetIconB]}
         />
         <InfoBox label="APR" value={apr} />

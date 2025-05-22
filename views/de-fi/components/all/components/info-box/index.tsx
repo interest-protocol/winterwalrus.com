@@ -32,10 +32,10 @@ const InfoBox: FC<IInfoBox> = ({ label, value, iconImages }) => {
               alt="icon 1"
               src={iconImages[0]}
               style={{
-                position: 'absolute',
                 left: 0,
-                borderRadius: '50%',
                 zIndex: 2,
+                borderRadius: '50%',
+                position: 'absolute',
               }}
             />
             <Image
@@ -44,10 +44,10 @@ const InfoBox: FC<IInfoBox> = ({ label, value, iconImages }) => {
               alt="icon 2"
               src={iconImages[1]}
               style={{
-                position: 'absolute',
+                zIndex: 1,
                 left: '0.75rem',
                 borderRadius: '50%',
-                zIndex: 1,
+                position: 'absolute',
               }}
             />
           </Div>

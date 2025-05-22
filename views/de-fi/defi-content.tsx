@@ -18,8 +18,8 @@ const DeFiContent: FC = () => {
       display="flex"
       borderRadius="1rem"
       flexDirection="column"
-      px={['0.5rem', '2rem']}
-      width={['100%', '53.5rem']}
+      px={['1.1rem', '2rem']}
+      width={['100%', '100%', '100%', '53.5rem']}
       my={['1rem', '1rem', '1rem', '1rem', '3rem']}
     >
       <Div
