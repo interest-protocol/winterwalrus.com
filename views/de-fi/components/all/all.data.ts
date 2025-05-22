@@ -2,6 +2,8 @@ export const lendingOptions = [
   {
     platform: 'Nemo',
     imageUrl: '/blizzard-nft.png',
+    assetIconA: '/blizzard-nft.png',
+    assetIconB: '/blizzard-nft.png',
     asset: 'WAL-SUI',
     apr: '2.21%',
     tvl: '$66.4K',
@@ -11,11 +13,12 @@ export const lendingOptions = [
   {
     platform: 'Bucket',
     imageUrl: '/blizzard-nft.png',
-    badgeColor: '#1A1A1A',
+    assetIconA: '/blizzard-nft.png',
+    assetIconB: '/blizzard-nft.png',
     asset: 'WAL-SUI',
     apr: '2.21%',
     tvl: '$66.4K',
     category: 'Lending',
-    points: '--',
+    points: '',
   },
 ];

@@ -8,6 +8,8 @@ import { ILendingCard } from './lending-card.types';
 const LendingCard: FC<ILendingCard> = ({
   platform,
   imageUrl,
+  assetIconA,
+  assetIconB,
   asset,
   apr,
   tvl,
@@ -36,21 +38,7 @@ const LendingCard: FC<ILendingCard> = ({
         <InfoBox
           label="Assets"
           value={asset}
-          icon={
-            <Div
-              bg="#3366FF"
-              width="1rem"
-              height="1rem"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              borderRadius="50%"
-              color="#FFFFFF"
-              fontSize="0.5rem"
-            >
-              Nada
-            </Div>
-          }
+          iconImages={[assetIconA, assetIconB]}
         />
         <InfoBox label="APR" value={apr} />
         <InfoBox label="TVL" value={tvl} />
