@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { LST_TYPES_MAP } from '@/constants';
 
+import TransmuteDetails from './transmute-details';
 import TransmuteForm from './transmute-form';
 
 const Transmute: FC = () => {
@@ -32,6 +33,7 @@ const Transmute: FC = () => {
     <FormProvider {...form}>
       <Div gap="1rem" display="flex" flexDirection="column">
         <TransmuteForm />
+        <TransmuteDetails />
       </Div>
     </FormProvider>
   );

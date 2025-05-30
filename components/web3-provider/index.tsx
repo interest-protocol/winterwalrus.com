@@ -27,12 +27,7 @@ const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
           }).networkConfig
         }
       >
-        <WalletProvider
-          autoConnect
-          stashedWallet={{ name: 'winterwalrus.com' }}
-        >
-          {children}
-        </WalletProvider>
+        <WalletProvider autoConnect>{children}</WalletProvider>
       </SuiClientProvider>
     </QueryClientProvider>
   );

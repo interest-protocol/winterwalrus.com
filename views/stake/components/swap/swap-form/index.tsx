@@ -1,6 +1,6 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import InputField from '@/components/input-field';
@@ -11,19 +11,21 @@ import SwapFormButton from './swap-form-button';
 import SwapFormManager from './swap-form-manager';
 
 const SwapForm: FC = () => {
-  const { setValue, control } = useFormContext();
+  const { setValue, control, getValues } = useFormContext();
 
-  const [inType, outType] = useWatch({
-    control,
-    name: ['in.type', 'out.type'],
-  });
+  const coinIn = useWatch({ control, name: 'in.type' });
 
   const handleFlipTokens = () => {
-    const coinIn = inType;
-    const coinOut = outType;
+    const coinOut = getValues('out.type');
+
     setValue('in', { value: '0', type: coinOut });
     setValue('out', { value: '0', type: coinIn });
   };
+
+  useEffect(() => {
+    if (coinIn === TYPES.WWAL) setValue('out.type', TYPES.WAL);
+    if (coinIn === TYPES.WAL) setValue('out.type', TYPES.WWAL);
+  }, [coinIn]);
 
   return (
     <>
@@ -34,13 +36,13 @@ const SwapForm: FC = () => {
           label="In"
           oppositeName="out"
           topContent="balance"
-          types={inType === TYPES.WAL ? [TYPES.WAL] : LST_TYPES}
+          types={[TYPES.WAL, ...LST_TYPES]}
         />
         <Button
           all="unset"
+          my="-1.5rem"
           width="3rem"
           height="3rem"
-          my="-1.5rem"
           display="flex"
           cursor="pointer"
           color="#FFFFFF80"
@@ -61,7 +63,7 @@ const SwapForm: FC = () => {
           name="out"
           label="Out"
           oppositeName="in"
-          types={outType === TYPES.WAL ? [TYPES.WAL] : LST_TYPES}
+          types={coinIn === TYPES.WAL ? [TYPES.WWAL] : [TYPES.WAL, TYPES.WWAL]}
         />
       </Div>
       <SwapFormButton />

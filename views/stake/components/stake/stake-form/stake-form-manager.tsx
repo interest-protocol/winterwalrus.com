@@ -9,7 +9,11 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { nftTypeFromType, ZERO_BIG_NUMBER } from '@/utils';
+import {
+  nftTypeFromType,
+  typeFromMaybeNftType,
+  ZERO_BIG_NUMBER,
+} from '@/utils';
 
 const StakeFormManager: FC = () => {
   const { nodes } = useAllowedNodes();
@@ -18,7 +22,7 @@ const StakeFormManager: FC = () => {
   const { control, setValue, getValues } = useFormContext();
   const validator = useReadLocalStorage(VALIDATOR_STORAGE_KEY);
 
-  const { fees } = useFees(getValues('in.type'));
+  const { fees } = useFees(typeFromMaybeNftType(getValues('out.type')));
   const coinOut = useWatch({ control, name: 'out.type' });
   const valueInBN = useWatch({ control, name: 'in.valueBN' });
 

@@ -10,7 +10,7 @@ import { LST_TYPES, STATS_PRICE_STORAGE_KEY } from '@/constants';
 import useMetadata from '@/hooks/use-metadata';
 import useStats from '@/hooks/use-stats';
 import { useWalPrice } from '@/hooks/use-wal-price';
-import { formatMoney } from '@/utils';
+import { formatDollars, formatMoney } from '@/utils';
 
 import { StatsSorting, StatsSortingProps } from './statistics.types';
 
@@ -109,7 +109,7 @@ const Statistics: FC = () => {
             {!data && isLoading ? (
               <Skeleton width="4rem" />
             ) : (
-              `${statsInUSD ? '$' : ''}${formatMoney(
+              `${(statsInUSD ? formatDollars : formatMoney)(
                 data
                   ? Number(data.totalTvl) * (statsInUSD && price ? price : 1)
                   : 0

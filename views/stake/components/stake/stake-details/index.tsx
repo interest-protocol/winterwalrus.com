@@ -13,8 +13,6 @@ const StakeDetails: FC = () => {
   const { fees, isLoading: feesLoading } = useFees(lst);
   const { data, isLoading: aprLoading } = useLstAPR(typeFromMaybeNftType(lst));
 
-  console.log({ data });
-
   return (
     <Div color="#F8F8F880" display="flex" flexDirection="column" gap="0.5rem">
       <Div display="flex" justifyContent="space-between">

@@ -45,6 +45,7 @@ const WalletProfile: FC = () => {
           alignItems="center"
           borderRadius="0.75rem"
           px={['0.75rem', '1rem']}
+          nHover={{ bg: '#99EFE433' }}
           onClick={handleOpenProfileDropdown}
         >
           <Img

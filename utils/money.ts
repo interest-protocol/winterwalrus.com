@@ -103,5 +103,8 @@ export const formatMoney = (
   }`.slice(1);
 };
 
-export const formatDollars = (money: number, max = 6): string =>
-  '$' + formatMoney(money, max);
+export const formatDollars = (
+  money: number,
+  max = 6,
+  allowK: boolean = false
+): string => '$' + formatMoney(money, max, allowK);

@@ -1,8 +1,8 @@
-import { Button } from '@stylin.js/elements';
 import { FC } from 'react';
 import Countdown from 'react-countdown';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 
+import WalletGuardButton from '@/components/wallet-button/wallet-guard-button';
 import { useCoins } from '@/hooks/use-coins';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
@@ -61,7 +61,7 @@ const UnstakeFormButton: FC = () => {
     );
 
   return (
-    <Button
+    <WalletGuardButton
       all="unset"
       py="1rem"
       px="1.5rem"
@@ -75,6 +75,11 @@ const UnstakeFormButton: FC = () => {
       cursor={disabled ? 'not-allowed' : 'pointer'}
       onClick={disabled ? undefined : handleUnstake}
       bg={insufficientAmount ? '#FF898B' : '#99EFE4'}
+      nHover={
+        !disabled && {
+          bg: '#74D5C9',
+        }
+      }
     >
       {isAfterVotes ? (
         <>
@@ -90,7 +95,7 @@ const UnstakeFormButton: FC = () => {
       ) : (
         'Unstake'
       )}
-    </Button>
+    </WalletGuardButton>
   );
 };
 

@@ -1,8 +1,9 @@
 import { Div } from '@stylin.js/elements';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Layout } from '@/components';
+import { useTabState } from '@/hooks/use-tab-manager';
 
 import { LiquidityPools, PoolsPerformance } from './components';
 import PoolsSearch from './components/pools-search';
@@ -11,6 +12,11 @@ import PoolsTabs from './components/pools-tabs';
 
 const Pools: FC = () => {
   const form = useForm({ defaultValues: { search: '' } });
+  const { setTab } = useTabState();
+
+  useEffect(() => {
+    setTab(0);
+  }, []);
 
   return (
     <Layout>
@@ -30,7 +36,6 @@ const Pools: FC = () => {
           <Div
             width="100%"
             display="grid"
-            minWidth="30rem"
             color="#FFFFFF80"
             fontSize="0.875rem"
             gap={['0.5rem', '1rem']}
@@ -44,8 +49,8 @@ const Pools: FC = () => {
             display="flex"
             gap={['0.5rem', '1rem']}
             justifyContent="space-between"
-            alignItems="center"
             flexDirection={['column', 'row']}
+            alignItems={['stretch', 'center']}
           >
             <PoolsTabs />
             <PoolsSearch />

@@ -3,14 +3,9 @@ import { FC } from 'react';
 
 import { formatDollars, formatMoney } from '@/utils';
 
-import { LstsOrCoinsRowProps } from './lsts-or-coins-row.types';
+import { TokensRowProps } from './tokens-row.types';
 
-const LstsOrCoinsRow: FC<LstsOrCoinsRowProps> = ({
-  balance,
-  price,
-  symbol,
-  iconUrl,
-}) => {
+const TokensRow: FC<TokensRowProps> = ({ balance, price, symbol, iconUrl }) => {
   const value = price * balance;
 
   return (
@@ -51,4 +46,4 @@ const LstsOrCoinsRow: FC<LstsOrCoinsRowProps> = ({
   );
 };
 
-export default LstsOrCoinsRow;
+export default TokensRow;

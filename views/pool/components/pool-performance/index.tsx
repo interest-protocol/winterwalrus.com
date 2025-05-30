@@ -32,9 +32,9 @@ const PoolPerformance: FC = () => {
 
   const tabs = ['TVL', 'Volume', 'Fees'];
   const value = [
-    `${formatDollars(latestTvl)}`,
-    `${formatDollars(latestVolume)}`,
-    `${formatDollars(latestFees)}`,
+    formatDollars(latestTvl),
+    formatDollars(latestVolume),
+    formatDollars(latestFees),
   ][tab];
 
   const setTab = (tab: number) => {

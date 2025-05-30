@@ -38,31 +38,46 @@ export const usePoolsMetricsOvertime = (
         (res) => res.json()
       );
 
-      const latestTvl = Number(data.toReversed()[0].cumulativeTvl ?? 0);
-      const latestFees = Number(data.toReversed()[0].cumulativeFees ?? 0);
+      const latestTvl = Number(data.toReversed()[0].tvl ?? 0);
+      const latestFees = Number(data.toReversed()[0].fees ?? 0);
       const latestVolume = Number(data.toReversed()[0].volume ?? 0);
 
       const tvlOvertime = data.map((pool) => ({
-        y: parseFloat(pool.cumulativeTvl),
+        y: parseFloat(pool.tvl),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 
       const volumeOvertime = data.map((pool) => ({
         y: parseFloat(pool.volume),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 
       const feesOvertime = data.map((pool) => ({
-        y: parseFloat(pool.cumulativeFees),
+        y: parseFloat(pool.fees),
         x: new Date(pool.epoch).toLocaleDateString(undefined, {
-          weekday: 'short',
           day: '2-digit',
+          ...(aggregation === 'daily'
+            ? { weekday: 'short' }
+            : {
+                month: 'short',
+                ...(aggregation === 'monthly' && { year: '2-digit' }),
+              }),
         }),
       }));
 

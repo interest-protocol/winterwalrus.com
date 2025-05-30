@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import LstsOrCoinsTable from '../lsts-or-coins-table';
+import LstsOrCoinsTable from '../tokens-table';
 
 const Coins: FC = () => {
   return (

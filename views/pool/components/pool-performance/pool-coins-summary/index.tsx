@@ -1,13 +1,10 @@
-import { Div, Img, Span } from '@stylin.js/elements';
+import { A, Div, Img, Span } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import Link from 'next/link';
 import { FC, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
-import { CopySVG } from '@/components/svg';
-import Checkmark from '@/components/svg/checkmark';
-import ExternalLink from '@/components/svg/external-link';
+import { CheckmarkSVG, CopySVG, ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import useMetadata from '@/hooks/use-metadata';
@@ -17,20 +14,10 @@ import { formatMoney, ZERO_BIG_NUMBER } from '@/utils';
 
 import { usePoolData } from '../../pool-stats/pool-stats.hooks';
 
-const iconHoverStyle: React.CSSProperties = {
-  cursor: 'pointer',
-  transition: 'transform 0.1s, filter 0.1s',
-};
-
-const iconHoverActiveStyle: React.CSSProperties = {
-  transform: 'scale(1.15)',
-  filter: 'drop-shadow(0 0 1px #99EFE4)',
-};
-
 export const PoolCoinsSummary: FC = () => {
-  const getExplorerUrl = useGetExplorerUrl();
-
   const pool = usePool();
+  const getExplorerUrl = useGetExplorerUrl();
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const coins = pool?.coinTypes.map((type) => ({
     type,
@@ -53,12 +40,6 @@ export const PoolCoinsSummary: FC = () => {
   const { data: poolData, isLoading: poolLoading } = usePoolData(
     pool?.objectId
   );
-
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-
-  // For hover animation
-  const [hoveredCopy, setHoveredCopy] = useState<number | null>(null);
-  const [hoveredExternal, setHoveredExternal] = useState<number | null>(null);
 
   const handleCopy = async (index: number, value: string) => {
     await navigator.clipboard.writeText(value);
@@ -113,47 +94,30 @@ export const PoolCoinsSummary: FC = () => {
               </Span>
               <Div position="relative" display="flex" alignItems="center">
                 {copiedIndex === index ? (
-                  <Checkmark
-                    width="1rem"
-                    maxHeight="1rem"
-                    color="#99EFE4"
-                    style={iconHoverStyle}
-                  />
+                  <Span color="#99EFE4" display="flex" alignItems="center">
+                    <CheckmarkSVG width="100%" maxWidth="1rem" />
+                  </Span>
                 ) : (
-                  <CopySVG
-                    style={{
-                      ...iconHoverStyle,
-                      ...(hoveredCopy === index
-                        ? iconHoverActiveStyle
-                        : undefined),
-                    }}
-                    width="1rem"
-                    maxHeight="1rem"
-                    onClick={() => handleCopy(index, balance)}
-                    onMouseEnter={() => setHoveredCopy(index)}
-                    onMouseLeave={() => setHoveredCopy(null)}
-                  />
+                  <Span
+                    display="flex"
+                    alignItems="center"
+                    nHover={{ color: '#99EFE4' }}
+                  >
+                    <CopySVG
+                      width="100%"
+                      maxWidth="1rem"
+                      onClick={() => handleCopy(index, balance)}
+                    />
+                  </Span>
                 )}
               </Div>
-              <Link
-                href={getExplorerUrl(type, ExplorerMode.Coin)}
+              <A
                 target="_blank"
-                style={{ display: 'flex', alignItems: 'center' }}
+                nHover={{ color: '#99EFE4' }}
+                href={getExplorerUrl(type, ExplorerMode.Coin)}
               >
-                <ExternalLink
-                  style={{
-                    ...iconHoverStyle,
-                    ...(hoveredExternal === index
-                      ? iconHoverActiveStyle
-                      : undefined),
-                  }}
-                  width="0.8rem"
-                  maxWidth="0.8rem"
-                  maxHeight="0.8rem"
-                  onMouseEnter={() => setHoveredExternal(index)}
-                  onMouseLeave={() => setHoveredExternal(null)}
-                />
-              </Link>
+                <ExternalLinkSVG width="100%" maxWidth="0.9rem" />
+              </A>
             </Div>
           </Div>
         );

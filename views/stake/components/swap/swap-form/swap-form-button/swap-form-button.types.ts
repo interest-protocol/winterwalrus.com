@@ -5,6 +5,7 @@ export interface SwapArgs {
   coinOutType: string;
   coinInValue: bigint;
   coinOutValue: bigint;
+  coinInNoFeeValue: bigint;
   onFailure: (error?: string) => void;
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }

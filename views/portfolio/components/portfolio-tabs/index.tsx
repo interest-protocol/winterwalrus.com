@@ -12,9 +12,9 @@ const PortfolioTabs: FC = () => {
 
   return (
     <Tabs
-      tabs={['LSTs', 'Native StakedWal', 'LST NFTs', 'Coins']}
       tab={tab}
       setTab={setTab}
+      tabs={['LSTs', 'Native StakedWal', 'LST NFTs', 'Coins']}
     />
   );
 };

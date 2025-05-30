@@ -58,27 +58,39 @@ const PoolsTable: FC = () => {
       borderRadius="1rem"
       alignItems="stretch"
       flexDirection="column"
-      gap={['0.5rem', '1rem']}
       borderColor="#FFFFFF1A"
+      gap={['0.5rem', '1rem']}
     >
       <Div
         px="1rem"
         display="grid"
-        minWidth="30rem"
         color="#FFFFFF80"
         fontSize="0.875rem"
-        gridTemplateColumns="2fr repeat(5, 1fr) 43px"
+        gap={['0.25rem', 'unset']}
+        gridTemplateColumns={['1fr 1fr', '2fr repeat(5, 1fr) 43px']}
       >
-        <Div gap="0.25rem" display="flex" alignItems="center">
+        <Div gap="0.25rem" display={['none', 'flex']} alignItems="center">
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             Pool
           </P>
         </Div>
+        {!!tab && (
+          <Div
+            gap="0.25rem"
+            alignItems="center"
+            justifyContent="center"
+            display={['none', 'flex']}
+          >
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              Position
+            </P>
+          </Div>
+        )}
         <Div
           gap="0.25rem"
-          display="flex"
           alignItems="center"
           justifyContent="center"
+          display={['none', 'flex']}
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             TVL
@@ -86,9 +98,9 @@ const PoolsTable: FC = () => {
         </Div>
         <Div
           gap="0.25rem"
-          display="flex"
           alignItems="center"
           justifyContent="center"
+          display={['none', 'flex']}
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             APR
@@ -96,9 +108,9 @@ const PoolsTable: FC = () => {
         </Div>
         <Div
           gap="0.25rem"
-          display="flex"
           alignItems="center"
           justifyContent="center"
+          display={['none', 'flex']}
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             1D Vol
@@ -106,26 +118,28 @@ const PoolsTable: FC = () => {
         </Div>
         <Div
           gap="0.25rem"
-          display="flex"
           alignItems="center"
           justifyContent="center"
+          display={['none', 'flex']}
         >
           <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
             7D Vol
           </P>
         </Div>
-        <Div
-          gap="0.25rem"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
-            30D Vol
-          </P>
-        </Div>
+        {!tab && (
+          <Div
+            gap="0.25rem"
+            alignItems="center"
+            justifyContent="center"
+            display={['none', 'flex']}
+          >
+            <P fontFamily="JetBrains Mono" whiteSpace="nowrap">
+              30D Vol
+            </P>
+          </Div>
+        )}
       </Div>
-      <Div minWidth="30rem">
+      <Div>
         {pools.length === 0 ? (
           <Div
             py="2rem"
@@ -140,7 +154,14 @@ const PoolsTable: FC = () => {
           </Div>
         ) : (
           pools.map(([key, pool]) => (
-            <PoolRow {...pool} key={unikey()} id={key} />
+            <PoolRow
+              {...pool}
+              id={key}
+              key={unikey()}
+              position={
+                tab ? balances[normalizeStructTag(pool.lpCoinType)] : null
+              }
+            />
           ))
         )}
       </Div>

@@ -31,6 +31,7 @@ const Settings: FC = () => {
         borderRadius="0.75rem"
         onClick={() => setShow(not)}
         border="1px solid #99EFE44D"
+        nHover={{ bg: '#99EFE480', borderColor: '#99EFE44D' }}
       >
         <Span
           p="0.75rem"
@@ -42,7 +43,7 @@ const Settings: FC = () => {
         <Span
           p={['0.5rem', '0.75rem']}
           transition="all 300ms linear"
-          nHover={{ rotate: '90deg', color: '#99EFE4' }}
+          nHover={{ rotate: '90deg', color: '#FFFFFF' }}
           display={['none', 'none', 'none', 'inline-block']}
         >
           <CogSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />

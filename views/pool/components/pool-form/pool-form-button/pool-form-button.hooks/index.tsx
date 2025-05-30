@@ -1,6 +1,7 @@
 import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import BigNumber from 'bignumber.js';
 import { isNil } from 'ramda';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { toasting } from '@/components/toast';
@@ -19,6 +20,7 @@ export const useLiquidity = () => {
   const addLiquidity = useAddLiquidity();
   const getExplorerUrl = useGetExplorerUrl();
   const removeLiquidity = useRemoveLiquidity();
+  const [loading, setLoading] = useState(false);
   const { getValues, setValue } = useFormContext<IPoolForm>();
   const { mutate } = usePoolData(getValues('pool.id'));
 
@@ -127,6 +129,7 @@ export const useLiquidity = () => {
   const handleAddLiquidity = async () => {
     const dismiss = toasting.loading({ message: 'Adding Liquidity...' });
     try {
+      setLoading(true);
       await addLiquidity({
         onSuccess: onAddSuccess(dismiss),
         onFailure: onAddFailure(dismiss),
@@ -138,6 +141,8 @@ export const useLiquidity = () => {
       });
     } catch (e) {
       onAddFailure(dismiss)((e as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,6 +155,7 @@ export const useLiquidity = () => {
       : null;
 
     try {
+      setLoading(true);
       await removeLiquidity({
         pool: getValues('pool.id'),
         coinType: selectedCoinType,
@@ -161,10 +167,13 @@ export const useLiquidity = () => {
       });
     } catch (e) {
       onRemoveFailure(dismiss)((e as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return {
+    loading,
     addLiquidity: handleAddLiquidity,
     removeLiquidity: handleRemoveLiquidity,
   };

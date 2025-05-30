@@ -5,7 +5,7 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
 import { useQuotes } from '@/hooks/use-quotes';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { ZERO_BIG_NUMBER } from '@/utils';
+import { feesCalcUp, ZERO_BIG_NUMBER } from '@/utils';
 
 const UnstakeFormManager: FC = () => {
   const { data: quotes } = useQuotes();
@@ -31,9 +31,9 @@ const UnstakeFormManager: FC = () => {
 
     if (!rate) return;
 
-    const valueInNoFeeBN = valueInBN.times(1 - fees.unstaking / 100);
+    const [valueInNoFeeBN] = feesCalcUp(fees.unstaking * 100, valueInBN);
 
-    const valueBN = valueInNoFeeBN.times(rate);
+    const valueBN = valueInNoFeeBN.times(rate).decimalPlaces(0, 1);
 
     setValue('out.valueBN', valueBN);
     setValue('in.valueNoFeeBN', valueInNoFeeBN);

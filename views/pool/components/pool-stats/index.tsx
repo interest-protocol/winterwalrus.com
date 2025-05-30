@@ -11,21 +11,24 @@ import { usePoolMetrics } from './pool-stats.hooks';
 const PoolStats: FC = () => {
   const pool = usePool();
 
-  const { data } = usePoolMetrics(pool?.objectId);
+  const { data, isLoading: poolLoading } = usePoolMetrics(pool?.objectId);
 
   const stats = [
-    { label: 'TVL', value: formatDollars(Number(data?.tvl ?? '0')) },
+    {
+      label: 'TVL',
+      value: formatDollars(+Number(data?.tvl ?? '0').toFixed(2)),
+    },
     {
       label: '24h Volume',
-      value: formatDollars(Number(data?.volume1D ?? '0')),
+      value: formatDollars(+Number(data?.volume1D ?? '0').toFixed(2)),
     },
     {
       label: '24h Fees',
-      value: `${formatDollars(+(Number(data?.fees) ?? 0).toFixed(2))}`,
+      value: formatDollars(+(Number(data?.fees1D) ?? 0).toFixed(2)),
     },
     {
       label: 'APR',
-      value: `${(Number(data?.apr) ?? 0).toFixed(4)}%`,
+      value: `${(Number(data?.apr) ?? 0).toFixed(2)}%`,
     },
   ];
 
@@ -39,18 +42,18 @@ const PoolStats: FC = () => {
   return (
     <Div
       gap="1rem"
+      width="100%"
       display="flex"
       justifyContent="space-between"
       flexDirection={['column', 'row']}
       alignItems={['stretch', 'center']}
-      width="100%"
     >
       <Div
         gap="1rem"
         display="flex"
         alignItems="center"
+        justifyContent="center"
         width={['100%', 'auto']}
-        flexDirection={['column', 'row']}
       >
         <Div display="flex" gap="0.5rem" color="#FFFFFF" alignItems="center">
           {isLoading ? (
@@ -107,7 +110,7 @@ const PoolStats: FC = () => {
             width={['48%', 'auto']}
           >
             <P color="#FFFFFF" fontFamily="JetBrains Mono">
-              {value}
+              {poolLoading ? <Skeleton width="4rem" /> : value}
             </P>
             <P color="#FFFFFF80">{label}</P>
           </Div>

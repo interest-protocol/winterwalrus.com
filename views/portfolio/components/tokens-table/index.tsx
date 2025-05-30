@@ -9,40 +9,41 @@ import useMetadata from '@/hooks/use-metadata';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import PortfolioTabHeader from '../portfolio-tab-header';
-import LstsOrCoinsRow from './lsts-or-coins-row';
-import LstsOrCoinsRowLoading from './lsts-or-coins-row/lsts-or-coins-row-loading';
+import TokensRow from './tokens-row';
+import TokensRowLoading from './tokens-row/tokens-row-loading';
 
 const TYPES = {
   LSTs: LST_TYPES,
   Coins: COIN_TYPES,
 };
 
-const LstsOrCoinsTable: FC<{ name: 'LSTs' | 'Coins' }> = ({ name }) => {
-  const { balances } = useAppState();
-  const { data: coinsPrice, isLoading: isGettingPrices } = useCoinsPrice(
-    TYPES[name]
-  );
-  const { data: metaData, isLoading: isGettingMetaData } = useMetadata(
-    TYPES[name]
-  );
+interface TokensTableProps {
+  name: 'LSTs' | 'Coins';
+}
 
-  const lstsOrCoins = TYPES[name].flatMap((lstOrCoin) =>
-    metaData?.[lstOrCoin] && balances[lstOrCoin]
+const TokensTable: FC<TokensTableProps> = ({ name }) => {
+  const types = TYPES[name];
+  const { balances } = useAppState();
+  const { data: metaData, isLoading: isGettingMetaData } = useMetadata(types);
+  const { data: coinsPrice, isLoading: isGettingPrices } = useCoinsPrice(types);
+
+  const tokens = types.flatMap((type) =>
+    metaData?.[type] && balances[type]
       ? {
-          ...metaData[lstOrCoin],
+          ...metaData[type],
           balance: FixedPointMath.toNumber(
-            balances[lstOrCoin],
-            metaData[lstOrCoin].decimals
+            balances[type],
+            metaData[type].decimals
           ),
-          price: coinsPrice?.[lstOrCoin] ?? 0,
+          price: coinsPrice?.[type] ?? 0,
           value: 0,
         }
       : []
   );
 
-  const [, usdValue] = lstsOrCoins.reduce(
-    ([, usdValue], lstOrCoinValue) => {
-      return [0, usdValue + (lstOrCoinValue.price ?? 0)];
+  const [, usdValue] = tokens.reduce(
+    ([, usdValue], tokenValue) => {
+      return [0, usdValue + (tokenValue.price ?? 0)];
     },
     [0, 0]
   );
@@ -101,8 +102,8 @@ const LstsOrCoinsTable: FC<{ name: 'LSTs' | 'Coins' }> = ({ name }) => {
           minWidth="30rem"
         >
           {loading ? (
-            <LstsOrCoinsRowLoading />
-          ) : !lstsOrCoins.length ? (
+            <TokensRowLoading />
+          ) : !tokens.length ? (
             <Div
               py="2rem"
               width="100%"
@@ -115,9 +116,7 @@ const LstsOrCoinsTable: FC<{ name: 'LSTs' | 'Coins' }> = ({ name }) => {
               </P>
             </Div>
           ) : (
-            lstsOrCoins.map((value) => (
-              <LstsOrCoinsRow key={unikey()} {...value} />
-            ))
+            tokens.map((value) => <TokensRow key={unikey()} {...value} />)
           )}
         </Div>
       </Div>
@@ -125,4 +124,4 @@ const LstsOrCoinsTable: FC<{ name: 'LSTs' | 'Coins' }> = ({ name }) => {
   );
 };
 
-export default LstsOrCoinsTable;
+export default TokensTable;

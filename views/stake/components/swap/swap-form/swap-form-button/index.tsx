@@ -12,12 +12,12 @@ import { useSwapAction } from './swap-form-button.hooks';
 
 const SwapFormButton: FC = () => {
   const { coins } = useCoins();
-  const { control, getValues } = useFormContext();
   const { onSwap, loading } = useSwapAction();
+  const { control, getValues } = useFormContext();
 
-  const amountIn = useWatch({
+  const [amountIn, amountOut, coinIn, coinOut, quoting] = useWatch({
     control,
-    name: 'in.value',
+    name: ['in.value', 'out.value', 'in.type', 'out.type', 'quoting'],
   });
 
   const insufficientBalance =
@@ -25,11 +25,17 @@ const SwapFormButton: FC = () => {
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
 
-  const hasMarket = values(POOLS).some(({ coinTypes }) =>
-    coinTypes.every((type) => getValues(['in.type', 'out.type']).includes(type))
-  );
+  const minAmountOut = 1;
 
-  const disabled = loading || !hasMarket || insufficientBalance;
+  const insufficientAmountOut =
+    !values(POOLS).some(({ coinTypes }) =>
+      coinTypes.every((coin) => [coinIn, coinOut].includes(coin))
+    ) &&
+    !!Number(amountOut) &&
+    Number(amountOut) < minAmountOut;
+
+  const disabled =
+    quoting || loading || insufficientBalance || insufficientAmountOut;
 
   return (
     <WalletGuardButton
@@ -44,16 +50,19 @@ const SwapFormButton: FC = () => {
       borderRadius="0.625rem"
       opacity={disabled ? 0.7 : 1}
       onClick={disabled ? undefined : onSwap}
+      nHover={!disabled && { bg: '#74D5C9' }}
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      bg={insufficientBalance ? '#FF898B' : '#99EFE4'}
+      bg={insufficientBalance ? '#FF898B' : disabled ? '#99EFE480' : '#99EFE4'}
     >
       {insufficientBalance
         ? 'Insufficient Balance'
-        : !hasMarket
-          ? 'Has no market'
-          : loading
-            ? 'Swapping...'
-            : 'Swap'}
+        : quoting
+          ? 'Quoting...'
+          : insufficientAmountOut
+            ? 'You must swap to at least 1'
+            : loading
+              ? 'Swapping...'
+              : 'Swap'}
     </WalletGuardButton>
   );
 };
