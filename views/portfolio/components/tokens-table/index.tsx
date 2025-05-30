@@ -1,18 +1,20 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
 import { COIN_TYPES, LST_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
-import { useCoinsPrice } from '@/hooks/use-coins-price';
 import useMetadata from '@/hooks/use-metadata';
+import { useAllQuotes } from '@/hooks/use-quotes';
+import { useWalPrice } from '@/hooks/use-wal-price';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import PortfolioTabHeader from '../portfolio-tab-header';
 import TokensRow from './tokens-row';
 import TokensRowLoading from './tokens-row/tokens-row-loading';
 
-const TYPES = {
+const TYPES_SET = {
   LSTs: LST_TYPES,
   Coins: COIN_TYPES,
 };
@@ -22,38 +24,50 @@ interface TokensTableProps {
 }
 
 const TokensTable: FC<TokensTableProps> = ({ name }) => {
-  const types = TYPES[name];
+  const types = TYPES_SET[name];
   const { balances } = useAppState();
+  const { data: quotes, isLoading: isGettingQuotes } = useAllQuotes();
+  const { data: walPrice, isLoading: isGettingWalPrice } = useWalPrice();
   const { data: metaData, isLoading: isGettingMetaData } = useMetadata(types);
-  const { data: coinsPrice, isLoading: isGettingPrices } = useCoinsPrice(types);
 
   const tokens = types.flatMap((type) =>
     metaData?.[type] && balances[type]
-      ? {
-          ...metaData[type],
-          balance: FixedPointMath.toNumber(
-            balances[type],
-            metaData[type].decimals
-          ),
-          price: coinsPrice?.[type] ?? 0,
-          value: 0,
-        }
+      ? type === TYPES.WAL
+        ? {
+            ...metaData[type],
+            balance: FixedPointMath.toNumber(
+              balances[type],
+              metaData[type].decimals
+            ),
+            price: walPrice ?? 0,
+            value: 0,
+          }
+        : {
+            ...metaData[type],
+            balance: FixedPointMath.toNumber(
+              balances[type],
+              metaData[type].decimals
+            ),
+            price: (quotes?.[type] ?? 0) * (walPrice ?? 0),
+            value: 0,
+          }
       : []
   );
 
   const [, usdValue] = tokens.reduce(
-    ([, usdValue], tokenValue) => {
-      return [0, usdValue + (tokenValue.price ?? 0)];
-    },
+    ([, usdValue], { price, balance }) => [
+      balance,
+      usdValue + (price ?? 0) * (balance ?? 0),
+    ],
     [0, 0]
   );
 
-  const loading = isGettingPrices || isGettingMetaData;
+  const isGettingPrices = isGettingQuotes || isGettingWalPrice;
+  const loading = isGettingQuotes || isGettingWalPrice || isGettingMetaData;
 
   return (
     <Div display="flex" flexDirection="column" gap="1rem">
       <PortfolioTabHeader usdValue={usdValue} loading={isGettingPrices} />
-
       <Div
         p="1rem"
         bg="#FFFFFF0D"

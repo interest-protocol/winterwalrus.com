@@ -46,11 +46,7 @@ const NativeStakedWal: FC = () => {
     );
   }
 
-  return (
-    <>
-      <NativeStakedWalCoinsTable />
-    </>
-  );
+  return <NativeStakedWalCoinsTable />;
 };
 
 export default NativeStakedWal;

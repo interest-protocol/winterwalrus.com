@@ -1,13 +1,7 @@
 import { FC } from 'react';
 
-import LstsOrCoinsTable from '../tokens-table';
+import TokensTable from '../tokens-table';
 
-const Coins: FC = () => {
-  return (
-    <>
-      <LstsOrCoinsTable name="Coins" />
-    </>
-  );
-};
+const Coins: FC = () => <TokensTable name="Coins" />;
 
 export default Coins;
