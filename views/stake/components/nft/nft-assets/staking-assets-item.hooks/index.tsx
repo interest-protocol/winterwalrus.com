@@ -1,0 +1,168 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { normalizeStructTag } from '@mysten/sui/utils';
+import BigNumber from 'bignumber.js';
+import { path } from 'ramda';
+import { useMemo, useState } from 'react';
+
+import { toasting } from '@/components/toast';
+import { ExplorerMode, NFT_TYPES } from '@/constants';
+import { useAppState } from '@/hooks/use-app-state';
+import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { useModal } from '@/hooks/use-modal';
+import { StakingObject } from '@/interface';
+import { ZERO_BIG_NUMBER } from '@/utils';
+
+import { StakingAssetsItemModal } from '../staking-assets-item-modals';
+import { useBurn } from './use-burn';
+
+export const useStakingAction = (
+  stakingObject: StakingObject | null | undefined,
+  isActivated: (epoch: number) => boolean
+) => {
+  const burn = useBurn();
+  const { update } = useAppState();
+  const { setContent } = useModal();
+  const account = useMemo(
+    () => ({
+      address:
+        '0xc23ea8e493616b1510d9405ce05593f8bd1fb30f44f92303ab2c54f6c8680ecb',
+    }),
+    []
+  );
+  const getExplorerUrl = useGetExplorerUrl();
+  const [loading, setLoading] = useState(false);
+
+  if (!stakingObject)
+    return {
+      loading,
+      onBurn: () => {},
+    };
+
+  const {
+    lst,
+    type,
+    state,
+    objectId,
+    principal,
+    withdrawEpoch,
+    activationEpoch,
+  } = stakingObject;
+
+  const onSuccess =
+    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
+      stopLoading();
+      toasting.success({
+        action: 'Withdraw',
+        message: 'See on explorer',
+        link: getExplorerUrl(
+          dryTx.effects.transactionDigest,
+          ExplorerMode.Transaction
+        ),
+      });
+
+      update(
+        ({
+          balances,
+          stakingObjectIds,
+          principalsByType: oldPrincipalsByType,
+        }) => {
+          const possiblyDeletedObjects = stakingObjectIds.filter(
+            (stakingObjectId) =>
+              !dryTx.objectChanges.find(
+                (object) =>
+                  object.type === 'deleted' &&
+                  NFT_TYPES.includes(object.objectType) &&
+                  object.objectId === stakingObjectId
+              )
+          );
+
+          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
+            (acc, object) =>
+              object.type === 'created' &&
+              NFT_TYPES.includes(normalizeStructTag(object.objectType))
+                ? [...acc, object]
+                : acc,
+            [] as ReadonlyArray<{ objectId: string; objectType: string }>
+          );
+
+          const principalsByType = possiblyCreatedObjects.reduce(
+            (acc, object) => ({
+              ...acc,
+              [normalizeStructTag(object.objectType)]: BigNumber(
+                principal
+              ).plus(
+                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+              ),
+            }),
+            oldPrincipalsByType
+          );
+
+          return {
+            principalsByType,
+            stakingObjectIds: [
+              ...possiblyDeletedObjects,
+              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
+            ],
+            balances: dryTx.balanceChanges.reduce(
+              (acc, { coinType, amount, owner }) =>
+                path(['AddressOwner'], owner) === account?.address
+                  ? {
+                      ...acc,
+                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                        acc[coinType] ?? ZERO_BIG_NUMBER
+                      ),
+                    }
+                  : acc,
+              { ...balances, ...principalsByType }
+            ),
+          };
+        }
+      );
+    };
+
+  const onFailure = (stopLoading: () => void) => (error?: string) => {
+    stopLoading();
+    toasting.error({
+      action: 'Withdraw',
+      message: error ?? 'Error executing transaction',
+    });
+  };
+
+  const onBurn = async () => {
+    if (!isActivated(withdrawEpoch ?? activationEpoch)) return;
+
+    if (type === TYPES.STAKED_WAL) {
+      return setContent(
+        <StakingAssetsItemModal
+          mode={state === 'Staked' ? 'unstake' : 'withdraw'}
+        />,
+        {
+          title:
+            state === 'Staked'
+              ? 'Unstake in Progress'
+              : 'Redirecting for Withdrawal',
+        }
+      );
+    }
+    setLoading(true);
+    const dismiss = toasting.loading({
+      message: 'Withdrawing LST...',
+    });
+
+    try {
+      await burn({
+        lst,
+        objectId,
+        onSuccess: onSuccess(dismiss),
+        onFailure: onFailure(dismiss),
+      });
+    } catch (e) {
+      onFailure(dismiss)((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { onBurn, loading };
+};
