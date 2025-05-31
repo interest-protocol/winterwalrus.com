@@ -1,3 +1,4 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div, P } from '@stylin.js/elements';
 import { values } from 'ramda';
 import { FC, useEffect, useState } from 'react';
@@ -10,12 +11,12 @@ import PortfolioTabHeader from '../../portfolio-tab-header';
 import LSTNFTsRow from '../lst-nftsl-row';
 import LSTNFTsCoinsRowLoading from '../lst-nftsl-row/lst-nftsl-row-loading';
 
-const LSTNFTsTable: FC<{ StructType: string }> = ({ StructType }) => {
+const LSTNFTsTable: FC<{ native?: boolean }> = ({ native }) => {
   const {
     stakingObjectIds: objectsIds,
     principalByType: principalsByType,
     isLoading,
-  } = useStakingObjects([{ StructType }]);
+  } = useStakingObjects(native ? TYPES.STAKED_WAL : TYPES.BLIZZARD_STAKE_NFT);
   const [stakingObjectIds, update] = useState<readonly string[]>();
 
   const loadingObjects = isLoading;

@@ -4,9 +4,9 @@ import { FC } from 'react';
 import unikey from 'unikey';
 
 import { COIN_TYPES, LST_TYPES } from '@/constants';
+import { useAllQuotes } from '@/hooks/use-all-quotes';
 import { useAppState } from '@/hooks/use-app-state';
 import useMetadata from '@/hooks/use-metadata';
-import { useAllQuotes } from '@/hooks/use-quotes';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
