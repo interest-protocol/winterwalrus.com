@@ -16,8 +16,13 @@ const LSTNFTsTable: FC<{ native?: boolean }> = ({ native }) => {
     stakingObjectIds: objectsIds,
     principalByType: principalsByType,
     isLoading,
+    mutate,
   } = useStakingObjects(native ? TYPES.STAKED_WAL : TYPES.BLIZZARD_STAKE_NFT);
   const [stakingObjectIds, update] = useState<readonly string[]>();
+
+  useEffect(() => {
+    mutate();
+  }, []);
 
   const loadingObjects = isLoading;
 

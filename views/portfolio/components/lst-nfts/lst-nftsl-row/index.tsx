@@ -3,8 +3,9 @@ import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
-import { memo, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import Countdown from 'react-countdown';
+import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
 import { ExternalLinkSVG } from '@/components/svg';
@@ -13,20 +14,21 @@ import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { useNodeName } from '@/hooks/use-node';
+import { usePendingRewards } from '@/hooks/use-pending-rewards';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import { formatDollars } from '@/utils';
 import LSTNFTsCoinsRowModal from '@/views/stake/components/nft/nft-assets/nft-assets-item/nft-assets-item-modal';
 import { useStakingAction } from '@/views/stake/components/nft/nft-assets/staking-assets-item.hooks';
 import StakingAssetsItemLoading from '@/views/stake/components/nft/nft-assets/staking-assets-item-loading';
 
-import { LSTNFTsCoinsRowProps } from './lst-nftsl.types';
-
-const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
+const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
   const { data } = useEpochData();
   const { setContent } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
   const { stakingObject, isLoading } = useStakingObject(id);
+  const { data: pendingRewards, isLoading: rewardsLoading } =
+    usePendingRewards(id);
+
   const { nodeName } = useNodeName(stakingObject?.nodeId);
 
   const isActivated = useCallback(
@@ -50,8 +52,6 @@ const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
     activationEpoch,
     principal,
   } = stakingObject;
-
-  const usdValue = 0;
 
   const activation = withdrawEpoch ?? activationEpoch;
 
@@ -129,19 +129,22 @@ const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
           </P>
         </Div>
       </Div>
-
       <Div>
         <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
-          {principal ? FixedPointMath.toNumber(BigNumber(principal), 9) : '-'}
+          {principal ? FixedPointMath.toNumber(BigNumber(principal)) : '-'}
         </P>
       </Div>
-
       <Div>
         <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
-          {usdValue ? formatDollars(usdValue) : '-'}
+          {rewardsLoading ? (
+            <Skeleton width="4rem" />
+          ) : (
+            FixedPointMath.toNumber(
+              BigNumber(principal).plus(String(pendingRewards ?? 0))
+            )
+          )}
         </P>
       </Div>
-
       <Div
         whiteSpace="nowrap"
         background={
@@ -175,7 +178,6 @@ const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
                 : state}
         </P>
       </Div>
-
       <Div
         display="flex"
         alignItems="center"
@@ -217,7 +219,6 @@ const LSTNFTsCoinsRow = memo<LSTNFTsCoinsRowProps>(({ id }) => {
       </Div>
     </Div>
   );
-});
-LSTNFTsCoinsRow.displayName = 'LSTNFTsCoinsRow';
+};
 
 export default LSTNFTsCoinsRow;
