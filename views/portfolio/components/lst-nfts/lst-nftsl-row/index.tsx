@@ -10,6 +10,7 @@ import unikey from 'unikey';
 
 import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode, NFT_IMAGE } from '@/constants';
+import { useCanWithdrawEarly } from '@/hooks/use-can-withdraw-early';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
@@ -17,15 +18,16 @@ import { useNodeName } from '@/hooks/use-node';
 import { usePendingRewards } from '@/hooks/use-pending-rewards';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
-import LSTNFTsCoinsRowModal from '@/views/stake/components/nft/nft-assets/nft-assets-item/nft-assets-item-modal';
-import { useStakingAction } from '@/views/stake/components/nft/nft-assets/staking-assets-item.hooks';
-import StakingAssetsItemLoading from '@/views/stake/components/nft/nft-assets/staking-assets-item-loading';
+import LSTNFTsCoinsRowModal from '@/views/portfolio/components/nft/nft-assets/nft-assets-item/nft-assets-item-modal';
+import { useStakingAction } from '@/views/portfolio/components/nft/nft-assets/staking-assets-item.hooks';
+import StakingAssetsItemLoading from '@/views/portfolio/components/nft/nft-assets/staking-assets-item-loading';
 
 const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
   const { data } = useEpochData();
   const { setContent } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
   const { stakingObject, isLoading } = useStakingObject(id);
+  const { data: canWithdrawEarly } = useCanWithdrawEarly(id);
   const { data: pendingRewards, isLoading: rewardsLoading } =
     usePendingRewards(id);
 
@@ -37,7 +39,11 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
     [data?.currentEpoch]
   );
 
-  const { onBurn, loading } = useStakingAction(stakingObject, isActivated);
+  const { onBurn, loading } = useStakingAction(
+    stakingObject,
+    isActivated,
+    canWithdrawEarly
+  );
 
   if (isLoading) return <StakingAssetsItemLoading />;
 
@@ -202,7 +208,7 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
         >
           {isActivated(activation) ? (
             type === TYPES.STAKED_WAL ? (
-              state === 'Staked' ? (
+              state === 'Staked' && !canWithdrawEarly ? (
                 'Unstake'
               ) : (
                 'Withdraw'

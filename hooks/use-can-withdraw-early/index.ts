@@ -1,10 +1,16 @@
-import { WalrusSDK } from '@interest-protocol/walrus-sdk';
 import useSWR from 'swr';
 
-export const useCanWithdrawEarly = (id: string) => {
-  const walrusSdk = new WalrusSDK();
+import useWalrusSdk from '../use-walrus-sdk';
 
-  return useSWR(['can-withdraw-early', id], () =>
-    walrusSdk.canWithdrawEarly(id)
+export const useCanWithdrawEarly = (id: string) => {
+  const walrusSdk = useWalrusSdk();
+
+  return useSWR(
+    [useCanWithdrawEarly.name, 'can-withdraw-early', id, walrusSdk],
+    () => {
+      if (!walrusSdk) return;
+
+      return walrusSdk.canWithdrawEarly(id);
+    }
   );
 };

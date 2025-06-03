@@ -15,14 +15,18 @@ import { ZERO_BIG_NUMBER } from '@/utils';
 
 import { StakingAssetsItemModal } from '../staking-assets-item-modals';
 import { useBurn } from './use-burn';
+import { useUnstake } from './use-unstake';
 
 export const useStakingAction = (
   stakingObject: StakingObject | null | undefined,
-  isActivated: (epoch: number) => boolean
+  isActivated: (epoch: number) => boolean,
+  canWithdrawEarly?: boolean
 ) => {
   const burn = useBurn();
+  const unstake = useUnstake();
   const { update } = useAppState();
   const { setContent } = useModal();
+
   const account = useMemo(
     () => ({
       address:
@@ -50,10 +54,11 @@ export const useStakingAction = (
   } = stakingObject;
 
   const onSuccess =
-    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
+    (action: string, stopLoading: () => void) =>
+    (dryTx: DryRunTransactionBlockResponse) => {
       stopLoading();
       toasting.success({
-        action: 'Withdraw',
+        action,
         message: 'See on explorer',
         link: getExplorerUrl(
           dryTx.effects.transactionDigest,
@@ -121,12 +126,63 @@ export const useStakingAction = (
       );
     };
 
-  const onFailure = (stopLoading: () => void) => (error?: string) => {
-    stopLoading();
-    toasting.error({
-      action: 'Withdraw',
-      message: error ?? 'Error executing transaction',
+  const onFailure =
+    (action: string, stopLoading: () => void) => (error?: string) => {
+      stopLoading();
+      toasting.error({
+        action,
+        message: error ?? 'Error executing transaction',
+      });
+    };
+
+  const onUnstake = async () => {
+    setLoading(true);
+    const dismiss = toasting.loading({
+      message:
+        state === 'Staked' && !canWithdrawEarly ? 'Unstaking' : 'Withdrawing',
     });
+
+    try {
+      await unstake({
+        objectId,
+        canWithdrawEarly,
+        onSuccess: onSuccess(
+          state === 'Staked' && !canWithdrawEarly ? 'Unstake' : 'Withdraw',
+          dismiss
+        ),
+        onFailure: onFailure(
+          state === 'Staked' && !canWithdrawEarly ? 'Unstake' : 'Withdraw',
+          dismiss
+        ),
+      });
+    } catch (e) {
+      onFailure(
+        state === 'Staked' && !canWithdrawEarly ? 'Unstake' : 'Withdraw',
+        dismiss
+      )((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onGetLST = async () => {
+    setLoading(true);
+    const dismiss = toasting.loading({
+      message: 'Getting LST...',
+    });
+
+    try {
+      await burn({
+        lst,
+        objectId,
+        onSuccess: onSuccess('Get LST', dismiss),
+        onFailure: onFailure('Get LST', dismiss),
+      });
+    } catch (e) {
+      onFailure('Get LST', dismiss)((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onBurn = async () => {
@@ -135,34 +191,22 @@ export const useStakingAction = (
     if (type === TYPES.STAKED_WAL) {
       return setContent(
         <StakingAssetsItemModal
-          mode={state === 'Staked' ? 'unstake' : 'withdraw'}
+          onClick={onUnstake}
+          mode={
+            state === 'Staked' && !canWithdrawEarly ? 'unstake' : 'withdraw'
+          }
         />,
         {
           title:
-            state === 'Staked'
-              ? 'Unstake in Progress'
-              : 'Redirecting for Withdrawal',
+            state === 'Staked' && !canWithdrawEarly
+              ? 'Unstaking'
+              : 'Withdrawal',
         }
       );
     }
-    setLoading(true);
-    const dismiss = toasting.loading({
-      message: 'Withdrawing LST...',
-    });
 
-    try {
-      await burn({
-        lst,
-        objectId,
-        onSuccess: onSuccess(dismiss),
-        onFailure: onFailure(dismiss),
-      });
-    } catch (e) {
-      onFailure(dismiss)((e as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    await onGetLST();
   };
 
-  return { onBurn, loading };
+  return { onBurn, onUnstake, loading };
 };
