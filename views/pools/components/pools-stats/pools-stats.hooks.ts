@@ -12,7 +12,7 @@ export const usePoolsMetrics = () => {
   const { data, ...rest } = useSWR<MetricsAPI>(
     [usePoolsMetrics.name],
     async () => {
-      const url = `${INTEREST_STABLE_DEX_API}/metrics`;
+      const url = `${INTEREST_STABLE_DEX_API}/metrics?poolId=0x2643f66613101148147ae5780eeb7471a0012de99daf40bb3a6030dc30a3561e`;
 
       const data: MetricsAPI = await fetch(url).then((res) => res.json());
       return data;
