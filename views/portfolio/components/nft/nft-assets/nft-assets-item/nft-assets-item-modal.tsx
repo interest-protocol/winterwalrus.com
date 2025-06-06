@@ -8,6 +8,7 @@ import Countdown from 'react-countdown';
 
 import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode } from '@/constants';
+import { useCanWithdrawEarly } from '@/hooks/use-can-withdraw-early';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
@@ -34,8 +35,13 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
   } = stakingObject;
   const { handleClose } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
+  const { data: canWithdrawEarly } = useCanWithdrawEarly(objectId);
 
-  const { onBurn, loading } = useStakingAction(stakingObject, isActivated);
+  const { onBurn, loading } = useStakingAction(
+    stakingObject,
+    isActivated,
+    canWithdrawEarly
+  );
 
   return (
     <Div
@@ -149,7 +155,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
       >
         {isActivated(withdrawEpoch ?? activationEpoch) ? (
           type === TYPES.STAKED_WAL ? (
-            state === 'Staked' ? (
+            state === 'Staked' && !canWithdrawEarly ? (
               'Unstake'
             ) : (
               'Withdraw'

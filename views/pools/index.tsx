@@ -39,7 +39,7 @@ const Pools: FC = () => {
             color="#FFFFFF80"
             fontSize="0.875rem"
             gap={['0.5rem', '1rem']}
-            gridTemplateColumns={['1fr', '1fr', '1fr 3fr']}
+            gridTemplateColumns={['1fr', '1fr', '1fr calc(100% - 16rem)']}
           >
             <LiquidityPools />
             <PoolsPerformance />
