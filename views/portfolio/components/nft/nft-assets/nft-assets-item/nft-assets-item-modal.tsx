@@ -103,7 +103,7 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
             target="_blank"
             href={`https://walruscan.com/mainnet/operator/${nodeId}`}
           >
-            <Div display="flex" gap="0.5rem">
+            <Div display="flex" gap="0.5rem" nHover={{ color: '#99EFE4' }}>
               <P fontFamily="JetBrains Mono" fontSize="0.875rem">
                 {nodeName ?? formatAddress(nodeId)}
               </P>
@@ -113,8 +113,11 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
         </Div>
         <Div display="flex" justifyContent="space-between" alignItems="center">
           <P color="#F8F8F880">Object ID</P>
-          <Link href={getExplorerUrl(objectId, ExplorerMode.Object)}>
-            <Div display="flex" gap="0.5rem">
+          <Link
+            target="_blank"
+            href={getExplorerUrl(objectId, ExplorerMode.Object)}
+          >
+            <Div display="flex" gap="0.5rem" nHover={{ color: '#99EFE4' }}>
               <P fontFamily="JetBrains Mono" fontSize="0.875rem">
                 {formatAddress(objectId)}
               </P>
