@@ -29,13 +29,11 @@ const TokensRow: FC<TokensRowProps> = ({ balance, price, symbol, iconUrl }) => {
           src={iconUrl}
           alt={symbol}
         />
-
         <Span whiteSpace="nowrap">{symbol}</Span>
       </Div>
       <Span whiteSpace="nowrap" textAlign="center">
         {formatMoney(Number(balance))}
       </Span>
-
       <Span whiteSpace="nowrap" textAlign="center">
         {formatDollars(Number(price ?? 0))}
       </Span>

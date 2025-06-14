@@ -1,4 +1,5 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
+import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
@@ -7,6 +8,7 @@ import { COIN_TYPES, LST_TYPES } from '@/constants';
 import { useAllQuotes } from '@/hooks/use-all-quotes';
 import { useAppState } from '@/hooks/use-app-state';
 import useMetadata from '@/hooks/use-metadata';
+import { useSuiPrice } from '@/hooks/use-sui-price';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
@@ -28,18 +30,24 @@ const TokensTable: FC<TokensTableProps> = ({ name }) => {
   const { balances } = useAppState();
   const { data: quotes, isLoading: isGettingQuotes } = useAllQuotes();
   const { data: walPrice, isLoading: isGettingWalPrice } = useWalPrice();
+  const { data: suiPrice, isLoading: isGettingSuiPrice } = useSuiPrice();
   const { data: metaData, isLoading: isGettingMetaData } = useMetadata(types);
+
+  const coinsPrice = {
+    [TYPES.WAL]: walPrice,
+    [SUI_TYPE_ARG]: suiPrice,
+  };
 
   const tokens = types.flatMap((type) =>
     metaData?.[type] && balances[type]
-      ? type === TYPES.WAL
+      ? COIN_TYPES.includes(type)
         ? {
             ...metaData[type],
             balance: FixedPointMath.toNumber(
               balances[type],
-              metaData[type].decimals
+              metaData[type]?.decimals
             ),
-            price: walPrice ?? 0,
+            price: coinsPrice[type] ?? 0,
             value: 0,
           }
         : {
@@ -62,7 +70,9 @@ const TokensTable: FC<TokensTableProps> = ({ name }) => {
     [0, 0]
   );
 
-  const isGettingPrices = isGettingQuotes || isGettingWalPrice;
+  const isGettingPrices =
+    isGettingQuotes || isGettingWalPrice || isGettingSuiPrice;
+
   const loading = isGettingQuotes || isGettingWalPrice || isGettingMetaData;
 
   return (

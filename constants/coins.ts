@@ -26,6 +26,13 @@ export const NFT_IMAGE = {
 } as const;
 
 export const ASSET_METADATA: Record<string, AssetMetadata> = {
+  [SUI_TYPE_ARG]: {
+    name: 'Sui',
+    decimals: 9,
+    symbol: 'SUI',
+    type: SUI_TYPE_ARG,
+    iconUrl: 'https://strapi-dev.scand.app/uploads/sui_c07df05f00.png',
+  },
   [TYPES.WAL]: {
     name: 'WAL',
     decimals: 9,
