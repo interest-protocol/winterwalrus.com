@@ -22,35 +22,36 @@ const Pools: FC = () => {
     <Layout>
       <FormProvider {...form}>
         <Div
-          flex="1"
           mx="auto"
-          gap="1rem"
           width="100%"
+          gap="2rem"
           display="flex"
-          borderRadius="1rem"
+          maxWidth="53.5rem"
+          my={['1rem', '3rem']}
           flexDirection="column"
           px={['0.5rem', '2rem']}
-          maxWidth={['100%', '51.5rem']}
-          my={['1rem', '1rem', '1rem', '1rem', '3rem']}
         >
           <Div
-            width="100%"
-            display="grid"
-            color="#FFFFFF80"
-            fontSize="0.875rem"
-            gap={['0.5rem', '1rem']}
-            gridTemplateColumns={['1fr', '1fr', '1fr calc(100% - 16rem)']}
+            gap="1rem"
+            display="flex"
+            justifyContent="space-between"
+            width={['100%', '100%', '100%', '53.5rem']}
+            flexDirection={['column', 'column', 'column', 'row']}
           >
-            <LiquidityPools />
-            <PoolsPerformance />
+            <Div flexShrink="0" width={['100%', '100%', '100%', '16.4375rem']}>
+              <LiquidityPools />
+            </Div>
+            <Div width={['100%', '100%', '100%', '36.0625rem']}>
+              <PoolsPerformance />
+            </Div>
           </Div>
           <Div
-            width="100%"
+            gap="1rem"
             display="flex"
-            gap={['0.5rem', '1rem']}
             justifyContent="space-between"
             flexDirection={['column', 'row']}
             alignItems={['stretch', 'center']}
+            width={['100%', '100%', '100%', '53.5rem']}
           >
             <PoolsTabs />
             <PoolsSearch />

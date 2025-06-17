@@ -53,6 +53,7 @@ const PoolsTable: FC = () => {
       p="1rem"
       bg="#FFFFFF0D"
       display="flex"
+      width={['100%', '100%', '100%', '53.5rem']}
       overflowX="auto"
       border="1px solid"
       borderRadius="1rem"
