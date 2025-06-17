@@ -19,6 +19,8 @@ const LiquidityPools: FC = () => {
       borderRadius="1rem"
       flexDirection="column"
       borderColor="#FFFFFF1A"
+      width={['100%', '100%', '100%', '16.4375rem']}
+      minWidth={['unset', 'unset', '16.4375rem']}
     >
       <H2 fontWeight="600" fontSize="1rem" color="#FFFFFF">
         Liquidity Pools
@@ -37,7 +39,7 @@ const LiquidityPools: FC = () => {
           flexDirection="column"
           borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
-          minWidth="max-content"
+          minWidth={['100%', '100%', 'max-content']}
         >
           {isLoading ? (
             <>
@@ -62,7 +64,7 @@ const LiquidityPools: FC = () => {
           flexDirection="column"
           borderRadius="0.625rem"
           borderColor="#FFFFFF1A"
-          minWidth="max-content"
+          minWidth={['100%', '100%', 'max-content']}
         >
           {isLoading ? (
             <>

@@ -19,12 +19,13 @@ const Web3Provider = dynamic(import('@/components/web3-provider'), {
 const App = ({ Component, pageProps }: AppProps) => (
   <Web3Provider>
     <Global styles={GlobalStyles} />
+    <ModalProvider />
     <Toaster
       position="bottom-right"
       toastOptions={{
         duration: TOAST_DURATION,
         style: {
-          zIndex: 1000000,
+          zIndex: 100,
           maxWidth: '20rem',
           overflow: 'hidden',
           position: 'relative',
@@ -34,7 +35,6 @@ const App = ({ Component, pageProps }: AppProps) => (
         },
       }}
     />
-    <ModalProvider />
     <SkeletonTheme baseColor="#FFFFFF0D" highlightColor="#FFFFFF1A">
       <AppStateProvider />
       <BackgroundProvider />

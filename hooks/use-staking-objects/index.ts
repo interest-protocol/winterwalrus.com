@@ -15,12 +15,12 @@ interface Response {
   balancesByLst: Record<string, BigNumber>;
 }
 
-export const useStakingObjects = () => {
+export const useStakingObjects = (type?: string) => {
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Response>(
-    [useStakingObjects.name, currentAccount],
+    [useStakingObjects.name, currentAccount, type],
     async () => {
       if (!currentAccount)
         return {
@@ -37,12 +37,9 @@ export const useStakingObjects = () => {
         const data = await suiClient.getOwnedObjects({
           owner: currentAccount.address,
           options: { showContent: true, showType: true },
-          filter: {
-            MatchAny: [
-              { StructType: TYPES.STAKED_WAL },
-              { StructType: TYPES.BLIZZARD_STAKE_NFT },
-            ],
-          },
+          ...(type && {
+            filter: { StructType: type },
+          }),
         });
 
         hasNextPage = data.hasNextPage;

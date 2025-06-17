@@ -1,7 +1,7 @@
 import { Div, Nav, Span } from '@stylin.js/elements';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { values } from 'ramda';
+import { map, toPairs } from 'ramda';
 import { FC } from 'react';
 
 import { ExternalLinkSVG } from '@/components/svg';
@@ -10,46 +10,29 @@ import { Routes, RoutesEnum } from '@/constants';
 const Navbar: FC = () => {
   const { pathname } = useRouter();
 
+  const links = map(
+    ([key, href]) => ({
+      href,
+      label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+      active:
+        (key === RoutesEnum.Stake && pathname === Routes[RoutesEnum.Stake]) ||
+        (key !== RoutesEnum.Stake && pathname.includes(Routes[key])),
+    }),
+    toPairs(Routes)
+  );
+
   return (
     <Nav display={['none', 'none', 'none', 'flex']} gap="2.5rem">
-      <Link href={Routes[RoutesEnum.Stake]} shallow>
-        <Span
-          nHover={{ color: '#99EFE480' }}
-          color={
-            values(Routes)
-              .slice(1)
-              .some((route) => pathname.includes(route))
-              ? '#FFFFFF80'
-              : '#99EFE4'
-          }
-        >
-          Stake
-        </Span>
-      </Link>
-      <Link href={Routes[RoutesEnum.Pools]} shallow>
-        <Span
-          nHover={{ color: '#99EFE480' }}
-          color={
-            pathname.includes(Routes[RoutesEnum.Pools])
-              ? '#99EFE4'
-              : '#FFFFFF80'
-          }
-        >
-          Pools
-        </Span>
-      </Link>
-      <Link href={Routes[RoutesEnum.Stats]} shallow>
-        <Span
-          nHover={{ color: '#99EFE480' }}
-          color={
-            pathname.includes(Routes[RoutesEnum.Stats])
-              ? '#99EFE4'
-              : '#FFFFFF80'
-          }
-        >
-          Stats
-        </Span>
-      </Link>
+      {links.map(({ href, label, active }) => (
+        <Link key={label} href={href} shallow>
+          <Span
+            nHover={{ color: '#99EFE480' }}
+            color={active ? '#99EFE4' : '#FFFFFF80'}
+          >
+            {label}
+          </Span>
+        </Link>
+      ))}
       <Link
         target="_blank"
         href="https://interest-protocol.gitbook.io/winter-walrus"
@@ -68,4 +51,5 @@ const Navbar: FC = () => {
     </Nav>
   );
 };
+
 export default Navbar;

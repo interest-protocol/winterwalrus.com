@@ -11,6 +11,14 @@ export interface BurnArgs {
   onSuccess: (tx: DryRunTransactionBlockResponse) => void;
 }
 
+export interface UnstakeArgs {
+  objectId: string;
+  canWithdrawEarly?: boolean;
+  onFailure: (error?: string) => void;
+  onSuccess: (tx: DryRunTransactionBlockResponse) => void;
+}
+
 export interface StakingAssetItemModalProps {
   mode: 'unstake' | 'withdraw';
+  onClick: () => void;
 }
