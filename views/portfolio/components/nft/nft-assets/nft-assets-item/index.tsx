@@ -9,6 +9,7 @@ import unikey from 'unikey';
 
 import { ExternalLinkSVG } from '@/components/svg';
 import { ExplorerMode, NFT_IMAGE } from '@/constants';
+import { useCanWithdrawEarly } from '@/hooks/use-can-withdraw-early';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
@@ -25,6 +26,8 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
   const { setContent } = useModal();
   const getExplorerUrl = useGetExplorerUrl();
   const { stakingObject, isLoading } = useStakingObject(id);
+  const { data: canWithdrawEarly } = useCanWithdrawEarly(id!);
+
   const { nodeName } = useNodeName(stakingObject?.nodeId);
 
   const isActivated = useCallback(
@@ -33,7 +36,11 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
     [data?.currentEpoch]
   );
 
-  const { onBurn, loading } = useStakingAction(stakingObject, isActivated);
+  const { onBurn, loading } = useStakingAction(
+    stakingObject,
+    isActivated,
+    canWithdrawEarly
+  );
 
   if (isLoading) return <StakingAssetsItemLoading />;
 
@@ -166,7 +173,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
           >
             {isActivated(activation) ? (
               type === TYPES.STAKED_WAL ? (
-                state === 'Staked' ? (
+                state === 'Staked' && !canWithdrawEarly ? (
                   'Unstake'
                 ) : (
                   'Withdraw'
