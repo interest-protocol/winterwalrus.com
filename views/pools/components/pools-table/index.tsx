@@ -149,7 +149,13 @@ const PoolsTable: FC = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <P color="#FFFFFF80" fontSize="1rem">
+            <P
+              fontSize="1rem"
+              fontWeight="400"
+              color="#FFFFFF80"
+              fontFamily="JetBrains Mono"
+              lineHeight="1.25rem"
+            >
               No result found for “ search “
             </P>
           </Div>
