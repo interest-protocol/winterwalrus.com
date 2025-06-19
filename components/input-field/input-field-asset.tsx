@@ -78,8 +78,9 @@ const InputFieldAsset: FC<InputFieldAssetProps> = ({
     >
       <Span overflow="hidden" borderRadius="0.5rem" display="flex">
         <Img
-          width="2rem"
-          height="2rem"
+          width="1.5rem"
+          height="1.5rem"
+          borderRadius="50%"
           alt={metadata[type]?.symbol ?? metadata[nftType].symbol}
           src={metadata[type]?.iconUrl ?? metadata[nftType].iconUrl}
         />
