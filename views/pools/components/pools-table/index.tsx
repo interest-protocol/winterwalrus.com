@@ -150,7 +150,7 @@ const PoolsTable: FC = () => {
             alignItems="center"
           >
             <P color="#FFFFFF80" fontSize="1rem">
-              No pools found.
+              No result found for “ search “
             </P>
           </Div>
         ) : (
