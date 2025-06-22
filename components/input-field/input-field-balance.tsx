@@ -37,7 +37,7 @@ const InputFieldBalance: FC<InputFieldGenericProps> = ({ name }) => {
     >
       <WalletSVG maxWidth="1rem" width="100%" />
       <Span fontFamily="JetBrains Mono">
-        {loadingCoins || loadingObjects ? (
+        {!balances && (loadingCoins || loadingObjects) ? (
           <Skeleton width="2rem" />
         ) : (
           FixedPointMath.toNumber(

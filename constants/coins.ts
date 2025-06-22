@@ -99,7 +99,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
   },
 };
 
-export const COIN_TYPES: ReadonlyArray<string> = [SUI_TYPE_ARG, TYPES.WAL];
+export const COIN_TYPES: ReadonlyArray<string> = [TYPES.WAL, SUI_TYPE_ARG];
 
 export const LST_LIST: ReadonlyArray<AssetMetadata> = [
   ASSET_METADATA[LST_TYPES_MAP.WWAL],

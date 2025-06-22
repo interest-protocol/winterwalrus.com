@@ -80,17 +80,17 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
   return (
     <Div
       key={unikey()}
+      display="grid"
       color="#ffffff"
       cursor="pointer"
       border="1px solid"
+      alignItems="center"
       onClick={openModal}
+      p={['0.5rem', '1rem']}
       borderColor="#FFFFFF1A"
       borderRadius="0.625rem"
       transition="all 300ms linear"
       nHover={{ borderColor: '#99EFE44D' }}
-      p={['0.5rem', '1rem']}
-      display="grid"
-      alignItems="center"
       gridTemplateColumns="2fr repeat(4, 1fr)"
     >
       <Div display="flex" alignItems="center" gap="0.75rem">
@@ -136,12 +136,12 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
         </Div>
       </Div>
       <Div>
-        <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
+        <P textAlign="center" fontSize="0.825rem">
           {principal ? FixedPointMath.toNumber(BigNumber(principal)) : '-'}
         </P>
       </Div>
       <Div>
-        <P textAlign="center" fontSize="1.125rem" fontWeight={500}>
+        <P textAlign="center" fontSize="0.825rem">
           {rewardsLoading ? (
             <Skeleton width="4rem" />
           ) : (
@@ -152,6 +152,11 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
         </P>
       </Div>
       <Div
+        p="0.25rem"
+        mx="0.5rem"
+        fontSize="0.85rem"
+        textAlign="center"
+        borderRadius="1rem"
         whiteSpace="nowrap"
         background={
           state === 'Ready to Get'
@@ -167,12 +172,6 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
               ? '#83F34E'
               : '#FFFFFF'
         }
-        px="0.75rem"
-        py="0.25rem"
-        mx="0.5rem"
-        borderRadius="1rem"
-        fontWeight="bold"
-        textAlign="center"
       >
         <P>
           {state === 'Ready to Get'
@@ -193,7 +192,7 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
         <Button
           all="unset"
           py="0.5rem"
-          width="7rem"
+          width="6.8rem"
           color="#000000"
           textAlign="center"
           borderRadius="0.5rem"
