@@ -25,9 +25,9 @@ const PoolsTable: FC = () => {
         if (normalizedSearch) {
           const foundLPToken = lpCoinType
             ?.toLowerCase()
-            .includes(normalizedSearch);
+            .startsWith(normalizedSearch);
           const foundAnyToken = coinTypes?.some((ct: string) =>
-            ct.toLowerCase().includes(normalizedSearch)
+            ct.toLowerCase().startsWith(normalizedSearch)
           );
 
           const foundToken = foundLPToken || foundAnyToken;
@@ -150,7 +150,7 @@ const PoolsTable: FC = () => {
             alignItems="center"
           >
             <P color="#FFFFFF80" fontSize="1rem">
-              No pools found.
+              {search ? `No result found for “${search}“` : 'No pools found.'}
             </P>
           </Div>
         ) : (
