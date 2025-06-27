@@ -1,8 +1,8 @@
+import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import InputField from '@/components/input-field';
-import { COIN_TYPES } from '@/constants';
 
 import StakeFormButton from './stake-form-button';
 import StakeFormManager from './stake-form-manager';
@@ -15,7 +15,7 @@ const StakeForm: FC = () => (
       <InputField
         name="in"
         label="In"
-        types={COIN_TYPES}
+        types={[TYPES.WAL]}
         topContent="balance"
       />
       <StakeInputOut />

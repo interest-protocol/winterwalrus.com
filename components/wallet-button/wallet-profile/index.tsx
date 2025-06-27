@@ -43,7 +43,7 @@ const WalletProfile: FC = () => {
           color="#F1F1F1"
           cursor="pointer"
           alignItems="center"
-          borderRadius="0.75rem"
+          borderRadius="0.5rem"
           px={['0.75rem', '1rem']}
           nHover={{ bg: '#99EFE433' }}
           onClick={handleOpenProfileDropdown}
@@ -55,8 +55,8 @@ const WalletProfile: FC = () => {
             borderRadius="50%"
             src={currentWallet.currentWallet?.icon}
           />
-          {formatAddress(currentAccount!.address)}
-          <Span display={['none', 'inline']}>
+          <Span>{formatAddress(currentAccount!.address)}</Span>
+          <Span display={['none', 'flex']} alignItems="center" ml="0.25rem">
             <ChevronDownSVG
               width="100%"
               maxWidth="0.65rem"

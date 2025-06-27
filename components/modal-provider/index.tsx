@@ -43,9 +43,9 @@ const ModalProvider: FC = () => {
         <Motion
           inset="0"
           bg="#0007"
+          zIndex="99"
           width="100vw"
           display="flex"
-          zIndex="999999"
           position="fixed"
           height={safeHeight}
           exit={{ opacity: 0 }}
