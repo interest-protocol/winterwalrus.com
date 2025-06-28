@@ -23,6 +23,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
         value: fetch(
           'https://swap.api.sui-prod.bluefin.io/api/v1/pools/info?pools=0x3ff28f5a754cfce6f2756a02a58cbcaedb97f4b566c285cf1cb6e83c5219e7c9',
           {
+            mode: 'no-cors',
             headers: { accept: 'application/json' },
           }
         )
