@@ -21,18 +21,10 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
       {
         name: 'APR',
         value: fetch(
-          'https://swap.api.sui-prod.bluefin.io/api/v1/pools/info?pools=0x3ff28f5a754cfce6f2756a02a58cbcaedb97f4b566c285cf1cb6e83c5219e7c9',
-          {
-            mode: 'no-cors',
-            headers: { accept: 'application/json' },
-          }
+          '/api/third-party/bluefin/0x3ff28f5a754cfce6f2756a02a58cbcaedb97f4b566c285cf1cb6e83c5219e7c9'
         )
           .then((res) => res.json())
-          .then((data) => `${data[0].day.apr.total}%`)
-          .catch((error) => {
-            console.log(error);
-            return '--';
-          }),
+          .then((data) => `${Number((+data[0].day.apr.total).toFixed(2))}%`),
       },
     ],
   },

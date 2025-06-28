@@ -3,7 +3,6 @@ import { FC } from 'react';
 
 import { Layout } from '@/components';
 
-import { DeFiTabs } from './components';
 import DeFiContent from './defi-content';
 
 const DeFi: FC = () => (
@@ -29,7 +28,6 @@ const DeFi: FC = () => (
         <H2 fontSize="1rem" fontWeight="600" color="#ffffff">
           DeFi
         </H2>
-        <DeFiTabs />
       </Div>
       <DeFiContent />
     </Div>

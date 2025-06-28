@@ -1,12 +1,12 @@
 import { Div, H3, Img, P } from '@stylin.js/elements';
 import Link from 'next/link';
 import { FC } from 'react';
-import Skeleton from 'react-loading-skeleton';
 import unikey from 'unikey';
 
 import useMetadata from '@/hooks/use-metadata';
 
 import { DeFiItemProps } from './defi-item.types';
+import DeFiItemMetric from './defi-item-cell';
 
 const DeFiItem: FC<DeFiItemProps> = ({
   logo,
@@ -27,6 +27,7 @@ const DeFiItem: FC<DeFiItemProps> = ({
         borderRadius="1rem"
         flexDirection="column"
         border="1px solid #FFFFFF1A"
+        nHover={{ borderColor: '#99EFE466' }}
       >
         <Div display="flex" gap="0.5rem" alignItems="center" color="#FFFFFF">
           {logo}
@@ -73,26 +74,9 @@ const DeFiItem: FC<DeFiItemProps> = ({
             </Div>
             <Div color="#FFFFFF80">Assets</Div>
           </Div>
-          {metrics.map(({ name, value }) => {
-            const data =
-              typeof value === 'string' ? value : <Skeleton width="3rem" />;
-
-            return (
-              <Div
-                p="1rem"
-                display="flex"
-                key={unikey()}
-                alignItems="center"
-                fontSize="0.875rem  "
-                borderRadius="0.63rem"
-                flexDirection="column"
-                border="1px solid #FFFFFF1A"
-              >
-                <Div color="#FFFFFF">{data}</Div>
-                <Div color="#FFFFFF80">{name}</Div>
-              </Div>
-            );
-          })}
+          {metrics.map((metric) => (
+            <DeFiItemMetric key={unikey()} {...metric} />
+          ))}
         </Div>
       </Div>
     </Link>
