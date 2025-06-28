@@ -11,7 +11,7 @@ const DeFiTabs: FC = () => {
   }, []);
 
   return (
-    <Tabs tab={tab} setTab={setTab} tabs={['All', 'Lending', 'AMM', 'CDP']} />
+    <Tabs tab={tab} setTab={setTab} tabs={['All', 'Lending', 'DEX', 'CDP']} />
   );
 };
 

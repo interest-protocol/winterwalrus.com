@@ -1,4 +1,6 @@
 export { default as BarsSVG } from './bars';
+export { default as BluefinSVG } from './bluefin';
+export { default as BucketSVG } from './bucket';
 export { default as CaretDownSVG } from './caret-down';
 export { default as CaretUpSVG } from './caret-up';
 export { default as CheckSVG } from './check';
