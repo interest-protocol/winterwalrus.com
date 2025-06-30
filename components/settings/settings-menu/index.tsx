@@ -2,10 +2,10 @@ import { Div, Hr, Nav } from '@stylin.js/elements';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { map, toPairs } from 'ramda';
+import { map } from 'ramda';
 import { FC, useState } from 'react';
 
-import { Routes, RoutesEnum } from '@/constants';
+import { NAV_ITEMS, NAV_ITEMS_TITLE, Routes, RoutesEnum } from '@/constants';
 
 import SettingsMenuExplorer from './settings-menu-explorer';
 import SettingsMenuRPC from './settings-menu-rpc';
@@ -37,14 +37,14 @@ const SettingsMenu: FC = () => {
     >
       <Motion py="0.5rem" borderRadius="0.75rem" width="20rem">
         <Nav display={['block', 'block', 'block', 'none']}>
-          {map(([key, href]) => {
+          {map((key: RoutesEnum) => {
             const isActive =
               (key === RoutesEnum.Stake &&
                 pathname === Routes[RoutesEnum.Stake]) ||
               (key !== RoutesEnum.Stake && pathname.includes(Routes[key]));
 
             return (
-              <Link href={href} key={key}>
+              <Link href={Routes[key]} key={key}>
                 <Div
                   px="1rem"
                   py="0.5rem"
@@ -54,11 +54,11 @@ const SettingsMenu: FC = () => {
                   textTransform="capitalize"
                   color={isActive ? '#99EFE4' : '#FFFFFF80'}
                 >
-                  {key}
+                  {NAV_ITEMS_TITLE[key]}
                 </Div>
               </Link>
             );
-          }, toPairs(Routes))}
+          }, NAV_ITEMS)}
           <Hr border="none" borderBottom="1px solid #242424" mx="1rem" />
         </Nav>
         <SettingsMenuValidator />
