@@ -34,7 +34,6 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     logo: <NoodlesSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://noodles.fi/coins/0xb1b0650a8862e30e3f604fd6c5838bc25464b8d3d827fbd58af7cb9685b832bf::wwal::WWAL',
     metrics: [
-      { name: 'Category', value: 'DEX' },
       {
         name: 'Rank',
         value: fetch(
@@ -51,10 +50,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     title: 'Borrow on Bucket',
     logo: <BucketSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://www.bucketprotocol.io/borrow?token=wWAL',
-    metrics: [
-      { name: 'Category', value: 'CDP' },
-      { name: 'Interest Rate', value: '14%' },
-    ],
+    metrics: [{ name: 'Interest Rate', value: '14%' }],
   },
 ];
 
