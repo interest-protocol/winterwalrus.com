@@ -12,6 +12,7 @@ import DeFiItemMetric from './defi-item-cell';
 const DeFiItem: FC<DeFiItemProps> = ({
   logo,
   link,
+  kind,
   title,
   assets,
   metrics,
@@ -84,6 +85,7 @@ const DeFiItem: FC<DeFiItemProps> = ({
             </Div>
             <Div color="#FFFFFF80">Assets</Div>
           </Div>
+          <DeFiItemMetric key={unikey()} name="Category" value={kind} />
           {metrics.map((metric) => (
             <DeFiItemMetric key={unikey()} {...metric} />
           ))}
