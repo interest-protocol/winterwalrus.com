@@ -3,7 +3,7 @@ import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { useWalPrice } from '@/hooks/use-wal-price';
-import { formatDollars, formatMoney } from '@/utils';
+import { formatMoney } from '@/utils';
 
 import useStats from '../../hooks/use-stats';
 
@@ -12,14 +12,16 @@ const HeaderTVL: FC = () => {
   const { data: price, isLoading: priceLoading } = useWalPrice();
 
   return (
-    <Div gap="0.25rem" display="flex" fontSize="0.875rem" alignItems="center">
+    <Div gap="0.5rem" display="flex" fontSize="0.875rem" alignItems="center">
       <P color="#FFFFFF80">TVL: </P>
-      <Div>
+      <Div textAlign="right">
         <P color="#FFFFFF" fontFamily="JetBrains Mono">
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
-            formatDollars(data ? Number(data.totalTvl) * (price ?? 1) : 0)
+            `${formatMoney(
+              data ? Number(data.totalTvl) * (price ?? 1) : 0
+            )} USD`
           )}
         </P>
         <P color="#FFFFFF" fontFamily="JetBrains Mono">
