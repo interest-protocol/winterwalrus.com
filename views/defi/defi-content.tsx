@@ -52,7 +52,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     logo: <BucketSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://www.bucketprotocol.io/borrow?token=wWAL',
     metrics: [
-      { name: 'Category', value: 'Lending' },
+      { name: 'Category', value: 'CDP' },
       { name: 'Interest Rate', value: '14%' },
     ],
   },
