@@ -163,7 +163,7 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
                     justifyContent="flex-end"
                     border="1px solid #FFFFFF33"
                   >
-                    <Span color="#C484F6" fontFamily="JetBrains Mono">
+                    <Span color="#99EFE4" fontFamily="JetBrains Mono">
                       {balances[normalizeStructTag(type)]
                         ? formatMoney(
                             Number(
