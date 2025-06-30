@@ -13,7 +13,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     kind: 'DEX',
     assets: [TYPES.WWAL, TYPES.WAL],
     title: 'Deposit on Bluefin',
-    logo: <BluefinSVG maxWidth="1rem" width="100%" />,
+    logo: <BluefinSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://trade.bluefin.io/deposit/0x3ff28f5a754cfce6f2756a02a58cbcaedb97f4b566c285cf1cb6e83c5219e7c9',
     metrics: [
       { name: 'Category', value: 'DEX' },
@@ -31,7 +31,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     kind: 'DEX',
     assets: [TYPES.WWAL],
     title: 'Trade on Noodles',
-    logo: <NoodlesSVG maxWidth="1rem" width="100%" />,
+    logo: <NoodlesSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://noodles.fi/coins/0xb1b0650a8862e30e3f604fd6c5838bc25464b8d3d827fbd58af7cb9685b832bf::wwal::WWAL',
     metrics: [
       { name: 'Category', value: 'DEX' },
@@ -49,7 +49,7 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     kind: 'CDP',
     assets: [TYPES.WWAL],
     title: 'Borrow on Bucket',
-    logo: <BucketSVG maxWidth="1rem" width="100%" />,
+    logo: <BucketSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://www.bucketprotocol.io/borrow?token=wWAL',
     metrics: [
       { name: 'Category', value: 'Lending' },
