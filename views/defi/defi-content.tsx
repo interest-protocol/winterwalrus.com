@@ -16,7 +16,6 @@ const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
     logo: <BluefinSVG maxWidth="1.5rem" width="100%" />,
     link: 'https://trade.bluefin.io/deposit/0x3ff28f5a754cfce6f2756a02a58cbcaedb97f4b566c285cf1cb6e83c5219e7c9',
     metrics: [
-      { name: 'Category', value: 'DEX' },
       {
         name: 'APR',
         value: fetch(

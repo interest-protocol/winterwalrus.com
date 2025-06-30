@@ -47,7 +47,7 @@ const DeFiItem: FC<DeFiItemProps> = ({
         <Div
           gap="0.5rem"
           display="grid"
-          gridTemplateColumns={`repeat(${metrics.length + 1}, 1fr)`}
+          gridTemplateColumns={`repeat(${metrics.length + 2}, 1fr)`}
         >
           <Div
             p="1rem"
