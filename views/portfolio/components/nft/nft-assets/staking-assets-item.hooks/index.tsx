@@ -109,18 +109,19 @@ export const useStakingAction = (
               ...possiblyDeletedObjects,
               ...possiblyCreatedObjects.map(({ objectId }) => objectId),
             ],
-            balances: dryTx.balanceChanges.reduce(
-              (acc, { coinType, amount, owner }) =>
-                path(['AddressOwner'], owner) === account?.address
-                  ? {
-                      ...acc,
-                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
-                        acc[coinType] ?? ZERO_BIG_NUMBER
-                      ),
-                    }
-                  : acc,
-              { ...balances, ...principalsByType }
-            ),
+            balances:
+              dryTx.balanceChanges.reduce(
+                (acc, { coinType, amount, owner }) =>
+                  path(['AddressOwner'], owner) === account?.address
+                    ? {
+                        ...acc,
+                        [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                          acc[coinType] ?? ZERO_BIG_NUMBER
+                        ),
+                      }
+                    : acc,
+                { ...balances, ...principalsByType }
+              ) ?? balances,
           };
         }
       );

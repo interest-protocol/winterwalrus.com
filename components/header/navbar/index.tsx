@@ -1,24 +1,24 @@
 import { Div, Nav, Span } from '@stylin.js/elements';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { map, toPairs } from 'ramda';
+import { map } from 'ramda';
 import { FC } from 'react';
 
 import { ExternalLinkSVG } from '@/components/svg';
-import { Routes, RoutesEnum } from '@/constants';
+import { NAV_ITEMS, Routes, RoutesEnum } from '@/constants';
 
 const Navbar: FC = () => {
   const { pathname } = useRouter();
 
   const links = map(
-    ([key, href]) => ({
-      href,
+    (key) => ({
+      href: Routes[key],
       label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
       active:
         (key === RoutesEnum.Stake && pathname === Routes[RoutesEnum.Stake]) ||
         (key !== RoutesEnum.Stake && pathname.includes(Routes[key])),
     }),
-    toPairs(Routes)
+    NAV_ITEMS
   );
 
   return (

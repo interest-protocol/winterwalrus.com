@@ -1,4 +1,6 @@
 export { default as BarsSVG } from './bars';
+export { default as BluefinSVG } from './bluefin';
+export { default as BucketSVG } from './bucket';
 export { default as CaretDownSVG } from './caret-down';
 export { default as CaretUpSVG } from './caret-up';
 export { default as CheckSVG } from './check';
@@ -18,6 +20,7 @@ export { default as InfoSVG } from './info';
 export { default as LoaderSVG } from './loader';
 export { default as LogoSVG } from './logo';
 export { default as LogoutSVG } from './logout';
+export { default as NoodlesSVG } from './noodles';
 export { default as PizzaPart25PercentSVG } from './pizza-part-25';
 export { default as PizzaPart50PercentSVG } from './pizza-part-50';
 export { default as PizzaPart100PercentSVG } from './pizza-part-100';
