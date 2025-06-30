@@ -21,3 +21,11 @@ export const NAV_ITEMS: ReadonlyArray<RoutesEnum> = [
   RoutesEnum.Portfolio,
   RoutesEnum.Stats,
 ];
+
+export const NAV_ITEMS_TITLE: Record<RoutesEnum, string> = {
+  [RoutesEnum.Stake]: 'Stake',
+  [RoutesEnum.Pools]: 'Pools',
+  [RoutesEnum.DeFi]: 'DeFi',
+  [RoutesEnum.Portfolio]: 'Portfolio',
+  [RoutesEnum.Stats]: 'Stats',
+};
