@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FC } from 'react';
 import unikey from 'unikey';
 
+import { ExternalLinkSVG } from '@/components/svg';
 import useMetadata from '@/hooks/use-metadata';
 
 import { DeFiItemProps } from './defi-item.types';
@@ -29,9 +30,18 @@ const DeFiItem: FC<DeFiItemProps> = ({
         border="1px solid #FFFFFF1A"
         nHover={{ borderColor: '#99EFE466' }}
       >
-        <Div display="flex" gap="0.5rem" alignItems="center" color="#FFFFFF">
-          {logo}
-          <H3 fontSize="1.125rem">{title}</H3>
+        <Div
+          gap="0.5rem"
+          display="flex"
+          color="#FFFFFF"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Div display="flex" gap="0.5rem" alignItems="center" color="#FFFFFF">
+            {logo}
+            <H3 fontSize="1.125rem">{title}</H3>
+          </Div>
+          <ExternalLinkSVG maxWidth="1rem" width="100%" />
         </Div>
         <Div
           gap="0.5rem"
