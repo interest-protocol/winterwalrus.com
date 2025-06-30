@@ -13,9 +13,11 @@ const HeaderTVL: FC = () => {
 
   return (
     <Div gap="0.5rem" display="flex" fontSize="0.875rem" alignItems="center">
-      <P color="#FFFFFF80">TVL: </P>
+      <P color="#FFFFFF80" display={['none', 'block']}>
+        TVL:{' '}
+      </P>
       <Div textAlign="right">
-        <P color="#FFFFFF" fontFamily="JetBrains Mono">
+        <P color="#FFFFFF" fontFamily="JetBrains Mono" whiteSpace="nowrap">
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
@@ -24,7 +26,7 @@ const HeaderTVL: FC = () => {
             )} USD`
           )}
         </P>
-        <P color="#FFFFFF" fontFamily="JetBrains Mono">
+        <P color="#FFFFFF" fontFamily="JetBrains Mono" whiteSpace="nowrap">
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
