@@ -9,13 +9,13 @@ import Navbar from './navbar';
 
 const Header: FC = () => (
   <HTMLHeader
-    p="1rem"
     mx="auto"
     width="100%"
     display="flex"
     maxWidth="1440px"
     position="relative"
     alignItems="center"
+    p={['0.5rem', '1rem']}
     justifyContent="space-between"
   >
     <Div display="flex" alignItems="center" gap={['0.5rem', '1rem', '2rem']}>

@@ -27,18 +27,23 @@ const Settings: FC = () => {
         all="unset"
         color="#fff"
         lineHeight="0"
+        display="flex"
         cursor="pointer"
-        borderRadius="0.75rem"
+        alignItems="center"
+        justifyContent="center"
+        width={['2rem', 'unset']}
+        height={['2rem', 'unset']}
         onClick={() => setShow(not)}
         border="1px solid #99EFE44D"
+        borderRadius={['0.5rem', '0.75rem']}
         nHover={{ bg: '#99EFE480', borderColor: '#99EFE44D' }}
       >
         <Span
-          p="0.75rem"
+          p="0.25rem"
           transition="all 300ms linear"
           display={['inline-block', 'inline-block', 'inline-block', 'none']}
         >
-          <BarsSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
+          <BarsSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
         </Span>
         <Span
           p={['0.5rem', '0.75rem']}

@@ -1,4 +1,4 @@
-import { Div, P } from '@stylin.js/elements';
+import { Div, P, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -12,23 +12,34 @@ const HeaderTVL: FC = () => {
   const { data: price, isLoading: priceLoading } = useWalPrice();
 
   return (
-    <Div gap="0.5rem" display="flex" fontSize="0.875rem" alignItems="center">
-      <P color="#FFFFFF80">TVL: </P>
-      <Div textAlign="right">
-        <P color="#FFFFFF" fontFamily="JetBrains Mono">
+    <Div
+      gap="0.25rem"
+      display="flex"
+      p={['0.625rem', '0.825rem']}
+      border="1px solid #99EFE44D"
+      borderRadius={['0.5rem', '0.75rem']}
+      fontSize={['0.625rem', '0.75rem', '0.875rem']}
+      nHover={{ bg: '#99EFE480', borderColor: '#99EFE44D' }}
+    >
+      <P color="#FFFFFF80">TVL</P>
+      <Div textAlign="right" display="flex" gap="0.25rem">
+        <P color="#FFFFFF" fontFamily="JetBrains Mono" whiteSpace="nowrap">
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
             `${formatMoney(
-              data ? Number(data.totalTvl) * (price ?? 1) : 0
+              data ? Number(data.totalTvl) * (price ?? 1) : 0,
+              2,
+              true
             )} USD`
           )}
-        </P>
-        <P color="#FFFFFF" fontFamily="JetBrains Mono">
+        </P>{' '}
+        <Span color="#FFFFFF80">|</Span>{' '}
+        <P color="#FFFFFF" fontFamily="JetBrains Mono" whiteSpace="nowrap">
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
-            `${formatMoney(data ? Number(data.totalTvl) : 0)} WAL`
+            `${formatMoney(data ? Number(data.totalTvl) : 0, 2, true)} WAL`
           )}
         </P>
       </Div>
