@@ -55,7 +55,9 @@ const WalletProfile: FC = () => {
             borderRadius="50%"
             src={currentWallet.currentWallet?.icon}
           />
-          <Span>{formatAddress(currentAccount!.address)}</Span>
+          <Span whiteSpace="nowrap">
+            {formatAddress(currentAccount!.address)}
+          </Span>
           <Span display={['none', 'flex']} alignItems="center" ml="0.25rem">
             <ChevronDownSVG
               width="100%"
@@ -70,25 +72,27 @@ const WalletProfile: FC = () => {
       </Div>
       <Button
         all="unset"
-        gap="0.5rem"
+        gap="0.25rem"
         bg="#99EFE41A"
         color="#F1F1F1"
         cursor="pointer"
         alignItems="center"
-        borderRadius="0.75rem"
-        py={['0.75rem', '1rem']}
-        px={['0.75rem', '1.5rem']}
+        borderRadius="0.5rem"
+        py={['0.625rem', '1rem']}
+        px={['0.5rem', '1.5rem']}
         onClick={handleOpenProfileModal}
+        fontSize={['0.75rem', '0.875rem']}
         display={['flex', 'flex', 'none']}
       >
         <Img
           alt="Wallet"
-          width="1.5rem"
-          height="1.5rem"
+          width="1rem"
+          height="1rem"
           borderRadius="50%"
           src={currentWallet.currentWallet?.icon}
         />
-        {formatAddress(currentAccount!.address)}
+        {currentAccount!.address.slice(0, 4)}...
+        {currentAccount!.address.slice(-4)}
         <Span display={['none', 'inline']}>
           <ChevronDownSVG maxWidth="0.65rem" maxHeight="0.65rem" width="100%" />
         </Span>
