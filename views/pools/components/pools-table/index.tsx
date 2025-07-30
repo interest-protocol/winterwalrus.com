@@ -1,7 +1,6 @@
 import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { Div, P } from '@stylin.js/elements';
-import { toPairs } from 'ramda';
 import { FC, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import unikey from 'unikey';
@@ -19,32 +18,35 @@ const PoolsTable: FC = () => {
 
   const pools = useMemo(
     () =>
-      toPairs(POOLS).filter(([, { lpCoinType, coinTypes }]) => {
-        const normalizedSearch = search.trim().toLowerCase();
+      [['WAL_WWAL', POOLS.WAL_WWAL]].filter(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ([, { lpCoinType, coinTypes }]: any[]) => {
+          const normalizedSearch = search.trim().toLowerCase();
 
-        if (normalizedSearch) {
-          const foundLPToken = lpCoinType
-            ?.toLowerCase()
-            .startsWith(normalizedSearch);
-          const foundAnyToken = coinTypes?.some((ct: string) =>
-            ct.toLowerCase().startsWith(normalizedSearch)
-          );
+          if (normalizedSearch) {
+            const foundLPToken = lpCoinType
+              ?.toLowerCase()
+              .startsWith(normalizedSearch);
+            const foundAnyToken = coinTypes?.some((ct: string) =>
+              ct.toLowerCase().startsWith(normalizedSearch)
+            );
 
-          const foundToken = foundLPToken || foundAnyToken;
+            const foundToken = foundLPToken || foundAnyToken;
 
-          if (!foundToken) return false;
+            if (!foundToken) return false;
+          }
+
+          const isMyPosition = !!tab;
+
+          if (!isMyPosition) return true;
+
+          const hasLPToken =
+            balances[normalizeStructTag(lpCoinType)] &&
+            !balances[normalizeStructTag(lpCoinType)].isZero();
+
+          return hasLPToken;
         }
-
-        const isMyPosition = !!tab;
-
-        if (!isMyPosition) return true;
-
-        const hasLPToken =
-          balances[normalizeStructTag(lpCoinType)] &&
-          !balances[normalizeStructTag(lpCoinType)].isZero();
-
-        return hasLPToken;
-      }),
+      ),
     [tab, balances, search]
   );
 
