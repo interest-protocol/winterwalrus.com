@@ -15,8 +15,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(typescript@5.8.3)
       '@interest-protocol/interest-stable-swap-sdk':
-        specifier: ^1.0.0
-        version: 1.3.0(typescript@5.8.3)
+        specifier: ^2.1.0
+        version: 2.1.0(typescript@5.8.3)
       '@interest-protocol/sui-core-sdk':
         specifier: ^0.0.1
         version: 0.0.1(typescript@5.8.3)
@@ -454,8 +454,8 @@ packages:
   '@interest-protocol/blizzard-sdk@3.3.0':
     resolution: {integrity: sha512-d3uT6TdUSo77RkZ2V9wfuZsiLNHddlM//00d5R08dqodS/Ik8wSnmF61vgdFPhyFMdIwek6VUNMlaw7sNVsa3Q==}
 
-  '@interest-protocol/interest-stable-swap-sdk@1.3.0':
-    resolution: {integrity: sha512-czNqnY+OtB10UwDGA4R9Uzg87Gmh07gYgr3TTmD2v3JYwPryqQYmHuI0wZ8i69oCJVyEfmY0pA703z2qyrtQwg==}
+  '@interest-protocol/interest-stable-swap-sdk@2.1.0':
+    resolution: {integrity: sha512-ySGmhh0Dn8nLaS5eyBFe9PIeN8+jPVd+7iSWLpxuz3/BR5WWRtprpR+vRGmz1/Icmmwt1vnLSJCf+skGNDVYng==}
 
   '@interest-protocol/sui-core-sdk@0.0.1':
     resolution: {integrity: sha512-Rajxynj90qrazuS/kbzzDhkftxp+2oE2gct7Ly/C22jRKztAsY9J8kIhN+9QlTfAkuoPEtABsD9zh8/zx3MSlQ==}
@@ -3681,7 +3681,7 @@ snapshots:
       - '@gql.tada/vue-support'
       - typescript
 
-  '@interest-protocol/interest-stable-swap-sdk@1.3.0(typescript@5.8.3)':
+  '@interest-protocol/interest-stable-swap-sdk@2.1.0(typescript@5.8.3)':
     dependencies:
       '@mysten/sui': 1.37.1(typescript@5.8.3)
       '@polymedia/suitcase-core': 0.0.36(@mysten/sui@1.37.1(typescript@5.8.3))
