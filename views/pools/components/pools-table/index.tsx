@@ -1,6 +1,7 @@
 import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { Div, P } from '@stylin.js/elements';
+import { toPairs } from 'ramda';
 import { FC, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import unikey from 'unikey';
@@ -18,9 +19,9 @@ const PoolsTable: FC = () => {
 
   const pools = useMemo(
     () =>
-      [['WAL_WWAL', POOLS.WAL_WWAL]].filter(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ([, { lpCoinType, coinTypes }]: any[]) => {
+      toPairs(POOLS)
+        .slice(0, 1)
+        .filter(([, { lpCoinType, coinTypes }]) => {
           const normalizedSearch = search.trim().toLowerCase();
 
           if (normalizedSearch) {
@@ -45,8 +46,7 @@ const PoolsTable: FC = () => {
             !balances[normalizeStructTag(lpCoinType)].isZero();
 
           return hasLPToken;
-        }
-      ),
+        }),
     [tab, balances, search]
   );
 
