@@ -19,32 +19,34 @@ const PoolsTable: FC = () => {
 
   const pools = useMemo(
     () =>
-      toPairs(POOLS).filter(([, { lpCoinType, coinTypes }]) => {
-        const normalizedSearch = search.trim().toLowerCase();
+      toPairs(POOLS)
+        .slice(0, 1)
+        .filter(([, { lpCoinType, coinTypes }]) => {
+          const normalizedSearch = search.trim().toLowerCase();
 
-        if (normalizedSearch) {
-          const foundLPToken = lpCoinType
-            ?.toLowerCase()
-            .startsWith(normalizedSearch);
-          const foundAnyToken = coinTypes?.some((ct: string) =>
-            ct.toLowerCase().startsWith(normalizedSearch)
-          );
+          if (normalizedSearch) {
+            const foundLPToken = lpCoinType
+              ?.toLowerCase()
+              .startsWith(normalizedSearch);
+            const foundAnyToken = coinTypes?.some((ct: string) =>
+              ct.toLowerCase().startsWith(normalizedSearch)
+            );
 
-          const foundToken = foundLPToken || foundAnyToken;
+            const foundToken = foundLPToken || foundAnyToken;
 
-          if (!foundToken) return false;
-        }
+            if (!foundToken) return false;
+          }
 
-        const isMyPosition = !!tab;
+          const isMyPosition = !!tab;
 
-        if (!isMyPosition) return true;
+          if (!isMyPosition) return true;
 
-        const hasLPToken =
-          balances[normalizeStructTag(lpCoinType)] &&
-          !balances[normalizeStructTag(lpCoinType)].isZero();
+          const hasLPToken =
+            balances[normalizeStructTag(lpCoinType)] &&
+            !balances[normalizeStructTag(lpCoinType)].isZero();
 
-        return hasLPToken;
-      }),
+          return hasLPToken;
+        }),
     [tab, balances, search]
   );
 

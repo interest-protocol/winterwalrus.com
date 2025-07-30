@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MAX_BPS } from '@interest-protocol/blizzard-sdk';
+import { MAX_BPS } from '@interest-protocol/sui-core-sdk';
 import BigNumber from 'bignumber.js';
 
 import { BigNumberish } from '@/interface';
@@ -48,10 +48,10 @@ export const feesCalcUp = (
   amount: BigNumber
 ): [BigNumber, BigNumber] => {
   const [fee, value, maxBps] = [
-    BigInt(feeBps),
-    BigInt(String(amount.decimalPlaces(0, 1))),
+    feeBps,
+    String(amount.decimalPlaces(0, 1)),
     MAX_BPS,
-  ];
+  ].map(BigInt);
 
   const fees =
     (fee * value) / maxBps + BigInt((fee * value) % maxBps > BigInt(0) ? 1 : 0);
