@@ -3,12 +3,38 @@ import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
-import { BluefinSVG, BucketSVG, NoodlesSVG } from '@/components/svg';
+import {
+  BluefinSVG,
+  BucketSVG,
+  NoodlesSVG,
+  ScallopSVG,
+} from '@/components/svg';
 
 import { DeFiItem } from './components';
 import { DeFiItemProps } from './components/defi-item/defi-item.types';
 
 const DEFI_ITEMS: ReadonlyArray<DeFiItemProps> = [
+  {
+    kind: 'Lending',
+    assets: [TYPES.WWAL],
+    title: 'Lend on Scallop',
+    logo: <ScallopSVG maxWidth="1.5rem" width="100%" />,
+    link: 'https://app.scallop.io/',
+    metrics: [
+      {
+        name: 'Supply APY',
+        value: fetch('/api/third-party/scallop/supplyApy/wwal')
+          .then((res) => res.json())
+          .then((value) => `${+(value * 100).toFixed(2)}%`),
+      },
+      {
+        name: 'Borrow APY',
+        value: fetch('/api/third-party/scallop/borrowApy/wwal')
+          .then((res) => res.json())
+          .then((value) => `${+(value * 100).toFixed(2)}%`),
+      },
+    ],
+  },
   {
     kind: 'DEX',
     assets: [TYPES.WWAL, TYPES.WAL],

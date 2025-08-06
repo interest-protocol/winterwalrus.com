@@ -1,1 +1,1 @@
-export type DeFiKind = 'Lending' | 'DEX' | 'CDP';
+export type DeFiKind = 'Lending' | 'DEX' | 'CDP' | 'Lending';
