@@ -25,6 +25,17 @@ export const NFT_IMAGE = {
   [TYPES.BLIZZARD_STAKE_NFT]: '/blizzard-nft.png',
 } as const;
 
+export const LST_ICON_MAP: Record<string, string> = {
+  [LST_TYPES_MAP.WWAL]: 'https://api.interestlabs.io/files/w-wal-147x147.png',
+  [LST_TYPES_MAP.PWAL]: 'https://api.interestlabs.io/files/p-wal-147x147.png',
+  [LST_TYPES_MAP.MWAL]: 'https://api.interestlabs.io/files/m-wal-147x147.png',
+  [LST_TYPES_MAP.NWAL]: 'https://api.interestlabs.io/files/n-wal-147x147.png',
+  [LST_TYPES_MAP.BREADWAL]:
+    'https://api.interestlabs.io/files/bread-wal-147x147.png',
+  [LST_TYPES_MAP.UPWAL]: 'https://api.interestlabs.io/files/up-wal-147x147.png',
+  [LST_TYPES_MAP.TRWAL]: 'https://api.interestlabs.io/files/tr-wal-147x147.png',
+};
+
 export const ASSET_METADATA: Record<string, AssetMetadata> = {
   [SUI_TYPE_ARG]: {
     name: 'Sui',

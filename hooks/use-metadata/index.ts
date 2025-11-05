@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-import { ASSET_METADATA } from '@/constants';
+import { ASSET_METADATA, LST_ICON_MAP } from '@/constants';
 import { AssetMetadata } from '@/interface';
 
 const useMetadata = (rawTypes: ReadonlyArray<string>) =>
@@ -25,7 +25,16 @@ const useMetadata = (rawTypes: ReadonlyArray<string>) =>
           )
             .then((res) => res.json())
             .then((data: ReadonlyArray<AssetMetadata>) =>
-              data.reduce((acc, item) => ({ ...acc, [item.type]: item }), {})
+              data.reduce(
+                (acc, item) => ({
+                  ...acc,
+                  [item.type]: {
+                    ...item,
+                    iconUrl: LST_ICON_MAP[item.type] ?? item.iconUrl,
+                  },
+                }),
+                {}
+              )
             )
         : [];
 
