@@ -1,6 +1,7 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import { Global } from '@emotion/react';
+import { Analytics } from '@vercel/analytics/next';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Toaster } from 'react-hot-toast';
@@ -39,6 +40,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       <AppStateProvider />
       <BackgroundProvider />
       <Component {...pageProps} />
+      <Analytics />
     </SkeletonTheme>
   </Web3Provider>
 );
