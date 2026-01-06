@@ -2,7 +2,7 @@ import useSWR from 'swr';
 
 export const useCoinsPrice = (types: ReadonlyArray<string>) =>
   useSWR<Record<string, number>>([useCoinsPrice.name, types], () =>
-    fetch('https://api.interestlabs.io/v1/rates', {
+    fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
       method: 'POST',
       headers: {
         accept: '*/*',
