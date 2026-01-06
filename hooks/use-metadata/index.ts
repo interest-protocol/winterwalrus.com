@@ -21,7 +21,7 @@ const useMetadata = (rawTypes: ReadonlyArray<string>) =>
 
       const missingMetadata = missingTypes.length
         ? await fetch(
-            `https://api.interestlabs.io/v1/coins/mainnet/metadatas?coinTypes=${missingTypes}`
+            `https://coin-metadata-api-production.up.railway.app/api/v1/fetch-coins?coinTypes=${missingTypes}`
           )
             .then((res) => res.json())
             .then((data: ReadonlyArray<AssetMetadata>) =>

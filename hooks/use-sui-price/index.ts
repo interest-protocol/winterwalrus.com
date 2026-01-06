@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 export const useSuiPrice = () =>
   useSWR<number>([useSuiPrice.name], () =>
-    fetch('https://api.interestlabs.io/v1/rates', {
+    fetch('https://rates-api-production.up.railway.app/api/fetch-quote', {
       method: 'POST',
       headers: {
         accept: '*/*',
