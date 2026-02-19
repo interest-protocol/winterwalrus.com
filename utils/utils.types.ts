@@ -16,8 +16,7 @@ export interface GetCoinOfValueArgs {
   client: SuiClient;
 }
 
-export interface TimedSuiTransactionBlockResponse
-  extends SuiTransactionBlockResponse {
+export interface TimedSuiTransactionBlockResponse extends SuiTransactionBlockResponse {
   time: number;
 }
 
