@@ -10,5 +10,7 @@ export interface WalletProfileItemProps {
   account: WalletAccount;
 }
 
-export interface WalletProfileDropdownProps
-  extends Pick<WalletProfileItemProps, 'close'> {}
+export interface WalletProfileDropdownProps extends Pick<
+  WalletProfileItemProps,
+  'close'
+> {}
