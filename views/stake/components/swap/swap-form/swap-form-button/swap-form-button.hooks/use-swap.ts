@@ -1,18 +1,16 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import {
   useCurrentAccount,
   useSignTransaction,
   useSuiClient,
 } from '@mysten/dapp-kit';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { BigNumber } from 'bignumber.js';
-import { values } from 'ramda';
 import invariant from 'tiny-invariant';
 
 import { STAKING_OBJECT } from '@/constants';
+import useAftermathSdk from '@/hooks/use-aftermath-sdk';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
-import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
+import useEpochData from '@/hooks/use-epoch-data';
 import { signAndExecute } from '@/utils';
 
 import { SwapArgs } from '../swap-form-button.types';
@@ -20,9 +18,10 @@ import { SwapArgs } from '../swap-form-button.types';
 export const useSwap = () => {
   const client = useSuiClient();
   const blizzardSdk = useBlizzardSdk();
+  const aftermathSdk = useAftermathSdk();
   const currentAccount = useCurrentAccount();
   const signTransaction = useSignTransaction();
-  const interestStableSdk = useInterestStableSdk();
+  const { data: epoch } = useEpochData();
 
   return async ({
     onSuccess,
@@ -30,38 +29,51 @@ export const useSwap = () => {
     coinInType,
     coinOutType,
     coinInValue,
-    coinOutValue,
     coinInNoFeeValue,
   }: SwapArgs) => {
     invariant(currentAccount?.address, 'You must be logged in');
-    invariant(interestStableSdk && blizzardSdk, 'Failed to load sdk');
+    invariant(aftermathSdk && blizzardSdk && epoch, 'Failed to load sdk');
 
-    const tx = new Transaction();
+    const router = aftermathSdk.Router();
 
-    tx.setSender(currentAccount.address);
+    const needsTransmute =
+      coinInType !== TYPES.WAL && coinInType !== TYPES.WWAL;
 
-    let pool = values(POOLS).find(
-      ({ coinTypes }) =>
-        coinTypes.includes(coinInType) && coinTypes.includes(coinOutType)
-    );
-
-    const coinIn = coinWithBalance({
-      type: coinInType,
-      balance: coinInValue,
-    })(tx);
-
-    if (pool) {
-      const { returnValues } = await interestStableSdk.swap({
-        tx,
-        coinIn,
+    if (!needsTransmute) {
+      // Path 1: Direct swap (WAL↔WWAL) via Aftermath Router
+      const route = await router.getCompleteTradeRouteGivenAmountIn({
         coinInType,
         coinOutType,
-        pool: pool.objectId,
-        minAmountOut: coinOutValue,
+        coinInAmount: coinInValue,
       });
 
-      tx.transferObjects([returnValues], currentAccount.address);
-    } else if (coinOutType === TYPES.WWAL) {
+      const txForRoute = await router.getTransactionForCompleteTradeRoute({
+        walletAddress: currentAccount.address,
+        completeRoute: route,
+        slippage: 0.01,
+      });
+
+      return signAndExecute({
+        tx: txForRoute,
+        client,
+        currentAccount,
+        signTransaction,
+        callback: onSuccess,
+        fallback: onFailure,
+      });
+    }
+
+    if (coinOutType === TYPES.WWAL) {
+      // Path 2: LST→WWAL (pure Blizzard transmute)
+      const tx = new Transaction();
+
+      tx.setSender(currentAccount.address);
+
+      const coinIn = coinWithBalance({
+        type: coinInType,
+        balance: coinInValue,
+      })(tx);
+
       const {
         returnValues: [, withdrawIXs],
       } = await blizzardSdk.fcfs({
@@ -80,46 +92,79 @@ export const useSwap = () => {
       });
 
       tx.transferObjects([extraLst, wWal], currentAccount.address);
-    } else {
-      const {
-        returnValues: [, withdrawIXs],
-      } = await blizzardSdk.fcfs({
+
+      return signAndExecute({
         tx,
-        value: coinInNoFeeValue,
-        blizzardStaking: STAKING_OBJECT[coinInType],
+        client,
+        currentAccount,
+        signTransaction,
+        callback: onSuccess,
+        fallback: onFailure,
       });
-
-      const {
-        returnValues: [extraLst, wWal],
-      } = await blizzardSdk.transmute({
-        tx,
-        withdrawIXs,
-        fromCoin: coinIn,
-        fromBlizzardStaking: STAKING_OBJECT[coinInType],
-      });
-
-      pool = values(POOLS).find(
-        ({ coinTypes }) =>
-          coinTypes.includes(TYPES.WWAL) && coinTypes.includes(coinOutType)
-      );
-
-      const { returnValues } = await interestStableSdk.swap({
-        tx,
-        coinOutType,
-        coinIn: wWal,
-        pool: pool!.objectId,
-        coinInType: TYPES.WWAL,
-        minAmountOut: BigNumber(String(coinOutValue))
-          .times(0.95)
-          .decimalPlaces(0, 1)
-          .toString(),
-      });
-
-      tx.transferObjects([returnValues, extraLst], currentAccount.address);
     }
 
-    return signAndExecute({
+    // Path 3: LST→WAL (transmute to wWAL, then Aftermath Router wWAL→WAL)
+    const tx = new Transaction();
+
+    tx.setSender(currentAccount.address);
+
+    const coinIn = coinWithBalance({
+      type: coinInType,
+      balance: coinInValue,
+    })(tx);
+
+    const {
+      returnValues: [, withdrawIXs],
+    } = await blizzardSdk.fcfs({
       tx,
+      value: coinInNoFeeValue,
+      blizzardStaking: STAKING_OBJECT[coinInType],
+    });
+
+    const {
+      returnValues: [extraLst, wWal],
+    } = await blizzardSdk.transmute({
+      tx,
+      withdrawIXs,
+      fromCoin: coinIn,
+      fromBlizzardStaking: STAKING_OBJECT[coinInType],
+    });
+
+    // Calculate expected wWAL amount for routing
+    const walAmount = await blizzardSdk.toWalAtEpoch({
+      epoch: epoch.currentEpoch,
+      blizzardStaking: STAKING_OBJECT[coinInType],
+      value: String(coinInNoFeeValue),
+    });
+
+    const wWalAmount = await blizzardSdk.toLstAtEpoch({
+      value: walAmount!,
+      epoch: epoch.currentEpoch,
+      blizzardStaking: STAKING_OBJECT[TYPES.WWAL],
+    });
+
+    const route = await router.getCompleteTradeRouteGivenAmountIn({
+      coinInType: TYPES.WWAL,
+      coinOutType,
+      coinInAmount: BigInt(wWalAmount!),
+    });
+
+    const { tx: swapTx, coinOutId } =
+      await router.addTransactionForCompleteTradeRoute({
+        tx,
+        walletAddress: currentAccount.address,
+        completeRoute: route,
+        slippage: 0.01,
+        coinInId: wWal,
+      });
+
+    const transferObjs = [extraLst];
+    if (coinOutId) transferObjs.push(coinOutId);
+
+    swapTx.transferObjects(transferObjs, currentAccount.address);
+
+    return signAndExecute({
+      tx: swapTx,
       client,
       currentAccount,
       signTransaction,

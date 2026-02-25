@@ -1,21 +1,19 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import BigNumber from 'bignumber.js';
-import { values } from 'ramda';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { STAKING_OBJECT } from '@/constants';
+import useAftermathSdk from '@/hooks/use-aftermath-sdk';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
-import useInterestStableSdk from '@/hooks/use-interest-stable-sdk';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 const SwapFormManager: FC = () => {
   const blizzardSdk = useBlizzardSdk();
+  const aftermathSdk = useAftermathSdk();
   const { data: epoch } = useEpochData();
-  const interestStableSdk = useInterestStableSdk();
   const { control, getValues, setValue } = useFormContext();
 
   const { fees } = useFees(getValues('in.type'));
@@ -26,28 +24,28 @@ const SwapFormManager: FC = () => {
   });
 
   useEffect(() => {
-    if (!interestStableSdk || !coinInValue || !blizzardSdk || !epoch) return;
+    if (!aftermathSdk || !coinInValue || !blizzardSdk || !epoch) return;
 
-    const pool = values(POOLS).find(({ coinTypes }) =>
-      coinTypes.every((type) => [coinIn, coinOut].includes(type))
-    );
+    const needsTransmute = coinIn !== TYPES.WAL && coinIn !== TYPES.WWAL;
 
     setValue('quoting', true);
 
-    if (pool) {
-      interestStableSdk
-        .quoteSwap({
+    if (!needsTransmute) {
+      // Path 1: Direct swap (WAL↔WWAL) via Aftermath Router
+      const router = aftermathSdk.Router();
+
+      router
+        .getCompleteTradeRouteGivenAmountIn({
           coinInType: coinIn,
-          pool: pool.objectId,
           coinOutType: coinOut,
-          amountIn: BigInt(coinInValue.toFixed(0)),
+          coinInAmount: BigInt(coinInValue.toFixed(0)),
         })
-        .then(({ amountOut }) => {
-          setValue('out.valueBN', BigNumber(String(amountOut)));
-          setValue('in.valueNoFeeBN', BigNumber(String(amountOut)));
+        .then((route) => {
+          setValue('out.valueBN', BigNumber(String(route.coinOut.amount)));
+          setValue('in.valueNoFeeBN', coinInValue);
           setValue(
             'out.value',
-            FixedPointMath.toNumber(BigNumber(String(amountOut)))
+            FixedPointMath.toNumber(BigNumber(String(route.coinOut.amount)))
           );
         })
         .catch()
@@ -59,6 +57,7 @@ const SwapFormManager: FC = () => {
     if (!fees) return;
 
     if (coinOut === TYPES.WAL) {
+      // Path 2: LST→WAL (transmute to wWAL, then Aftermath Router wWAL→WAL)
       blizzardSdk
         .toWalAtEpoch({
           epoch: epoch.currentEpoch,
@@ -71,37 +70,30 @@ const SwapFormManager: FC = () => {
         .then(async (walAmount) => {
           if (!walAmount) return;
 
-          await blizzardSdk
-            .toLstAtEpoch({
-              value: walAmount,
-              epoch: epoch.currentEpoch,
-              blizzardStaking: STAKING_OBJECT[TYPES.WWAL],
+          const wWalAmount = await blizzardSdk.toLstAtEpoch({
+            value: walAmount,
+            epoch: epoch.currentEpoch,
+            blizzardStaking: STAKING_OBJECT[TYPES.WWAL],
+          });
+
+          if (!wWalAmount) return;
+
+          const router = aftermathSdk.Router();
+
+          await router
+            .getCompleteTradeRouteGivenAmountIn({
+              coinInType: TYPES.WWAL,
+              coinOutType: TYPES.WAL,
+              coinInAmount: BigInt(wWalAmount),
             })
-            .then(async (wWalAmount) => {
-              if (!wWalAmount) return;
-
-              const pool = values(POOLS).find(({ coinTypes }) =>
-                coinTypes.every((type) => [coinOut, TYPES.WWAL].includes(type))
+            .then((route) => {
+              setValue('out.valueBN', BigNumber(String(route.coinOut.amount)));
+              setValue(
+                'out.value',
+                FixedPointMath.toNumber(BigNumber(String(route.coinOut.amount)))
               );
-
-              if (!pool) return;
-
-              await interestStableSdk
-                .quoteSwap({
-                  pool: pool.objectId,
-                  coinOutType: coinOut,
-                  coinInType: TYPES.WWAL,
-                  amountIn: BigInt(wWalAmount),
-                })
-                .then(({ amountOut }) => {
-                  setValue('out.valueBN', BigNumber(String(amountOut)));
-                  setValue(
-                    'out.value',
-                    FixedPointMath.toNumber(BigNumber(String(amountOut)))
-                  );
-                })
-                .catch();
-            });
+            })
+            .catch();
 
           setValue(
             'in.valueNoFeeBN',
@@ -113,6 +105,7 @@ const SwapFormManager: FC = () => {
       return;
     }
 
+    // Path 3: LST→WWAL (transmute only, no AMM)
     blizzardSdk
       .toWalAtEpoch({
         epoch: epoch.currentEpoch,
