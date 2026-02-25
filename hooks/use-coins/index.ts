@@ -1,9 +1,7 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
-import { values } from 'ramda';
 import useSWR from 'swr';
 
 import { LST_TYPES } from '@/constants';
@@ -27,7 +25,6 @@ export const useCoins = () => {
             normalizeStructTag(SUI_TYPE_ARG),
             normalizeStructTag(TYPES.WAL),
             ...LST_TYPES.map(normalizeStructTag),
-            ...values(POOLS).map(({ lpCoinType }) => lpCoinType),
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,

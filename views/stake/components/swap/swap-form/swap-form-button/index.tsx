@@ -1,5 +1,3 @@
-import { POOLS } from '@interest-protocol/interest-stable-swap-sdk';
-import { values } from 'ramda';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -15,9 +13,9 @@ const SwapFormButton: FC = () => {
   const { onSwap, loading } = useSwapAction();
   const { control, getValues } = useFormContext();
 
-  const [amountIn, amountOut, coinIn, coinOut, quoting] = useWatch({
+  const [amountIn, amountOut, quoting] = useWatch({
     control,
-    name: ['in.value', 'out.value', 'in.type', 'out.type', 'quoting'],
+    name: ['in.value', 'out.value', 'quoting'],
   });
 
   const insufficientBalance =
@@ -25,14 +23,7 @@ const SwapFormButton: FC = () => {
     Number(amountIn) >
       FixedPointMath.toNumber(coins?.[getValues('in.type')] ?? ZERO_BIG_NUMBER);
 
-  const minAmountOut = 1;
-
-  const insufficientAmountOut =
-    !values(POOLS).some(({ coinTypes }) =>
-      coinTypes.every((coin) => [coinIn, coinOut].includes(coin))
-    ) &&
-    !!Number(amountOut) &&
-    Number(amountOut) < minAmountOut;
+  const insufficientAmountOut = !!Number(amountOut) && Number(amountOut) < 1;
 
   const disabled =
     quoting || loading || insufficientBalance || insufficientAmountOut;
