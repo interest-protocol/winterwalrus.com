@@ -26,14 +26,13 @@ export const NFT_IMAGE = {
 } as const;
 
 export const LST_ICON_MAP: Record<string, string> = {
-  [LST_TYPES_MAP.WWAL]: 'https://api.interestlabs.io/files/w-wal-147x147.png',
-  [LST_TYPES_MAP.PWAL]: 'https://api.interestlabs.io/files/p-wal-147x147.png',
-  [LST_TYPES_MAP.MWAL]: 'https://api.interestlabs.io/files/m-wal-147x147.png',
-  [LST_TYPES_MAP.NWAL]: 'https://api.interestlabs.io/files/n-wal-147x147.png',
-  [LST_TYPES_MAP.BREADWAL]:
-    'https://api.interestlabs.io/files/bread-wal-147x147.png',
-  [LST_TYPES_MAP.UPWAL]: 'https://api.interestlabs.io/files/up-wal-147x147.png',
-  [LST_TYPES_MAP.TRWAL]: 'https://api.interestlabs.io/files/tr-wal-147x147.png',
+  [LST_TYPES_MAP.WWAL]: '/wWAL.webp',
+  [LST_TYPES_MAP.PWAL]: '/pWAL.webp',
+  [LST_TYPES_MAP.MWAL]: '/mWal.webp',
+  [LST_TYPES_MAP.NWAL]: '/nWAL.webp',
+  [LST_TYPES_MAP.BREADWAL]: '/breadWal.webp',
+  [LST_TYPES_MAP.UPWAL]: '/upWal.webp',
+  [LST_TYPES_MAP.TRWAL]: '/trWal.webp',
 };
 
 export const ASSET_METADATA: Record<string, AssetMetadata> = {
