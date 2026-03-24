@@ -11,6 +11,8 @@ const HeaderTVL: FC = () => {
   const { data, isLoading } = useStats();
   const { data: price, isLoading: priceLoading } = useWalPrice();
 
+  console.log({ price, priceLoading });
+
   return (
     <Div
       gap="0.25rem"
