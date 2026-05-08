@@ -13,7 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@interest-protocol/blizzard-sdk": "^4.1.0",
     "@interest-protocol/sui-core-sdk": "^0.0.1",
-    "@interest-protocol/walrus-sdk": "^1.0.0",
+    "@interest-protocol/walrus-sdk": "^2.0.0",
     "@mysten/dapp-kit": "0.17.0",
     "@mysten/sui": "1.36.2",
     "@stylin.js/elements": "^1.0.2",

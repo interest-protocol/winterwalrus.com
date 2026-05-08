@@ -18,8 +18,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1(typescript@5.9.3)
       '@interest-protocol/walrus-sdk':
-        specifier: ^1.0.0
-        version: 1.0.0(typescript@5.9.3)
+        specifier: ^2.0.0
+        version: 2.0.0(typescript@5.9.3)
       '@mysten/dapp-kit':
         specifier: 0.17.0
         version: 0.17.0(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
@@ -597,8 +597,8 @@ packages:
   '@interest-protocol/sui-core-sdk@0.0.1':
     resolution: {integrity: sha512-Rajxynj90qrazuS/kbzzDhkftxp+2oE2gct7Ly/C22jRKztAsY9J8kIhN+9QlTfAkuoPEtABsD9zh8/zx3MSlQ==}
 
-  '@interest-protocol/walrus-sdk@1.0.0':
-    resolution: {integrity: sha512-fBuWH9KTynYK6WOzLmY11tYDKQrGuRVgJLkP7yP6ZzX/KQ+x2EHtymOCJKTu5TcMxyfscbE9U/TUz/DkPEnDPQ==}
+  '@interest-protocol/walrus-sdk@2.0.0':
+    resolution: {integrity: sha512-MTPt5L7KUpP+1iQVwNy8AKcpMMJDSRoXGJDuCD5Dx65JSMSjx3TjfiYhliFSj31CuyHLj5nVaV29lfwFIsaGqQ==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -4036,7 +4036,7 @@ snapshots:
       - '@gql.tada/vue-support'
       - typescript
 
-  '@interest-protocol/walrus-sdk@1.0.0(typescript@5.9.3)':
+  '@interest-protocol/walrus-sdk@2.0.0(typescript@5.9.3)':
     dependencies:
       '@mysten/sui': 1.36.2(typescript@5.9.3)
       '@polymedia/suitcase-core': 0.0.36(@mysten/sui@1.36.2(typescript@5.9.3))

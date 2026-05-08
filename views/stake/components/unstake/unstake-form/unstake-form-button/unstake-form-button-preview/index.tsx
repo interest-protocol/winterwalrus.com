@@ -30,6 +30,8 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
     coinOutValue: BigInt(valueInNoFee.toFixed(0)),
   });
 
+  console.log({ data, isLoading, error });
+
   const retriedForRef = useRef<string | null>(null);
 
   useEffect(() => {
