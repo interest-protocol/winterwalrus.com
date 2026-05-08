@@ -1,7 +1,7 @@
 import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div, Img, P, Span } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
-import { FC, useEffect, useRef } from 'react';
+import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import Skeleton from 'react-loading-skeleton';
 
@@ -17,7 +17,7 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
   onProceed,
 }) => {
   const { handleClose } = useModal();
-  const { control, setValue } = useFormContext();
+  const { control } = useFormContext();
 
   const [coinIn, valueIn, valueInNoFee, valueOut] = useWatch({
     control,
@@ -29,18 +29,6 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
     coinInValue: BigInt(valueIn.toFixed(0)),
     coinOutValue: BigInt(valueInNoFee.toFixed(0)),
   });
-
-  console.log({ data, isLoading, error });
-
-  const retriedForRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (!error) return;
-    const key = valueIn?.toFixed?.(0) ?? '';
-    if (retriedForRef.current === key) return;
-    retriedForRef.current = key;
-    setValue('in.valueNoFeeBN', valueInNoFee.minus(1));
-  }, [error, valueIn, valueInNoFee, setValue]);
 
   const walAmount = BigNumber(
     data?.balanceChanges.find(({ coinType }) => coinType === TYPES.WAL)
