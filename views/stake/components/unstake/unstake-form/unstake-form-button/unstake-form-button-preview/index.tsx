@@ -82,7 +82,7 @@ const UnstakeFormButtonPreview: FC<{ onProceed: () => void }> = ({
             height="7rem"
             alt="Staked Wal"
             borderRadius="1rem"
-            src="https://www.walrus.xyz/walrus-stakedwal"
+            src="/staked-wal.webp"
           />
           <Div display="flex" alignItems="center" gap="0.25rem">
             <P>StakedWAL</P>
