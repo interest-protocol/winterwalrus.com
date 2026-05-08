@@ -12,8 +12,8 @@ importers:
         specifier: ^11.11.1
         version: 11.14.0(@types/react@18.3.28)(react@18.3.1)
       '@interest-protocol/blizzard-sdk':
-        specifier: ^4.0.0
-        version: 4.0.0(typescript@5.9.3)
+        specifier: ^4.1.0
+        version: 4.1.0(typescript@5.9.3)
       '@interest-protocol/sui-core-sdk':
         specifier: ^0.0.1
         version: 0.0.1(typescript@5.9.3)
@@ -591,8 +591,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@interest-protocol/blizzard-sdk@4.0.0':
-    resolution: {integrity: sha512-cxXS1jaGcUNndFDBr9i8IlEM1eCn7JK3KVgG6r0XDDfFvUPkfM/c2x8nUcXxS9W3nwVrmmIrWZECpN6f9SEi8Q==}
+  '@interest-protocol/blizzard-sdk@4.1.0':
+    resolution: {integrity: sha512-oTc8oKYRuDOlIjSKOhmwUY0OD/D2JRGpiPnvE4SaCzx/GoiPj36D+m8FM4lIbD7NLNM95SfT/Ot40ZtKjz8M8Q==}
 
   '@interest-protocol/sui-core-sdk@0.0.1':
     resolution: {integrity: sha512-Rajxynj90qrazuS/kbzzDhkftxp+2oE2gct7Ly/C22jRKztAsY9J8kIhN+9QlTfAkuoPEtABsD9zh8/zx3MSlQ==}
@@ -4013,7 +4013,7 @@ snapshots:
   '@img/sharp-win32-x64@0.34.5':
     optional: true
 
-  '@interest-protocol/blizzard-sdk@4.0.0(typescript@5.9.3)':
+  '@interest-protocol/blizzard-sdk@4.1.0(typescript@5.9.3)':
     dependencies:
       '@interest-protocol/sui-core-sdk': 0.0.1(typescript@5.9.3)
       '@mysten/sui': 1.45.2(typescript@5.9.3)

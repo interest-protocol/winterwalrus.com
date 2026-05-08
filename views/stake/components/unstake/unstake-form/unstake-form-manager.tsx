@@ -38,7 +38,7 @@ const UnstakeFormManager: FC = () => {
     setValue('out.valueBN', valueBN);
     setValue('in.valueNoFeeBN', valueInNoFeeBN);
     setValue('out.value', FixedPointMath.toNumber(valueBN));
-  }, [valueInBN, epoch, quotes, coinOut]);
+  }, [valueInBN, quotes?.quoteSWal, fees?.unstaking, coinOut]);
 
   return null;
 };

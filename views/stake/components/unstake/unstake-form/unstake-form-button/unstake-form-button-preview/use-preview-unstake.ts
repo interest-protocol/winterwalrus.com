@@ -19,7 +19,13 @@ export const usePreviewUnstake = ({
   const currentAccount = useCurrentAccount();
 
   return useSWR(
-    [blizzardSdk, currentAccount, coinIn, coinInValue, coinOutValue],
+    [
+      usePreviewUnstake.name,
+      currentAccount?.address,
+      coinIn,
+      coinInValue.toString(),
+      coinOutValue.toString(),
+    ],
     async () => {
       invariant(currentAccount?.address, 'You must be logged in');
       invariant(blizzardSdk, 'Failed to load sdk');

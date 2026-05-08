@@ -1,17 +1,34 @@
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 
 import { useAppState } from '@/hooks/use-app-state';
 import { useCoins } from '@/hooks/use-coins';
 import { useStakingObjects } from '@/hooks/use-staking-objects';
 
+const signRecord = (record?: Record<string, BigNumber>) =>
+  record
+    ? Object.entries(record)
+        .map(([k, v]) => `${k}:${v.toFixed()}`)
+        .sort()
+        .join('|')
+    : '';
+
+const signNumberRecord = (record?: Record<string, number>) =>
+  record
+    ? Object.entries(record)
+        .map(([k, v]) => `${k}:${v}`)
+        .sort()
+        .join('|')
+    : '';
+
 const AppStateProvider: FC = () => {
   const { update } = useAppState();
   const suiClient = useSuiClient();
   const currentAccount = useCurrentAccount();
+  const accountAddress = currentAccount?.address;
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
   const {
     balancesByLst,
@@ -41,21 +58,23 @@ const AppStateProvider: FC = () => {
       objectsActivation: {},
       loadingObjects: false,
     });
-  }, [currentAccount]);
+  }, [accountAddress]);
+
+  const coinsSig = useMemo(() => signRecord(coins), [coins]);
 
   useEffect(() => {
     if (!coins) return;
 
     update(({ balances }) => ({ balances: { ...balances, ...coins } }));
-  }, [coins]);
+  }, [coinsSig]);
 
   useSWR(
-    ['sui-balance', currentAccount],
+    ['sui-balance', accountAddress],
     () => {
-      if (!currentAccount) return;
+      if (!accountAddress) return;
 
       suiClient
-        .getBalance({ coinType: SUI_TYPE_ARG, owner: currentAccount?.address })
+        .getBalance({ coinType: SUI_TYPE_ARG, owner: accountAddress })
         .then((balance) => {
           update(({ balances }) => ({
             balances: {
@@ -71,6 +90,17 @@ const AppStateProvider: FC = () => {
     { refreshInterval: 10000 }
   );
 
+  const stakingSig = useMemo(
+    () =>
+      [
+        signRecord(principalByType),
+        signRecord(balancesByLst),
+        stakingObjectIds?.join(',') ?? '',
+        signNumberRecord(objectsActivation),
+      ].join('#'),
+    [principalByType, balancesByLst, stakingObjectIds, objectsActivation]
+  );
+
   useEffect(() => {
     if (!principalByType || !stakingObjectIds) return;
 
@@ -80,7 +110,7 @@ const AppStateProvider: FC = () => {
       principalsByType: principalByType,
       balances: { ...balances, ...principalByType, ...balancesByLst },
     }));
-  }, [principalByType, stakingObjectIds, objectsActivation, balancesByLst]);
+  }, [stakingSig]);
 
   useEffect(() => {
     update({ loadingObjects });

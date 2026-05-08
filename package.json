@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
-    "@interest-protocol/blizzard-sdk": "^4.0.0",
+    "@interest-protocol/blizzard-sdk": "^4.1.0",
     "@interest-protocol/sui-core-sdk": "^0.0.1",
     "@interest-protocol/walrus-sdk": "^1.0.0",
     "@mysten/dapp-kit": "0.17.0",

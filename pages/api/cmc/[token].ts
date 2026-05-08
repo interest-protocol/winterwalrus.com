@@ -24,8 +24,6 @@ const handler: NextApiHandler = async (req, res) => {
 
     const payload = await response.json();
 
-    console.log({ payload });
-
     if (!response.ok) return res.status(response.status).json(payload);
 
     const price = payload[String(coinGeckoId)].usd;
