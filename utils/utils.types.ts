@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { useSignTransaction } from '@mysten/dapp-kit';
 import type {
   DryRunTransactionBlockResponse,
@@ -21,7 +22,7 @@ export interface TimedSuiTransactionBlockResponse extends SuiTransactionBlockRes
 }
 
 export interface SignAndExecuteArgs {
-  tx: Transaction;
+  tx: any;
   client: SuiClient;
   currentAccount: WalletAccount;
   fallback?: (arg?: string) => void;

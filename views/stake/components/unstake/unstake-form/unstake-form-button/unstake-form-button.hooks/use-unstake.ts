@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   useCurrentAccount,
   useSignTransaction,
@@ -41,12 +42,12 @@ export const useUnstake = () => {
     const lstCoin = coinWithBalance({
       type: coinIn,
       balance: coinInValue,
-    })(tx);
+    })(tx as any);
 
     const {
       returnValues: [extraLst, stakedWalVector],
     } = await blizzardSdk.burnLst({
-      tx,
+      tx: tx as any,
       lstCoin,
       withdrawIXs,
       blizzardStaking: STAKING_OBJECT[coinIn],
@@ -55,7 +56,7 @@ export const useUnstake = () => {
     tx.transferObjects([extraLst], currentAccount.address);
 
     blizzardSdk.vectorTransferStakedWal({
-      tx,
+      tx: tx as any,
       vector: stakedWalVector,
       to: currentAccount.address,
     });

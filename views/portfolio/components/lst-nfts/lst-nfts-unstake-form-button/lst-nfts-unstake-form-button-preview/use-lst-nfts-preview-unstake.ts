@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { coinWithBalance } from '@mysten/sui/transactions';
 import useSWR from 'swr';
@@ -36,12 +37,12 @@ export const useLSTNFTsPreviewUnstake = ({
       const lstCoin = coinWithBalance({
         type: coinIn,
         balance: coinInValue,
-      })(tx);
+      })(tx as any);
 
       const {
         returnValues: [extraLst, stakedWalVector],
       } = await blizzardSdk.burnLst({
-        tx,
+        tx: tx as any,
         lstCoin,
         withdrawIXs,
         blizzardStaking: STAKING_OBJECT[coinIn],
@@ -50,7 +51,7 @@ export const useLSTNFTsPreviewUnstake = ({
       tx.transferObjects([extraLst], currentAccount.address);
 
       blizzardSdk.vectorTransferStakedWal({
-        tx,
+        tx: tx as any,
         vector: stakedWalVector,
         to: currentAccount.address,
       });
@@ -58,7 +59,7 @@ export const useLSTNFTsPreviewUnstake = ({
       tx.setSenderIfNotSet(currentAccount.address);
 
       return client.dryRunTransactionBlock({
-        transactionBlock: await tx.build({ client }),
+        transactionBlock: await tx.build({ client: client as any }),
       });
     }
   );

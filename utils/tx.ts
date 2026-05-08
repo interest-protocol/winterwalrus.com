@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DryRunTransactionBlockResponse,
   SuiTransactionBlockResponse,
@@ -43,7 +44,7 @@ export const signAndExecute = async ({
   tx.setSenderIfNotSet(currentAccount.address);
 
   const txDryResult = await client.dryRunTransactionBlock({
-    transactionBlock: await tx.build({ client }),
+    transactionBlock: await tx.build({ client: client as any }),
   });
 
   const { signature, bytes: transactionBlock } =
