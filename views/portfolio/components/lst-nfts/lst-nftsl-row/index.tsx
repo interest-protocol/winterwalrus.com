@@ -49,15 +49,8 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
 
   if (!stakingObject) return null;
 
-  const {
-    type,
-    state,
-    display,
-    objectId,
-    withdrawEpoch,
-    activationEpoch,
-    principal,
-  } = stakingObject;
+  const { type, state, objectId, withdrawEpoch, activationEpoch, principal } =
+    stakingObject;
 
   const activation = withdrawEpoch ?? activationEpoch;
 
@@ -109,7 +102,7 @@ const LSTNFTsCoinsRow: FC<{ id: string }> = ({ id }) => {
             height="2.5rem"
             position="relative"
             borderRadius="0.5rem"
-            src={display ?? NFT_IMAGE[type]}
+            src={NFT_IMAGE[type]}
           />
         </Div>
         <Div>

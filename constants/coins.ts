@@ -21,7 +21,7 @@ export const NFT_TYPES: ReadonlyArray<string> = [
 ];
 
 export const NFT_IMAGE = {
-  [TYPES.STAKED_WAL]: '/staked-wal.png',
+  [TYPES.STAKED_WAL]: '/staked-wal.webp',
   [TYPES.BLIZZARD_STAKE_NFT]: '/blizzard-nft.png',
 } as const;
 
