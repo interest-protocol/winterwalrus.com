@@ -26,16 +26,14 @@ export const RPC_DISPLAY = {
 
 export const RPC_MAP: Record<Network, Record<RPC, string>> = {
   [Network.TESTNET]: {
-    [RPC.Shinami]:
-      'https://api.shinami.com/node/v1/sui_testnet_8d0574f74958d67931463c51da36bc24',
+    [RPC.Shinami]: 'https://fullnode.testnet.sui.io:443',
     [RPC.Mysten]: 'https://fullnode.testnet.sui.io:443',
     [RPC.Blockvision]: 'https://sui-testnet-endpoint.blockvision.org',
     [RPC.SuiScan]: 'https://rpc-testnet.suiscan.xyz',
     [RPC.Suiet]: 'https://testnet.suiet.app',
   },
   [Network.MAINNET]: {
-    [RPC.Shinami]:
-      'https://api.shinami.com/node/v1/us1_sui_mainnet_117c254f84cd45349d9602ac13d5a995',
+    [RPC.Shinami]: 'https://wallet-rpc.mainnet.sui.io',
     [RPC.Mysten]: 'https://fullnode.mainnet.sui.io:443',
     [RPC.Blockvision]: 'https://sui-mainnet-endpoint.blockvision.org',
     [RPC.SuiScan]: 'https://rpc-mainnet.suiscan.xyz',
