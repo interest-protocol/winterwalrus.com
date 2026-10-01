@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div, Img, P, Span } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
 import { FC } from 'react';
@@ -8,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 import { InfoSVG } from '@/components/svg';
 import TooltipIcon from '@/components/tooltip';
 import { useModal } from '@/hooks/use-modal';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';
 

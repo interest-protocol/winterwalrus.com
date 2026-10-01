@@ -1,4 +1,4 @@
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { TxResult } from '@/utils/utils.types';
 
 export interface StakeArgs {
   nodeId: string;
@@ -7,7 +7,7 @@ export interface StakeArgs {
   coinValue: bigint;
   isAfterVote: boolean;
   onFailure: (error?: string) => void;
-  onSuccess: (tx: DryRunTransactionBlockResponse) => void;
+  onSuccess: (tx: TxResult) => void;
 }
 
 export interface StakingAssetsItemNFTModalProps {

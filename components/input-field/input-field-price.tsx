@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { Span } from '@stylin.js/elements';
 import { FC } from 'react';
@@ -6,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { useQuotes } from '@/hooks/use-quotes';
 import { useWalPrice } from '@/hooks/use-wal-price';
+import { TYPES } from '@/lib/blizzard';
 import { formatDollars } from '@/utils';
 
 import { InputFieldGenericProps } from './input-field.types';

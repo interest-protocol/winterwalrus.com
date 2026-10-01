@@ -1,11 +1,11 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { SuiObjectResponse } from '@mysten/sui/client';
+import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
-import { path, pathEq, pathOr } from 'ramda';
+import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
 
+import { TYPES } from '@/lib/blizzard';
+import { JsonObject, listOwnedJsonObjects } from '@/lib/sui';
 import { ZERO_BIG_NUMBER } from '@/utils';
 
 interface Response {
@@ -15,8 +15,17 @@ interface Response {
   balancesByLst: Record<string, BigNumber>;
 }
 
+const activationEpochOf = ({ json }: JsonObject) =>
+  Number(
+    pathOr(
+      path(['inner', 'activation_epoch'], json),
+      ['activation_epoch'],
+      json
+    )
+  );
+
 export const useStakingObjects = (type?: string) => {
-  const suiClient = useSuiClient();
+  const suiClient = useCurrentClient();
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Response>(
@@ -30,81 +39,27 @@ export const useStakingObjects = (type?: string) => {
           objectsActivation: {},
         };
 
-      let hasNextPage;
-      const objects: SuiObjectResponse[] = [];
-
-      do {
-        const data = await suiClient.getOwnedObjects({
-          owner: currentAccount.address,
-          options: { showContent: true, showType: true },
-          ...(type && {
-            filter: { StructType: type },
-          }),
-        });
-
-        hasNextPage = data.hasNextPage;
-
-        if (data.data) objects.push(...data.data);
-      } while (hasNextPage);
-
-      const stakingObjects = objects.sort((a, b) =>
-        Number(
-          pathOr(
-            path(
-              [
-                'data',
-                'content',
-                'fields',
-                'inner',
-                'fields',
-                'inner',
-                'activation_epoch',
-              ],
-              a
-            ),
-            ['data', 'content', 'fields', 'activation_epoch'],
-            a
-          )
-        ) <
-        Number(
-          pathOr(
-            path(
-              [
-                'data',
-                'content',
-                'fields',
-                'inner',
-                'fields',
-                'inner',
-                'activation_epoch',
-              ],
-              b
-            ),
-            ['data', 'content', 'fields', 'activation_epoch'],
-            b
-          )
-        )
-          ? -1
-          : 1
+      const objects = await listOwnedJsonObjects(
+        suiClient,
+        currentAccount.address,
+        type
       );
-      const stakingObjectIds = stakingObjects.map(
-        (item) => path(['data', 'objectId'], item) as string
+
+      const stakingObjects = [...objects].sort((a, b) =>
+        activationEpochOf(a) < activationEpochOf(b) ? -1 : 1
       );
+
+      const stakingObjectIds = stakingObjects.map(({ objectId }) => objectId);
 
       const principalByType = stakingObjects.reduce(
         (acc, item) => {
-          const type = normalizeStructTag(
-            path(['data', 'content', 'type'], item) as string
-          );
+          const type = normalizeStructTag(item.type);
 
           const value = BigNumber(
             pathOr(
-              path(
-                ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
-                item
-              ),
-              ['data', 'content', 'fields', 'principal'],
-              item
+              path(['inner', 'principal'], item.json),
+              ['principal'],
+              item.json
             ) as string
           );
 
@@ -117,70 +72,37 @@ export const useStakingObjects = (type?: string) => {
       );
 
       const balancesByLst = stakingObjects.reduce(
-        (acc, data) => {
-          if (!pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], data))
+        (acc, item) => {
+          if (normalizeStructTag(item.type) !== TYPES.BLIZZARD_STAKE_NFT)
             return acc;
 
           const lstType = `nft:${normalizeStructTag(
-            String(
-              path(
-                ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
-                data
-              )
-            )
+            String(path(['type_name'], item.json))
           )}`;
 
           return {
             ...acc,
-            [lstType]: BigNumber(
-              String(path(['data', 'content', 'fields', 'value'], data))
-            ).plus(acc[lstType] ?? ZERO_BIG_NUMBER),
+            [lstType]: BigNumber(String(path(['value'], item.json))).plus(
+              acc[lstType] ?? ZERO_BIG_NUMBER
+            ),
           };
         },
         {} as Record<string, BigNumber>
       );
+
       const objectsActivation = stakingObjects.reduce(
         (acc, item) => {
-          const id = path(['data', 'objectId'], item) as string;
-
-          const type = normalizeStructTag(
-            path(['data', 'content', 'type'], item) as string
-          );
+          const type = normalizeStructTag(item.type);
 
           const value = Number(
-            pathOr(
-              null,
-              [
-                'data',
-                'content',
-                'fields',
-                'state',
-                'fields',
-                'withdraw_epoch',
-              ],
-              item
-            ) ??
-              pathOr(
-                path(
-                  [
-                    'data',
-                    'content',
-                    'fields',
-                    'inner',
-                    'fields',
-                    'inner',
-                    'activation_epoch',
-                  ],
-                  item
-                ),
-                ['data', 'content', 'fields', 'activation_epoch'],
-                item
-              )
+            pathOr(null, ['state', 'withdraw_epoch'], item.json) ??
+              activationEpochOf(item)
           );
 
           return {
             ...acc,
-            [id]: value - (type === TYPES.BLIZZARD_STAKE_NFT ? 1 : 0),
+            [item.objectId]:
+              value - (type === TYPES.BLIZZARD_STAKE_NFT ? 1 : 0),
           };
         },
         {} as Record<string, number>

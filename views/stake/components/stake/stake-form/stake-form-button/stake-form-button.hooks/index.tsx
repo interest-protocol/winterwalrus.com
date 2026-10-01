@@ -1,5 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
@@ -12,7 +10,9 @@ import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
+import { TYPES } from '@/lib/blizzard';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
+import { TxResult } from '@/utils/utils.types';
 
 import { StakeFormAfterVoteNFTModal } from './stake-form-button-modal';
 import { useStake } from './use-stake';
@@ -35,79 +35,65 @@ export const useStakeAction = () => {
     setValue('out.valueBN', ZERO_BIG_NUMBER);
   };
 
-  const onSuccess =
-    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
-      stopLoading();
-      toasting.success({
-        action: 'Staked',
-        message: 'See on explorer',
-        link: getExplorerUrl(
-          dryTx.effects.transactionDigest,
-          ExplorerMode.Transaction
-        ),
-      });
+  const onSuccess = (stopLoading: () => void) => (txResult: TxResult) => {
+    stopLoading();
+    toasting.success({
+      action: 'Staked',
+      message: 'See on explorer',
+      link: getExplorerUrl(txResult.digest, ExplorerMode.Transaction),
+    });
 
-      update(
-        ({
-          balances,
-          stakingObjectIds,
-          principalsByType: oldPrincipalsByType,
-        }) => {
-          const possiblyDeletedObjects = stakingObjectIds.filter(
-            (stakingObjectId) =>
-              !dryTx.objectChanges.find(
-                (object) =>
-                  object.type === 'deleted' &&
-                  NFT_TYPES.includes(object.objectType) &&
-                  object.objectId === stakingObjectId
-              )
-          );
+    update(
+      ({
+        balances,
+        stakingObjectIds,
+        principalsByType: oldPrincipalsByType,
+      }) => {
+        const possiblyDeletedObjects = stakingObjectIds.filter(
+          (stakingObjectId) =>
+            !txResult.deletedObjectIds.includes(stakingObjectId)
+        );
 
-          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
-            (acc, object) =>
-              object.type === 'created' &&
-              NFT_TYPES.includes(normalizeStructTag(object.objectType))
-                ? [...acc, object]
-                : acc,
-            [] as ReadonlyArray<{ objectId: string; objectType: string }>
-          );
+        const possiblyCreatedObjects = txResult.createdObjects.filter(
+          ({ objectType }) => NFT_TYPES.includes(normalizeStructTag(objectType))
+        );
 
-          const principalsByType = possiblyCreatedObjects.reduce(
-            (acc, object) => ({
-              ...acc,
-              [normalizeStructTag(object.objectType)]: getValues(
-                coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
-              ).plus(
-                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-              ),
-            }),
-            oldPrincipalsByType
-          );
+        const principalsByType = possiblyCreatedObjects.reduce(
+          (acc, object) => ({
+            ...acc,
+            [normalizeStructTag(object.objectType)]: getValues(
+              coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
+            ).plus(
+              acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
+            ),
+          }),
+          oldPrincipalsByType
+        );
 
-          return {
-            principalsByType,
-            stakingObjectIds: [
-              ...possiblyDeletedObjects,
-              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
-            ],
-            balances: {
-              ...balances,
-              ...principalsByType,
-              ...({
-                [getValues('out.type')]: (
-                  balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
-                ).plus(getValues('out.valueBN')),
-                [getValues('in.type')]: (
-                  balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
-                ).minus(getValues('in.valueBN')),
-              } as Record<string, BigNumber>),
-            },
-          };
-        }
-      );
+        return {
+          principalsByType,
+          stakingObjectIds: [
+            ...possiblyDeletedObjects,
+            ...possiblyCreatedObjects.map(({ objectId }) => objectId),
+          ],
+          balances: {
+            ...balances,
+            ...principalsByType,
+            ...({
+              [getValues('out.type')]: (
+                balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
+              ).plus(getValues('out.valueBN')),
+              [getValues('in.type')]: (
+                balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
+              ).minus(getValues('in.valueBN')),
+            } as Record<string, BigNumber>),
+          },
+        };
+      }
+    );
 
-      reset();
-    };
+    reset();
+  };
 
   const onFailure = (stopLoading: () => void) => (error?: string) => {
     stopLoading();

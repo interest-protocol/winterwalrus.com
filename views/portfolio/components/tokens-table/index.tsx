@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { Div, P } from '@stylin.js/elements';
 import { FC } from 'react';
@@ -10,6 +9,7 @@ import { useAppState } from '@/hooks/use-app-state';
 import useMetadata from '@/hooks/use-metadata';
 import { useSuiPrice } from '@/hooks/use-sui-price';
 import { useWalPrice } from '@/hooks/use-wal-price';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import PortfolioTabHeader from '../portfolio-tab-header';

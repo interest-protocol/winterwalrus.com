@@ -1,4 +1,4 @@
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect, useMemo } from 'react';
@@ -26,7 +26,7 @@ const signNumberRecord = (record?: Record<string, number>) =>
 
 const AppStateProvider: FC = () => {
   const { update } = useAppState();
-  const suiClient = useSuiClient();
+  const suiClient = useCurrentClient();
   const currentAccount = useCurrentAccount();
   const accountAddress = currentAccount?.address;
   const { coins, mutate: mutateCoins, isLoading: loadingCoins } = useCoins();
@@ -75,14 +75,12 @@ const AppStateProvider: FC = () => {
 
       suiClient
         .getBalance({ coinType: SUI_TYPE_ARG, owner: accountAddress })
-        .then((balance) => {
+        .then(({ balance }) => {
           update(({ balances }) => ({
             balances: {
               ...balances,
-              [normalizeStructTag(SUI_TYPE_ARG)]: BigNumber(
-                balance.totalBalance
-              ),
-              [SUI_TYPE_ARG]: BigNumber(balance.totalBalance),
+              [normalizeStructTag(SUI_TYPE_ARG)]: BigNumber(balance.balance),
+              [SUI_TYPE_ARG]: BigNumber(balance.balance),
             },
           }));
         });

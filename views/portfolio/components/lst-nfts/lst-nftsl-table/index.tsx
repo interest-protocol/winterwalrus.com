@@ -1,9 +1,9 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div, P } from '@stylin.js/elements';
 import { values } from 'ramda';
 import { FC, useEffect, useState } from 'react';
 
 import { useStakingObjects } from '@/hooks/use-staking-objects';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 

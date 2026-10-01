@@ -1,26 +1,30 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
-  useSignTransaction,
-  useSuiClient,
-} from '@mysten/dapp-kit';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
+  useCurrentClient,
+  useDAppKit,
+} from '@mysten/dapp-kit-react';
+import {
+  coinWithBalance,
+  Transaction,
+  TransactionObjectArgument,
+} from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import { STAKING_OBJECT } from '@/constants';
 import useAftermathSdk from '@/hooks/use-aftermath-sdk';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import useEpochData from '@/hooks/use-epoch-data';
+import { TYPES } from '@/lib/blizzard';
 import { signAndExecute } from '@/utils';
 
 import { SwapArgs } from '../swap-form-button.types';
 
 export const useSwap = () => {
-  const client = useSuiClient();
+  const dAppKit = useDAppKit();
+  const client = useCurrentClient();
   const blizzardSdk = useBlizzardSdk();
   const aftermathSdk = useAftermathSdk();
   const currentAccount = useCurrentAccount();
-  const signTransaction = useSignTransaction();
   const { data: epoch } = useEpochData();
 
   return async ({
@@ -57,7 +61,7 @@ export const useSwap = () => {
         tx: txForRoute,
         client,
         currentAccount,
-        signTransaction,
+        dAppKit,
         callback: onSuccess,
         fallback: onFailure,
       });
@@ -97,7 +101,7 @@ export const useSwap = () => {
         tx,
         client,
         currentAccount,
-        signTransaction,
+        dAppKit,
         callback: onSuccess,
         fallback: onFailure,
       });
@@ -158,7 +162,7 @@ export const useSwap = () => {
         coinInId: wWal,
       });
 
-    const transferObjs = [extraLst];
+    const transferObjs: TransactionObjectArgument[] = [extraLst];
     if (coinOutId) transferObjs.push(coinOutId);
 
     swapTx.transferObjects(transferObjs, currentAccount.address);
@@ -167,7 +171,7 @@ export const useSwap = () => {
       tx: swapTx,
       client,
       currentAccount,
-      signTransaction,
+      dAppKit,
       callback: onSuccess,
       fallback: onFailure,
     });

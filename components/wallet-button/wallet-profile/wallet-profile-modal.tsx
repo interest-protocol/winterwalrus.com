@@ -1,4 +1,4 @@
-import { useAccounts } from '@mysten/dapp-kit';
+import { useWalletConnection } from '@mysten/dapp-kit-react';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
@@ -7,7 +7,7 @@ import { useModal } from '@/hooks/use-modal';
 import WalletProfileItem from './wallet-profile-item';
 
 const WalletProfileModal: FC = () => {
-  const accounts = useAccounts();
+  const accounts = useWalletConnection().wallet?.accounts ?? [];
   const { handleClose } = useModal();
 
   return (

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   useCurrentAccount,
-  useSignTransaction,
-  useSuiClient,
-} from '@mysten/dapp-kit';
-import { coinWithBalance } from '@mysten/sui/transactions';
+  useCurrentClient,
+  useDAppKit,
+} from '@mysten/dapp-kit-react';
+import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import { STAKING_OBJECT } from '@/constants';
@@ -14,10 +13,10 @@ import { signAndExecute } from '@/utils';
 import { UnstakeArgs } from '../unstake-form-button.types';
 
 export const useUnstake = () => {
-  const client = useSuiClient();
+  const dAppKit = useDAppKit();
+  const client = useCurrentClient();
   const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
-  const signTransaction = useSignTransaction();
 
   return async ({
     coinIn,
@@ -29,25 +28,27 @@ export const useUnstake = () => {
     invariant(currentAccount?.address, 'You must be logged in');
     invariant(blizzardSdk, 'Failed to load sdk');
 
+    const tx = new Transaction();
+
+    tx.setSender(currentAccount.address);
+
     const {
       returnValues: [, withdrawIXs],
-      tx,
     } = await blizzardSdk.fcfs({
+      tx,
       value: coinOutValue,
       blizzardStaking: STAKING_OBJECT[coinIn],
     });
 
-    tx.setSender(currentAccount.address);
-
     const lstCoin = coinWithBalance({
       type: coinIn,
       balance: coinInValue,
-    })(tx as any);
+    })(tx);
 
     const {
       returnValues: [extraLst, stakedWalVector],
     } = await blizzardSdk.burnLst({
-      tx: tx as any,
+      tx,
       lstCoin,
       withdrawIXs,
       blizzardStaking: STAKING_OBJECT[coinIn],
@@ -56,7 +57,7 @@ export const useUnstake = () => {
     tx.transferObjects([extraLst], currentAccount.address);
 
     blizzardSdk.vectorTransferStakedWal({
-      tx: tx as any,
+      tx,
       vector: stakedWalVector,
       to: currentAccount.address,
     });
@@ -64,8 +65,8 @@ export const useUnstake = () => {
     return signAndExecute({
       tx,
       client,
+      dAppKit,
       currentAccount,
-      signTransaction,
       callback: onSuccess,
       fallback: onFailure,
     });

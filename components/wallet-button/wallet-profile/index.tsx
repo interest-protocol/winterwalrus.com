@@ -1,4 +1,4 @@
-import { useCurrentAccount, useCurrentWallet } from '@mysten/dapp-kit';
+import { useCurrentAccount, useCurrentWallet } from '@mysten/dapp-kit-react';
 import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, DivElementProps, Img, Span } from '@stylin.js/elements';
 import { AnimatePresence } from 'motion/react';
@@ -53,7 +53,7 @@ const WalletProfile: FC = () => {
             width="1.5rem"
             height="1.5rem"
             borderRadius="50%"
-            src={currentWallet.currentWallet?.icon}
+            src={currentWallet?.icon}
           />
           <Span whiteSpace="nowrap">
             {formatAddress(currentAccount!.address)}
@@ -89,7 +89,7 @@ const WalletProfile: FC = () => {
           width="1rem"
           height="1rem"
           borderRadius="50%"
-          src={currentWallet.currentWallet?.icon}
+          src={currentWallet?.icon}
         />
         {currentAccount!.address.slice(0, 4)}...
         {currentAccount!.address.slice(-4)}

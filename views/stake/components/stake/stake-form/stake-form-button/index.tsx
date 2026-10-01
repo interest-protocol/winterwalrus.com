@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -7,6 +6,7 @@ import WalletGuardButton from '@/components/wallet-button/wallet-guard-button';
 import { useAllowedNodes } from '@/hooks/use-allowed-nodes';
 import { useCoins } from '@/hooks/use-coins';
 import { useFees } from '@/hooks/use-fees';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 

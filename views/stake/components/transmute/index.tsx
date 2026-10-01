@@ -1,10 +1,10 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { LST_TYPES_MAP } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 import TransmuteDetails from './transmute-details';
 import TransmuteForm from './transmute-form';

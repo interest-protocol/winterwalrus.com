@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
-import { coinWithBalance } from '@mysten/sui/transactions';
+import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
+import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import useSWR from 'swr';
 import invariant from 'tiny-invariant';
 
 import { STAKING_OBJECT } from '@/constants';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
+import { simulateTx } from '@/utils';
 
 import { LSTNFTsUnstakeArgs } from '../lst-nfts-unstake-form-button.types';
 
@@ -14,7 +14,7 @@ export const useLSTNFTsPreviewUnstake = ({
   coinInValue,
   coinOutValue,
 }: Omit<LSTNFTsUnstakeArgs, 'onFailure' | 'onSuccess'>) => {
-  const client = useSuiClient();
+  const client = useCurrentClient();
   const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
 
@@ -24,25 +24,27 @@ export const useLSTNFTsPreviewUnstake = ({
       invariant(currentAccount?.address, 'You must be logged in');
       invariant(blizzardSdk, 'Failed to load sdk');
 
+      const tx = new Transaction();
+
+      tx.setSender(currentAccount.address);
+
       const {
         returnValues: [, withdrawIXs],
-        tx,
       } = await blizzardSdk.fcfs({
+        tx,
         value: coinOutValue,
         blizzardStaking: STAKING_OBJECT[coinIn],
       });
 
-      tx.setSender(currentAccount.address);
-
       const lstCoin = coinWithBalance({
         type: coinIn,
         balance: coinInValue,
-      })(tx as any);
+      })(tx);
 
       const {
         returnValues: [extraLst, stakedWalVector],
       } = await blizzardSdk.burnLst({
-        tx: tx as any,
+        tx,
         lstCoin,
         withdrawIXs,
         blizzardStaking: STAKING_OBJECT[coinIn],
@@ -51,16 +53,12 @@ export const useLSTNFTsPreviewUnstake = ({
       tx.transferObjects([extraLst], currentAccount.address);
 
       blizzardSdk.vectorTransferStakedWal({
-        tx: tx as any,
+        tx,
         vector: stakedWalVector,
         to: currentAccount.address,
       });
 
-      tx.setSenderIfNotSet(currentAccount.address);
-
-      return client.dryRunTransactionBlock({
-        transactionBlock: await tx.build({ client: client as any }),
-      });
+      return simulateTx(client, tx);
     }
   );
 };

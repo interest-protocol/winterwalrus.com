@@ -1,10 +1,10 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { COIN_TYPES, LST_TYPES_MAP } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 import UnstakeDetails from './unstake-details';
 import UnstakeForm from './unstake-form';

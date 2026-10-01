@@ -1,6 +1,4 @@
-import '@mysten/dapp-kit/dist/index.css';
-
-import { useCurrentAccount, useCurrentWallet } from '@mysten/dapp-kit';
+import { useWalletConnection } from '@mysten/dapp-kit-react';
 import { FC } from 'react';
 
 import ConnectWallet from './connect-wallet';
@@ -8,12 +6,11 @@ import LoadingWallet from './loading-wallet';
 import WalletProfile from './wallet-profile';
 
 const WalletButton: FC = () => {
-  const currentAccount = useCurrentAccount();
-  const { connectionStatus } = useCurrentWallet();
+  const { account, isConnecting } = useWalletConnection();
 
-  if (connectionStatus === 'connecting') return <LoadingWallet />;
+  if (isConnecting) return <LoadingWallet />;
 
-  if (currentAccount) return <WalletProfile />;
+  if (account) return <WalletProfile />;
 
   return <ConnectWallet />;
 };

@@ -1,8 +1,8 @@
 import {
   useCurrentAccount,
-  useSignTransaction,
-  useSuiClient,
-} from '@mysten/dapp-kit';
+  useCurrentClient,
+  useDAppKit,
+} from '@mysten/dapp-kit-react';
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
@@ -13,10 +13,10 @@ import { signAndExecute } from '@/utils';
 import { StakeArgs } from '../stake-form-button.types';
 
 export const useStake = () => {
-  const client = useSuiClient();
+  const dAppKit = useDAppKit();
+  const client = useCurrentClient();
   const blizzardSdk = useBlizzardSdk();
   const currentAccount = useCurrentAccount();
-  const signTransaction = useSignTransaction();
 
   return async ({
     nodeId,
@@ -54,8 +54,8 @@ export const useStake = () => {
     return signAndExecute({
       tx,
       client,
+      dAppKit,
       currentAccount,
-      signTransaction,
       callback: onSuccess,
       fallback: onFailure,
     });

@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div } from '@stylin.js/elements';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -6,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import InputField from '@/components/input-field';
 import { SwapSVG } from '@/components/svg';
 import { LST_TYPES } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 import SwapFormButton from './swap-form-button';
 import SwapFormManager from './swap-form-manager';

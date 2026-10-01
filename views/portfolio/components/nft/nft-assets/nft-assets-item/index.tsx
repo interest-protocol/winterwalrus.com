@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
 import Link from 'next/link';
@@ -15,6 +14,7 @@ import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
+import { TYPES } from '@/lib/blizzard';
 
 import { StakingAssetsItemProps } from '../../nft.types';
 import { useStakingAction } from '../staking-assets-item.hooks';

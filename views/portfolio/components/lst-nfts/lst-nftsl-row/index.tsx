@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
@@ -17,6 +16,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useNodeName } from '@/hooks/use-node';
 import { usePendingRewards } from '@/hooks/use-pending-rewards';
 import { useStakingObject } from '@/hooks/use-staking-object';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import LSTNFTsCoinsRowModal from '@/views/portfolio/components/nft/nft-assets/nft-assets-item/nft-assets-item-modal';
 import { useStakingAction } from '@/views/portfolio/components/nft/nft-assets/staking-assets-item.hooks';
