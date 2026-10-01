@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Button, Div, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -11,6 +10,7 @@ import {
 } from '@/components/svg';
 import { useAppState } from '@/hooks/use-app-state';
 import useEpochData from '@/hooks/use-epoch-data';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { ZERO_BIG_NUMBER } from '@/utils';
 

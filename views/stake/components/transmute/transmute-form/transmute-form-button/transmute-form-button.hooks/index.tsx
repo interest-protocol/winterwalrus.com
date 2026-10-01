@@ -1,4 +1,3 @@
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -7,6 +6,7 @@ import { ExplorerMode } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { typeFromMaybeNftType, ZERO_BIG_NUMBER } from '@/utils';
+import { TxResult } from '@/utils/utils.types';
 
 import { useTransmute } from './use-transmute';
 
@@ -26,32 +26,28 @@ export const useTransmuteAction = () => {
     setValue('out.valueBN', ZERO_BIG_NUMBER);
   };
 
-  const onSuccess =
-    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
-      stopLoading();
-      toasting.success({
-        action: 'Transmute',
-        message: 'See on explorer',
-        link: getExplorerUrl(
-          dryTx.effects.transactionDigest,
-          ExplorerMode.Transaction
-        ),
-      });
+  const onSuccess = (stopLoading: () => void) => (txResult: TxResult) => {
+    stopLoading();
+    toasting.success({
+      action: 'Transmute',
+      message: 'See on explorer',
+      link: getExplorerUrl(txResult.digest, ExplorerMode.Transaction),
+    });
 
-      update(({ balances }) => ({
-        balances: {
-          ...balances,
-          [getValues('out.type')]: (
-            balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
-          ).plus(getValues('out.valueBN')),
-          [getValues('in.type')]: (
-            balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
-          ).minus(getValues('in.valueNoFeeBN')),
-        },
-      }));
+    update(({ balances }) => ({
+      balances: {
+        ...balances,
+        [getValues('out.type')]: (
+          balances[getValues('out.type')] ?? ZERO_BIG_NUMBER
+        ).plus(getValues('out.valueBN')),
+        [getValues('in.type')]: (
+          balances[getValues('in.type')] ?? ZERO_BIG_NUMBER
+        ).minus(getValues('in.valueNoFeeBN')),
+      },
+    }));
 
-      reset();
-    };
+    reset();
+  };
 
   const onFailureTransmute = (stopLoading: () => void) => (error?: string) => {
     stopLoading();

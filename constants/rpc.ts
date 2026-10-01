@@ -1,42 +1,44 @@
 import { Network } from './network';
 
+/**
+ * gRPC fullnode providers. Every entry must serve gRPC-web with CORS enabled
+ * for browsers.
+ */
 export enum RPC {
-  Shinami = 'shinami',
   Mysten = 'mysten',
-  Blockvision = 'blockvision',
   SuiScan = 'suiscan',
-  Suiet = 'suiet',
+  Triton = 'triton',
 }
 
-export const RPCs = [
-  RPC.Shinami,
-  RPC.Mysten,
-  RPC.Blockvision,
-  RPC.SuiScan,
-  RPC.Suiet,
-];
+export const DEFAULT_RPC = RPC.Mysten;
+
+export const RPCs = [RPC.Mysten, RPC.SuiScan, RPC.Triton];
 
 export const RPC_DISPLAY = {
-  [RPC.Shinami]: 'Shinami',
-  [RPC.Mysten]: 'Mysten Public RPC',
-  [RPC.Blockvision]: 'Blockvision',
+  [RPC.Mysten]: 'Mysten',
   [RPC.SuiScan]: 'SuiScan',
-  [RPC.Suiet]: 'Suiet',
+  [RPC.Triton]: 'Triton One',
 };
 
 export const RPC_MAP: Record<Network, Record<RPC, string>> = {
   [Network.TESTNET]: {
-    [RPC.Shinami]: 'https://fullnode.testnet.sui.io:443',
     [RPC.Mysten]: 'https://fullnode.testnet.sui.io:443',
-    [RPC.Blockvision]: 'https://sui-testnet-endpoint.blockvision.org',
     [RPC.SuiScan]: 'https://rpc-testnet.suiscan.xyz',
-    [RPC.Suiet]: 'https://testnet.suiet.app',
+    [RPC.Triton]: 'https://fullnode.testnet.sui.io:443',
   },
   [Network.MAINNET]: {
-    [RPC.Shinami]: 'https://wallet-rpc.mainnet.sui.io',
     [RPC.Mysten]: 'https://fullnode.mainnet.sui.io:443',
-    [RPC.Blockvision]: 'https://sui-mainnet-endpoint.blockvision.org',
     [RPC.SuiScan]: 'https://rpc-mainnet.suiscan.xyz',
-    [RPC.Suiet]: 'https://mainnet.suiet.app',
+    [RPC.Triton]: 'https://mainnet.sui.rpcpool.com',
   },
 };
+
+/**
+ * Users may have a provider that no longer exists (e.g. Shinami) saved in
+ * local storage, so unknown values fall back to the default.
+ */
+export const getRpc = (rpc?: string | null): RPC =>
+  RPCs.includes(rpc as RPC) ? (rpc as RPC) : DEFAULT_RPC;
+
+export const getRpcUrl = (network: Network, rpc?: string | null) =>
+  RPC_MAP[network]?.[getRpc(rpc)] ?? RPC_MAP[network][DEFAULT_RPC];

@@ -5,7 +5,14 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { ChevronRightSVG } from '@/components/svg';
 import { Network } from '@/constants';
-import { RPC, RPC_DISPLAY, RPC_STORAGE_KEY, RPCs } from '@/constants';
+import {
+  DEFAULT_RPC,
+  getRpc,
+  RPC,
+  RPC_DISPLAY,
+  RPC_STORAGE_KEY,
+  RPCs,
+} from '@/constants';
 import { useNetwork } from '@/hooks/use-network';
 
 import { SettingsMenusProps } from './settings-menu.types';
@@ -15,7 +22,11 @@ const Motion = motion.create(Div);
 
 const SettingsMenuRPC: FC<SettingsMenusProps> = ({ show, toggleShow }) => {
   const network = useNetwork();
-  const [localRPC, setRPC] = useLocalStorage<RPC>(RPC_STORAGE_KEY, RPC.Shinami);
+  const [storedRPC, setRPC] = useLocalStorage<RPC>(
+    RPC_STORAGE_KEY,
+    DEFAULT_RPC
+  );
+  const localRPC = getRpc(storedRPC);
 
   return (
     <Motion>
@@ -62,7 +73,7 @@ const SettingsMenuRPC: FC<SettingsMenusProps> = ({ show, toggleShow }) => {
                 title={RPC_DISPLAY[rpc]}
                 selected={rpc === localRPC}
                 onSelect={() => setRPC(rpc)}
-                tag={rpc === RPC.Shinami ? 'Recommended' : null}
+                tag={rpc === DEFAULT_RPC ? 'Recommended' : null}
               />
             ))}
           </Motion>

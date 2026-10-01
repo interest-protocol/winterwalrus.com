@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { formatAddress } from '@mysten/sui/utils';
 import { Button, Div, Img, P } from '@stylin.js/elements';
 import BigNumber from 'bignumber.js';
@@ -11,6 +10,7 @@ import { ExplorerMode } from '@/constants';
 import { useCanWithdrawEarly } from '@/hooks/use-can-withdraw-early';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import { useStakingAction } from '../staking-assets-item.hooks';

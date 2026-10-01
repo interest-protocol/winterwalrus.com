@@ -1,99 +1,63 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useSuiClient } from '@mysten/dapp-kit';
+import { useCurrentClient } from '@mysten/dapp-kit-react';
 import { normalizeStructTag } from '@mysten/sui/utils';
-import { path, pathEq, pathOr } from 'ramda';
+import { path, pathOr } from 'ramda';
 import useSWR from 'swr';
 
 import { StakingObject } from '@/interface';
+import { TYPES } from '@/lib/blizzard';
 
 export const useStakingObject = (id?: string) => {
-  const suiClient = useSuiClient();
+  const suiClient = useCurrentClient();
 
   const { data, ...props } = useSWR<StakingObject | null>(
     [useStakingObject.name, id],
     async () => {
       if (!id) return null;
 
-      const item = await suiClient.getObject({
-        id,
-        options: {
-          showType: true,
-          showContent: true,
-          showDisplay: true,
-        },
+      const { object } = await suiClient.getObject({
+        objectId: id,
+        include: { json: true, display: true },
       });
 
-      const lst = pathOr(
-        '',
-        ['data', 'content', 'fields', 'type_name', 'fields', 'name'],
-        item
-      );
+      const json = object.json ?? {};
+      const type = normalizeStructTag(object.type);
+
+      const lst = pathOr('', ['type_name'], json);
 
       return {
         lst: lst ? normalizeStructTag(lst) : '',
-        symbol: path(['data', 'content', 'fields', 'symbol'], item)
-          ? `${path(['data', 'content', 'fields', 'symbol'], item)}`
+        symbol: path(['symbol'], json)
+          ? `${path(['symbol'], json)}`
           : 'StakedWAL',
-        type: path(['data', 'type'], item) as string,
-        objectId: path(['data', 'objectId'], item) as string,
-        display: pathOr(null, ['data', 'display', 'data', 'image_url'], item),
+        type,
+        objectId: object.objectId,
+        display: pathOr(null, ['output', 'image_url'], object.display) as
+          | string
+          | null,
         nodeId: pathOr(
-          path(
-            ['data', 'content', 'fields', 'inner', 'fields', 'node_id'],
-            item
-          ),
-          ['data', 'content', 'fields', 'node_id'],
-          item
+          path(['inner', 'node_id'], json),
+          ['node_id'],
+          json
         ) as string,
         principal: pathOr(
-          path(
-            ['data', 'content', 'fields', 'inner', 'fields', 'principal'],
-            item
-          ),
-          ['data', 'content', 'fields', 'principal'],
-          item
+          path(['inner', 'principal'], json),
+          ['principal'],
+          json
         ) as string,
         state: pathOr(
-          path(
-            [
-              'data',
-              'content',
-              'fields',
-              'inner',
-              'fields',
-              'state',
-              'variant',
-            ],
-            item
-          ),
-          ['data', 'content', 'fields', 'state', 'variant'],
-          item
+          path(['inner', 'state', '@variant'], json),
+          ['state', '@variant'],
+          json
         ) as string,
-        withdrawEpoch: pathOr(
-          null,
-          ['data', 'content', 'fields', 'state', 'fields', 'withdraw_epoch'],
-          item
-        ),
+        withdrawEpoch: pathOr(null, ['state', 'withdraw_epoch'], json),
         activationEpoch:
           Number(
             pathOr(
-              path(
-                [
-                  'data',
-                  'content',
-                  'fields',
-                  'inner',
-                  'fields',
-                  'inner',
-                  'activation_epoch',
-                ],
-                item
-              ),
-              ['data', 'content', 'fields', 'activation_epoch'],
-              item
+              path(['inner', 'activation_epoch'], json),
+              ['activation_epoch'],
+              json
             )
-          ) -
-          (pathEq(TYPES.BLIZZARD_STAKE_NFT, ['data', 'type'], item) ? 1 : 0),
+          ) - (type === TYPES.BLIZZARD_STAKE_NFT ? 1 : 0),
       };
     },
     { refreshInterval: 5000 }

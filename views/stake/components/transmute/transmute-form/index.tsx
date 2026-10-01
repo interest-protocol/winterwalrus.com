@@ -1,9 +1,9 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import InputField from '@/components/input-field';
 import { LST_TYPES } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 import TransmuteFormButton from './transmute-form-button';
 import TransmuteFormManager from './transmute-form-manager';

@@ -1,9 +1,9 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { INTEREST_LABS } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 import StakeDetails from './stake-details';
 import StakeForm from './stake-form';

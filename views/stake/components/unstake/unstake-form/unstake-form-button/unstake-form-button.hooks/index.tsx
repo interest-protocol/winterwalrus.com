@@ -1,9 +1,6 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount } from '@mysten/dapp-kit';
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { useCurrentAccount } from '@mysten/dapp-kit-react';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
-import { path } from 'ramda';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -11,7 +8,9 @@ import { toasting } from '@/components/toast';
 import { ExplorerMode, INTEREST_LABS, NFT_TYPES } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { TYPES } from '@/lib/blizzard';
 import { ZERO_BIG_NUMBER } from '@/utils';
+import { TxResult } from '@/utils/utils.types';
 
 import { useUnstake } from './use-unstake';
 
@@ -32,79 +31,65 @@ export const useUnstakeAction = () => {
     setValue('validator', INTEREST_LABS);
   };
 
-  const onSuccess =
-    (stopLoading: () => void) => (dryTx: DryRunTransactionBlockResponse) => {
-      stopLoading();
-      toasting.success({
-        action: 'Unstake',
-        message: 'See on explorer',
-        link: getExplorerUrl(
-          dryTx.effects.transactionDigest,
-          ExplorerMode.Transaction
-        ),
-      });
+  const onSuccess = (stopLoading: () => void) => (txResult: TxResult) => {
+    stopLoading();
+    toasting.success({
+      action: 'Unstake',
+      message: 'See on explorer',
+      link: getExplorerUrl(txResult.digest, ExplorerMode.Transaction),
+    });
 
-      update(
-        ({
-          balances,
-          stakingObjectIds,
-          principalsByType: oldPrincipalsByType,
-        }) => {
-          const possiblyDeletedObjects = stakingObjectIds.filter(
-            (stakingObjectId) =>
-              !dryTx.objectChanges.find(
-                (object) =>
-                  object.type === 'deleted' &&
-                  NFT_TYPES.includes(object.objectType) &&
-                  object.objectId === stakingObjectId
-              )
-          );
+    update(
+      ({
+        balances,
+        stakingObjectIds,
+        principalsByType: oldPrincipalsByType,
+      }) => {
+        const possiblyDeletedObjects = stakingObjectIds.filter(
+          (stakingObjectId) =>
+            !txResult.deletedObjectIds.includes(stakingObjectId)
+        );
 
-          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
-            (acc, object) =>
-              object.type === 'created' &&
-              NFT_TYPES.includes(normalizeStructTag(object.objectType))
-                ? [...acc, object]
-                : acc,
-            [] as ReadonlyArray<{ objectId: string; objectType: string }>
-          );
+        const possiblyCreatedObjects = txResult.createdObjects.filter(
+          ({ objectType }) => NFT_TYPES.includes(normalizeStructTag(objectType))
+        );
 
-          const principalsByType = possiblyCreatedObjects.reduce(
-            (acc, object) => ({
-              ...acc,
-              [normalizeStructTag(object.objectType)]: getValues(
-                coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
-              ).plus(
-                acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
-              ),
-            }),
-            oldPrincipalsByType
-          );
-
-          return {
-            principalsByType,
-            stakingObjectIds: [
-              ...possiblyDeletedObjects,
-              ...possiblyCreatedObjects.map(({ objectId }) => objectId),
-            ],
-            balances: dryTx.balanceChanges.reduce(
-              (acc, { coinType, amount, owner }) =>
-                path(['AddressOwner'], owner) === account?.address
-                  ? {
-                      ...acc,
-                      [normalizeStructTag(coinType)]: BigNumber(amount).plus(
-                        acc[coinType] ?? ZERO_BIG_NUMBER
-                      ),
-                    }
-                  : acc,
-              { ...balances, ...principalsByType }
+        const principalsByType = possiblyCreatedObjects.reduce(
+          (acc, object) => ({
+            ...acc,
+            [normalizeStructTag(object.objectType)]: getValues(
+              coinOut === TYPES.STAKED_WAL ? 'out.valueBN' : 'in.valueBN'
+            ).plus(
+              acc[normalizeStructTag(object.objectType)] ?? ZERO_BIG_NUMBER
             ),
-          };
-        }
-      );
+          }),
+          oldPrincipalsByType
+        );
 
-      reset();
-    };
+        return {
+          principalsByType,
+          stakingObjectIds: [
+            ...possiblyDeletedObjects,
+            ...possiblyCreatedObjects.map(({ objectId }) => objectId),
+          ],
+          balances: txResult.balanceChanges.reduce(
+            (acc, { coinType, amount, address }) =>
+              address === account?.address
+                ? {
+                    ...acc,
+                    [normalizeStructTag(coinType)]: BigNumber(amount).plus(
+                      acc[coinType] ?? ZERO_BIG_NUMBER
+                    ),
+                  }
+                : acc,
+            { ...balances, ...principalsByType }
+          ),
+        };
+      }
+    );
+
+    reset();
+  };
 
   const onFailure = (stopLoading: () => void) => (error?: string) => {
     stopLoading();

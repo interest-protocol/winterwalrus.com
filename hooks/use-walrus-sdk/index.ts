@@ -1,18 +1,12 @@
-import { WalrusSDK } from '@interest-protocol/walrus-sdk';
-import useSWR from 'swr';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useCurrentClient } from '@mysten/dapp-kit-react';
+import { useMemo } from 'react';
 
-import { Network, RPC, RPC_MAP, RPC_STORAGE_KEY } from '@/constants';
+import { WalrusClient } from '@/lib/blizzard';
 
 const useWalrusSdk = () => {
-  const localRPC = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;
+  const client = useCurrentClient();
 
-  const { data } = useSWR<WalrusSDK>(
-    [useWalrusSdk.name, localRPC, 'walrus'],
-    () => new WalrusSDK({ fullNodeUrl: RPC_MAP[Network.MAINNET][localRPC] })
-  );
-
-  return data;
+  return useMemo(() => new WalrusClient(client), [client]);
 };
 
 export default useWalrusSdk;

@@ -1,13 +1,14 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
+import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
+import type { SuiClientTypes } from '@mysten/sui/client';
 import { normalizeStructTag, SUI_TYPE_ARG } from '@mysten/sui/utils';
 import { BigNumber } from 'bignumber.js';
 import useSWR from 'swr';
 
 import { LST_TYPES } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 
 export const useCoins = () => {
-  const client = useSuiClient();
+  const client = useCurrentClient();
   const currentAccount = useCurrentAccount();
 
   const { data, ...props } = useSWR<Record<string, BigNumber>>(
@@ -15,12 +16,22 @@ export const useCoins = () => {
     async () => {
       if (!currentAccount) return {};
 
-      const coins = await client.getAllBalances({
-        owner: currentAccount?.address,
-      });
+      const balances: SuiClientTypes.Balance[] = [];
+      let cursor: string | null = null;
 
-      return coins.reduce(
-        (acc, { coinType, totalBalance }) =>
+      do {
+        const page: SuiClientTypes.ListBalancesResponse =
+          await client.listBalances({
+            owner: currentAccount.address,
+            cursor,
+          });
+
+        balances.push(...page.balances);
+        cursor = page.hasNextPage ? page.cursor : null;
+      } while (cursor);
+
+      return balances.reduce(
+        (acc, { coinType, balance }) =>
           [
             normalizeStructTag(SUI_TYPE_ARG),
             normalizeStructTag(TYPES.WAL),
@@ -28,7 +39,7 @@ export const useCoins = () => {
           ].includes(normalizeStructTag(coinType))
             ? {
                 ...acc,
-                [normalizeStructTag(coinType)]: BigNumber(totalBalance),
+                [normalizeStructTag(coinType)]: BigNumber(balance),
               }
             : acc,
         {}

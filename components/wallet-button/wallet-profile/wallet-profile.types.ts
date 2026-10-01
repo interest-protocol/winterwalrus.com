@@ -1,13 +1,13 @@
-import { WalletAccount } from '@mysten/wallet-standard';
+import { UiWalletAccount } from '@mysten/dapp-kit-react';
 
 export interface WalletProfileItemProps {
   close: () => void;
-  account: WalletAccount;
+  account: UiWalletAccount;
 }
 
 export interface WalletProfileItemProps {
   close: () => void;
-  account: WalletAccount;
+  account: UiWalletAccount;
 }
 
 export interface WalletProfileDropdownProps extends Pick<

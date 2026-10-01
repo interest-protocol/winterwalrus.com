@@ -1,4 +1,3 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import BigNumber from 'bignumber.js';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -8,6 +7,7 @@ import useAftermathSdk from '@/hooks/use-aftermath-sdk';
 import useBlizzardSdk from '@/hooks/use-blizzard-sdk';
 import useEpochData from '@/hooks/use-epoch-data';
 import { useFees } from '@/hooks/use-fees';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 const SwapFormManager: FC = () => {

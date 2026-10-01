@@ -1,4 +1,4 @@
-import { useAccounts } from '@mysten/dapp-kit';
+import { useWalletConnection } from '@mysten/dapp-kit-react';
 import { AnimatePresence } from 'motion/react';
 import { FC } from 'react';
 
@@ -8,7 +8,7 @@ import { WalletProfileDropdownProps } from './wallet-profile.types';
 import WalletProfileItem from './wallet-profile-item';
 
 const WalletProfileDropdown: FC<WalletProfileDropdownProps> = ({ close }) => {
-  const accounts = useAccounts();
+  const accounts = useWalletConnection().wallet?.accounts ?? [];
 
   return (
     <Motion

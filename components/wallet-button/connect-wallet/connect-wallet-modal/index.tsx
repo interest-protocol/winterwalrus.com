@@ -1,4 +1,4 @@
-import { useConnectWallet, useWallets } from '@mysten/dapp-kit';
+import { useDAppKit, useWallets } from '@mysten/dapp-kit-react';
 import { Div, Img } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
@@ -7,7 +7,7 @@ import { useModal } from '@/hooks/use-modal';
 
 const ConnectWalletModal: FC = () => {
   const wallets = useWallets();
-  const connect = useConnectWallet();
+  const dAppKit = useDAppKit();
   const { handleClose } = useModal();
 
   return (
@@ -25,7 +25,7 @@ const ConnectWalletModal: FC = () => {
           borderColor="#FFFFFF1A"
           nHover={{ borderColor: '#99EFE44D' }}
           onClick={() => {
-            connect.mutateAsync({ wallet });
+            dAppKit.connectWallet({ wallet });
             handleClose();
           }}
         >

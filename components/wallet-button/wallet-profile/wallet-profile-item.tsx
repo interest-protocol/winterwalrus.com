@@ -1,10 +1,8 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import {
   useCurrentAccount,
   useCurrentWallet,
-  useDisconnectWallet,
-  useSwitchAccount,
-} from '@mysten/dapp-kit';
+  useDAppKit,
+} from '@mysten/dapp-kit-react';
 import {
   formatAddress,
   normalizeStructTag,
@@ -22,6 +20,7 @@ import { toasting } from '@/components/toast';
 import { ExplorerMode } from '@/constants';
 import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 import { formatMoney } from '@/utils';
 
@@ -34,8 +33,7 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
   const currentWallet = useCurrentWallet();
   const currentAccount = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
-  const { mutate: switchAccount } = useSwitchAccount();
-  const { mutate: disconnectWallet } = useDisconnectWallet();
+  const dAppKit = useDAppKit();
 
   const copyAddress = () => {
     toasting.success({
@@ -64,7 +62,7 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
         transition={{ ease: 'linear' }}
         onClick={(e) => {
           e.stopPropagation();
-          !isCurrentAccount && switchAccount({ account });
+          !isCurrentAccount && dAppKit.switchAccount({ account });
         }}
       >
         <Motion
@@ -89,8 +87,8 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
                 borderRadius="50%"
                 width={['1.5rem', '1.5rem', '1rem']}
                 height={['1.5rem', '1.5rem', '1rem']}
-                src={currentWallet.currentWallet?.icon}
-                alt={`${currentWallet.currentWallet?.name} Wallet`}
+                src={currentWallet?.icon}
+                alt={`${currentWallet?.name} Wallet`}
               />
               <Span
                 flex="1"
@@ -197,7 +195,7 @@ const WalletProfileItem: FC<WalletProfileItemProps> = ({ account }) => {
               transition={{ ease: 'linear' }}
               borderTop="1px solid #FFFFFF33"
               onClick={() => {
-                disconnectWallet();
+                dAppKit.disconnectWallet();
                 close();
               }}
               animate={{ height: [0, 'auto'], scaleY: [0, 1] }}

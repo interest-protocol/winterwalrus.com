@@ -1,8 +1,8 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
 import InputField from '@/components/input-field';
+import { TYPES } from '@/lib/blizzard';
 
 import StakeFormButton from './stake-form-button';
 import StakeFormManager from './stake-form-manager';

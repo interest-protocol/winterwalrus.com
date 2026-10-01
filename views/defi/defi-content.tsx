@@ -1,9 +1,9 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 import unikey from 'unikey';
 
 import { BluefinSVG, ScallopSVG } from '@/components/svg';
+import { TYPES } from '@/lib/blizzard';
 
 import { DeFiItem } from './components';
 import { DeFiItemProps } from './components/defi-item/defi-item.types';

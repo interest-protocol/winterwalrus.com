@@ -1,18 +1,12 @@
-import { BlizzardSDK } from '@interest-protocol/blizzard-sdk';
-import useSWR from 'swr';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useCurrentClient } from '@mysten/dapp-kit-react';
+import { useMemo } from 'react';
 
-import { Network, RPC, RPC_MAP, RPC_STORAGE_KEY } from '@/constants';
+import { BlizzardClient } from '@/lib/blizzard';
 
 const useBlizzardSdk = () => {
-  const localRPC = useReadLocalStorage<RPC>(RPC_STORAGE_KEY) ?? RPC.Shinami;
+  const client = useCurrentClient();
 
-  const { data } = useSWR<BlizzardSDK>(
-    [useBlizzardSdk.name, localRPC, 'blizzard'],
-    () => new BlizzardSDK({ fullNodeUrl: RPC_MAP[Network.MAINNET][localRPC] })
-  );
-
-  return data;
+  return useMemo(() => new BlizzardClient(client), [client]);
 };
 
 export default useBlizzardSdk;

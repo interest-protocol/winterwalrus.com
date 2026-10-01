@@ -1,9 +1,7 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { useCurrentAccount } from '@mysten/dapp-kit-react';
 import { normalizeStructTag } from '@mysten/sui/utils';
 import BigNumber from 'bignumber.js';
-import { path } from 'ramda';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { toasting } from '@/components/toast';
 import { ExplorerMode, NFT_TYPES } from '@/constants';
@@ -11,7 +9,9 @@ import { useAppState } from '@/hooks/use-app-state';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { StakingObject } from '@/interface';
+import { TYPES } from '@/lib/blizzard';
 import { ZERO_BIG_NUMBER } from '@/utils';
+import { TxResult } from '@/utils/utils.types';
 
 import { StakingAssetsItemModal } from '../staking-assets-item-modals';
 import { useBurn } from './use-burn';
@@ -27,13 +27,7 @@ export const useStakingAction = (
   const { update } = useAppState();
   const { setContent } = useModal();
 
-  const account = useMemo(
-    () => ({
-      address:
-        '0xc23ea8e493616b1510d9405ce05593f8bd1fb30f44f92303ab2c54f6c8680ecb',
-    }),
-    []
-  );
+  const account = useCurrentAccount();
   const getExplorerUrl = useGetExplorerUrl();
   const [loading, setLoading] = useState(false);
 
@@ -54,16 +48,12 @@ export const useStakingAction = (
   } = stakingObject;
 
   const onSuccess =
-    (action: string, stopLoading: () => void) =>
-    (dryTx: DryRunTransactionBlockResponse) => {
+    (action: string, stopLoading: () => void) => (txResult: TxResult) => {
       stopLoading();
       toasting.success({
         action,
         message: 'See on explorer',
-        link: getExplorerUrl(
-          dryTx.effects.transactionDigest,
-          ExplorerMode.Transaction
-        ),
+        link: getExplorerUrl(txResult.digest, ExplorerMode.Transaction),
       });
 
       update(
@@ -74,21 +64,12 @@ export const useStakingAction = (
         }) => {
           const possiblyDeletedObjects = stakingObjectIds.filter(
             (stakingObjectId) =>
-              !dryTx.objectChanges.find(
-                (object) =>
-                  object.type === 'deleted' &&
-                  NFT_TYPES.includes(object.objectType) &&
-                  object.objectId === stakingObjectId
-              )
+              !txResult.deletedObjectIds.includes(stakingObjectId)
           );
 
-          const possiblyCreatedObjects = dryTx.objectChanges.reduce(
-            (acc, object) =>
-              object.type === 'created' &&
-              NFT_TYPES.includes(normalizeStructTag(object.objectType))
-                ? [...acc, object]
-                : acc,
-            [] as ReadonlyArray<{ objectId: string; objectType: string }>
+          const possiblyCreatedObjects = txResult.createdObjects.filter(
+            ({ objectType }) =>
+              NFT_TYPES.includes(normalizeStructTag(objectType))
           );
 
           const principalsByType = possiblyCreatedObjects.reduce(
@@ -110,9 +91,9 @@ export const useStakingAction = (
               ...possiblyCreatedObjects.map(({ objectId }) => objectId),
             ],
             balances:
-              dryTx.balanceChanges.reduce(
-                (acc, { coinType, amount, owner }) =>
-                  path(['AddressOwner'], owner) === account?.address
+              txResult.balanceChanges.reduce(
+                (acc, { coinType, amount, address }) =>
+                  address === account?.address
                     ? {
                         ...acc,
                         [normalizeStructTag(coinType)]: BigNumber(amount).plus(

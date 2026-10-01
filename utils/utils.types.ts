@@ -1,39 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { useSignTransaction } from '@mysten/dapp-kit';
-import type {
-  DryRunTransactionBlockResponse,
-  SuiClient,
-  SuiTransactionBlockResponse,
-  SuiTransactionBlockResponseOptions,
-} from '@mysten/sui/client';
+import type { UiWalletAccount } from '@mysten/dapp-kit-react';
+import type { SuiClientTypes } from '@mysten/sui/client';
 import type { Transaction } from '@mysten/sui/transactions';
-import type { WalletAccount } from '@mysten/wallet-standard';
 
-export interface GetCoinOfValueArgs {
-  tx: Transaction;
-  account: string;
-  coinType: string;
-  coinValue: bigint;
-  client: SuiClient;
-}
+import type { SuiClient } from '@/lib/sui';
+import type { AppDAppKit } from '@/lib/sui/dapp-kit';
 
-export interface TimedSuiTransactionBlockResponse extends SuiTransactionBlockResponse {
-  time: number;
+export interface TxResult {
+  digest: string;
+  deletedObjectIds: ReadonlyArray<string>;
+  balanceChanges: ReadonlyArray<SuiClientTypes.BalanceChange>;
+  createdObjects: ReadonlyArray<{ objectId: string; objectType: string }>;
 }
 
 export interface SignAndExecuteArgs {
-  tx: any;
+  tx: Transaction;
   client: SuiClient;
-  currentAccount: WalletAccount;
+  dAppKit: AppDAppKit;
+  currentAccount: UiWalletAccount;
   fallback?: (arg?: string) => void;
-  options?: SuiTransactionBlockResponseOptions;
-  signTransaction: ReturnType<typeof useSignTransaction>;
-  callback?: (arg: DryRunTransactionBlockResponse) => void;
-}
-
-export interface WaitForTxArgs {
-  digest: string;
-  timeout?: number;
-  client: SuiClient;
-  pollInterval?: number;
+  callback?: (arg: TxResult) => void;
 }

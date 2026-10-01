@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MAX_BPS } from '@interest-protocol/sui-core-sdk';
 import BigNumber from 'bignumber.js';
 
 import { BigNumberish } from '@/interface';
+import { MAX_BPS } from '@/lib/blizzard';
 
 export function isHexString(value: any, length?: number): boolean {
   if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {

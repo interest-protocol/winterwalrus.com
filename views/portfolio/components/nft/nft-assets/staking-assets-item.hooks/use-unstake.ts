@@ -1,8 +1,9 @@
 import {
   useCurrentAccount,
-  useSignTransaction,
-  useSuiClient,
-} from '@mysten/dapp-kit';
+  useCurrentClient,
+  useDAppKit,
+} from '@mysten/dapp-kit-react';
+import { Transaction } from '@mysten/sui/transactions';
 import invariant from 'tiny-invariant';
 
 import useWalrusSdk from '@/hooks/use-walrus-sdk';
@@ -11,10 +12,10 @@ import { signAndExecute } from '@/utils';
 import { UnstakeArgs } from '../../nft.types';
 
 export const useUnstake = () => {
-  const client = useSuiClient();
+  const dAppKit = useDAppKit();
+  const client = useCurrentClient();
   const walrus = useWalrusSdk();
   const currentAccount = useCurrentAccount();
-  const signTransaction = useSignTransaction();
 
   return async ({
     objectId,
@@ -27,15 +28,15 @@ export const useUnstake = () => {
 
     const { returnValue: wal, tx } = walrus[
       canWithdrawEarly ? 'withdrawStake' : 'requestWithdrawing'
-    ]({ stakedWal: objectId });
+    ]({ tx: new Transaction(), stakedWal: objectId });
 
     if (wal) tx.transferObjects([wal], currentAccount.address);
 
     return signAndExecute({
       tx,
       client,
+      dAppKit,
       currentAccount,
-      signTransaction,
       callback: onSuccess,
       fallback: onFailure,
     });

@@ -1,7 +1,7 @@
-import { SHARED_OBJECTS, TYPES } from '@interest-protocol/blizzard-sdk';
 import { SUI_TYPE_ARG } from '@mysten/sui/utils';
 
 import { AssetMetadata } from '@/interface';
+import { SHARED_OBJECTS, TYPES } from '@/lib/blizzard';
 
 export const LST_TYPES_MAP: Record<string, string> = {
   WWAL: TYPES.WWAL,

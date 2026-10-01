@@ -1,9 +1,9 @@
-import { TYPES } from '@interest-protocol/blizzard-sdk';
 import { BigNumber } from 'bignumber.js';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 import { LST_TYPES_MAP, STAKING_OBJECT } from '@/constants';
+import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
 
 import useBlizzardSdk from '../use-blizzard-sdk';

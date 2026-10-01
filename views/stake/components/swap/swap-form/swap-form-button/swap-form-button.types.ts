@@ -1,4 +1,4 @@
-import { DryRunTransactionBlockResponse } from '@mysten/sui/client';
+import { TxResult } from '@/utils/utils.types';
 
 export interface SwapArgs {
   coinInType: string;
@@ -7,5 +7,5 @@ export interface SwapArgs {
   coinOutValue: bigint;
   coinInNoFeeValue: bigint;
   onFailure: (error?: string) => void;
-  onSuccess: (tx: DryRunTransactionBlockResponse) => void;
+  onSuccess: (tx: TxResult) => void;
 }
