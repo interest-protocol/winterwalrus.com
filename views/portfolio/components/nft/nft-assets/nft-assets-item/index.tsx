@@ -15,6 +15,7 @@ import { useModal } from '@/hooks/use-modal';
 import { useNodeName } from '@/hooks/use-node';
 import { useStakingObject } from '@/hooks/use-staking-object';
 import { TYPES } from '@/lib/blizzard';
+import { fallbackOnError } from '@/utils';
 
 import { StakingAssetsItemProps } from '../../nft.types';
 import { useStakingAction } from '../staking-assets-item.hooks';
@@ -113,6 +114,7 @@ const NFTAssetsItem = memo<StakingAssetsItemProps>(({ id }) => {
                 position="relative"
                 borderRadius="0.5rem"
                 src={display ?? NFT_IMAGE[type]}
+                onError={fallbackOnError(NFT_IMAGE[type])}
               />
             </Div>
             <Div>

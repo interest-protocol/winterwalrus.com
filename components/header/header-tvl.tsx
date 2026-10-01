@@ -2,13 +2,12 @@ import { Div, P, Span } from '@stylin.js/elements';
 import { FC } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
+import useTvl from '@/hooks/use-tvl';
 import { useWalPrice } from '@/hooks/use-wal-price';
 import { formatMoney } from '@/utils';
 
-import useStats from '../../hooks/use-stats';
-
 const HeaderTVL: FC = () => {
-  const { data, isLoading } = useStats();
+  const { data, isLoading } = useTvl();
   const { data: price, isLoading: priceLoading } = useWalPrice();
 
   return (
@@ -27,11 +26,7 @@ const HeaderTVL: FC = () => {
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
-            `${formatMoney(
-              data ? Number(data.totalTvl) * (price ?? 1) : 0,
-              2,
-              true
-            )} USD`
+            `${formatMoney(data ? data.total * (price ?? 1) : 0, 2, true)} USD`
           )}
         </P>{' '}
         <Span color="#FFFFFF80">|</Span>{' '}
@@ -39,7 +34,7 @@ const HeaderTVL: FC = () => {
           {(!data || !price) && (isLoading || priceLoading) ? (
             <Skeleton width="4rem" />
           ) : (
-            `${formatMoney(data ? Number(data.totalTvl) : 0, 2, true)} WAL`
+            `${formatMoney(data ? data.total : 0, 2, true)} WAL`
           )}
         </P>
       </Div>
