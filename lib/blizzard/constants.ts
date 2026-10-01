@@ -153,6 +153,23 @@ export const INNER_LST_STATE_ID: Record<string, string> = {
     '0xba9ef1033d861252f6254752a2ba6e495ca08702dd2bc524a6ef1a76f8ac5a54',
 };
 
+export const INNER_LST_TREASURY_CAP: Record<string, string> = {
+  [SHARED_OBJECTS.WWAL_STAKING({ mutable: false }).objectId]:
+    '0x423ec7efb16a74e6885385a49df3436758fa9e79302a9f0de9485b8874cf2aaf',
+  [SHARED_OBJECTS.PWAL_STAKING({ mutable: false }).objectId]:
+    '0x2f30428b1ae24b8708b59c0083881c8ebf8149a5932323e6f1f25d59a3d7a53c',
+  [SHARED_OBJECTS.BREAD_WAL_STAKING({ mutable: false }).objectId]:
+    '0xc4afc289ea27490d5e59e379c875890af37041f9bdf9651d1c213a097c328216',
+  [SHARED_OBJECTS.NWAL_STAKING({ mutable: false }).objectId]:
+    '0xbd3194d22731232d22f484bb44a9d02880bef12f2ab1fd5abe802ea9a08e69a5',
+  [SHARED_OBJECTS.UP_WAL_STAKING({ mutable: false }).objectId]:
+    '0xa8315b6458e455121e0d8c7a656e31e1c9ccb9433c166289a3c93904d2046cdc',
+  [SHARED_OBJECTS.MWAL_STAKING({ mutable: false }).objectId]:
+    '0xe1b3079eea6e85fba6b013d101351f9c6397e5a56b8fe48624de5aa71a796933',
+  [SHARED_OBJECTS.TR_WAL_STAKING({ mutable: false }).objectId]:
+    '0x390082df42428e33c5c4a3a9ec9a33567f8748e2cb5a6c4953c7a884f032e2b5',
+};
+
 export const TYPES = {
   WWAL: `${PACKAGES.WWAL.original}::wwal::WWAL`,
   BLIZZARD: `${PACKAGES.BLIZZARD.original}::blizzard::BLIZZARD`,

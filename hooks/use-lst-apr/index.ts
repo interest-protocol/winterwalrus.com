@@ -1,12 +1,17 @@
 import useSWR from 'swr';
 
-const useLstAPR = (lst: string) =>
-  useSWR([useLstAPR.name, lst], () =>
-    lst
-      ? fetch(`https://api.winterwalrus.com/v1/exchange-rate/${lst}`).then(
-          (res) => res.json()
-        )
-      : Promise.resolve(null)
+import { STAKING_OBJECT } from '@/constants';
+
+import useBlizzardSdk from '../use-blizzard-sdk';
+
+const useLstAPR = (lst: string) => {
+  const blizzardSdk = useBlizzardSdk();
+
+  return useSWR([useLstAPR.name, lst, blizzardSdk], async () =>
+    lst && STAKING_OBJECT[lst]
+      ? { apr: await blizzardSdk.getApr(STAKING_OBJECT[lst]) }
+      : null
   );
+};
 
 export default useLstAPR;

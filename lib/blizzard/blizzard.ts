@@ -12,10 +12,16 @@ import {
 import { pathOr } from 'ramda';
 import invariant from 'tiny-invariant';
 
-import { devInspect, getJsonObject, SuiClient } from '@/lib/sui';
+import {
+  devInspect,
+  getJsonObject,
+  getJsonObjects,
+  SuiClient,
+} from '@/lib/sui';
 
 import {
   INNER_LST_STATE_ID,
+  INNER_LST_TREASURY_CAP,
   INNER_WALRUS_STAKING_ID,
   Modules,
   PACKAGES,
@@ -87,6 +93,8 @@ export const getEpochData = async (client: SuiClient): Promise<EpochData> => {
       firstEpochStartTimestamp + currentEpoch * epochDurationMs - Date.now(),
   };
 };
+
+const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 const lstTypeCache = new Map<string, string>();
 
@@ -207,6 +215,139 @@ export class BlizzardClient {
     invariant(result, 'Invalid result: no allowed nodes found');
 
     return bcs.vector(bcs.Address).parse(result);
+  }
+
+  /**
+   * WAL value of every LST's total supply at the current epoch, keyed by
+   * blizzard staking id. Exchange rates are synced first, so rewards since
+   * the last on-chain sync are included.
+   */
+  async getTvl(): Promise<Record<string, bigint>> {
+    const stakings = Object.keys(INNER_LST_TREASURY_CAP);
+
+    const [treasuryCaps, { currentEpoch }, lstTypes] = await Promise.all([
+      getJsonObjects(
+        this.client,
+        stakings.map((staking) => INNER_LST_TREASURY_CAP[staking])
+      ),
+      this.getEpochData(),
+      Promise.all(stakings.map((staking) => this.getLstType(staking))),
+    ]);
+
+    const tx = new Transaction();
+
+    stakings.forEach((staking, index) => {
+      const supply = pathOr(
+        '0',
+        ['json', 'total_supply', 'value'],
+        treasuryCaps.find(
+          ({ objectId }) => objectId === INNER_LST_TREASURY_CAP[staking]
+        )
+      );
+
+      tx.moveCall({
+        package: PACKAGES.BLIZZARD.latest,
+        module: Modules.Protocol,
+        function: 'sync_exchange_rate',
+        arguments: [
+          sharedObject(tx, staking),
+          tx.sharedObjectRef(SHARED_OBJECTS.WALRUS_STAKING({ mutable: false })),
+        ],
+        typeArguments: [lstTypes[index]],
+      });
+
+      tx.moveCall({
+        package: PACKAGES.BLIZZARD.latest,
+        module: Modules.Protocol,
+        function: 'to_wal_at_epoch',
+        arguments: [
+          sharedObject(tx, staking),
+          tx.pure.u32(currentEpoch),
+          tx.pure.u64(supply),
+          tx.pure.bool(false),
+        ],
+        typeArguments: [lstTypes[index]],
+      });
+    });
+
+    const results = await devInspect(this.client, tx);
+
+    return stakings.reduce(
+      (acc, staking, index) => {
+        const [value] = results[index * 2 + 1];
+
+        return {
+          ...acc,
+          [staking]: BigInt(
+            (value && bcs.option(bcs.u64()).parse(value)) ?? '0'
+          ),
+        };
+      },
+      {} as Record<string, bigint>
+    );
+  }
+
+  /**
+   * Annualized growth of the LST's WAL exchange rate between the current epoch
+   * and the most recent past epoch with a stored rate (rates are only stored
+   * on epochs where the LST synced). Returns a percentage, e.g. 1 === 1%.
+   */
+  async getApr(blizzardStaking: SharedObject, lookbackEpochs = 10) {
+    assertObjectId(blizzardStaking);
+
+    const [lstType, { currentEpoch, epochDurationMs }] = await Promise.all([
+      this.getLstType(blizzardStaking),
+      this.getEpochData(),
+    ]);
+
+    const tx = new Transaction();
+
+    tx.moveCall({
+      package: PACKAGES.BLIZZARD.latest,
+      module: Modules.Protocol,
+      function: 'sync_exchange_rate',
+      arguments: [
+        sharedObject(tx, blizzardStaking),
+        tx.sharedObjectRef(SHARED_OBJECTS.WALRUS_STAKING({ mutable: false })),
+      ],
+      typeArguments: [lstType],
+    });
+
+    const epochs = Array.from(
+      { length: Math.min(lookbackEpochs, currentEpoch) + 1 },
+      (_, index) => currentEpoch - index
+    );
+
+    epochs.forEach((epoch) =>
+      tx.moveCall({
+        package: PACKAGES.BLIZZARD.latest,
+        module: Modules.Protocol,
+        function: 'to_wal_at_epoch',
+        arguments: [
+          sharedObject(tx, blizzardStaking),
+          tx.pure.u32(epoch),
+          tx.pure.u64(1_000_000_000),
+          tx.pure.bool(false),
+        ],
+        typeArguments: [lstType],
+      })
+    );
+
+    const [, ...results] = await devInspect(this.client, tx);
+
+    const rates = results.map(([value]) =>
+      value ? bcs.option(bcs.u64()).parse(value) : null
+    );
+
+    const [currentRate] = rates;
+    const previousIndex = rates.findIndex((rate, index) => index && rate);
+
+    if (!currentRate || previousIndex === -1 || !epochDurationMs) return 0;
+
+    const growthPerEpoch =
+      (Number(currentRate) / Number(rates[previousIndex]) - 1) / previousIndex;
+
+    return growthPerEpoch * (YEAR_MS / epochDurationMs) * 100;
   }
 
   getAllowedVersions(tx: Transaction) {

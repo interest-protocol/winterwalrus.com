@@ -6,12 +6,13 @@ import { FC } from 'react';
 import Countdown from 'react-countdown';
 
 import { ExternalLinkSVG } from '@/components/svg';
-import { ExplorerMode } from '@/constants';
+import { ExplorerMode, NFT_IMAGE } from '@/constants';
 import { useCanWithdrawEarly } from '@/hooks/use-can-withdraw-early';
 import { useGetExplorerUrl } from '@/hooks/use-get-explorer-url';
 import { useModal } from '@/hooks/use-modal';
 import { TYPES } from '@/lib/blizzard';
 import { FixedPointMath } from '@/lib/entities/fixed-point-math';
+import { fallbackOnError } from '@/utils';
 
 import { useStakingAction } from '../staking-assets-item.hooks';
 import { NFTAssetsItemModalProps } from './nft-assets-item.types';
@@ -55,7 +56,8 @@ const NFTAssetsItemModal: FC<NFTAssetsItemModalProps> = ({
       <Img
         width="100%"
         height="100%"
-        src={display ?? ''}
+        src={display ?? NFT_IMAGE[type]}
+        onError={fallbackOnError(NFT_IMAGE[type])}
         borderRadius="1rem"
         alt={symbol ?? 'NFT Details'}
       />
